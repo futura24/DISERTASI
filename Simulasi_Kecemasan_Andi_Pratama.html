@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulasi Skala Kecemasan · Andi Pratama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--primary:#0369A1;--secondary:#075985;--accent:#0EA5E9;--accent2:#38BDF8;--bg:#F1F5F9;--surface:#fff;--soft:#F0F9FF;--line:#E2E8F0;--ink:#1E293B;--muted:#64748B;--ok:#16A34A;--warn:#D97706;--bad:#DC2626;--r:14px;--r-sm:10px;--sh:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.tag,.pill{font-family:'Poppins',sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.app-header{background:linear-gradient(135deg,var(--secondary),var(--primary) 60%,var(--accent));color:#fff;position:relative;overflow:hidden}
+.app-header::after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%}
+.app-header .wrap{padding:32px 18px 28px;position:relative;z-index:1}
+.eyebrow{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:999px;margin-bottom:14px}
+.app-header h1{font-size:clamp(1.4rem,3.4vw,2rem);font-weight:700;line-height:1.2}
+.app-header p.sub{margin-top:8px;max-width:780px;color:rgba(255,255,255,.92);font-size:.95rem}
+.crumbs{margin-top:14px;font-size:.85rem}.crumbs a{color:#BAE6FD;text-decoration:none;border-bottom:1px dashed rgba(186,230,253,.5)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin:18px 0}
+.sec-label{display:inline-block;font-weight:700;font-size:.74rem;letter-spacing:.1em;color:var(--accent);background:var(--soft);border:1px solid #BAE6FD;padding:4px 10px;border-radius:8px;margin-bottom:8px}
+.section-title{font-size:1.16rem;font-weight:600;color:var(--secondary);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--accent)}
+.section-desc{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+p.body{margin:10px 0}
+.idgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.idcell{background:var(--soft);border:1px solid #BAE6FD;border-radius:var(--r-sm);padding:11px 13px}
+.idcell .l{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+.idcell .v{font-family:'Poppins';font-weight:600;color:var(--secondary);font-size:.98rem;margin-top:1px}
+.warnbox{background:#FFFBEB;border:1.5px solid #FCD34D;color:#92400E;border-radius:var(--r-sm);padding:14px 16px;font-size:.86rem;margin-top:12px}
+.warnbox b{color:#7C2D12}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-sm);box-shadow:var(--sh);margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:.84rem}
+thead th{background:var(--secondary);color:#fff;font-weight:600;font-size:.76rem;padding:9px 10px;text-align:left}
+tbody td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#F8FAFC}tbody tr:hover{background:var(--soft)}
+.center{text-align:center}
+.log td:nth-child(1){font-weight:700;color:var(--secondary)}
+.tag{display:inline-block;font-size:.62rem;font-weight:600;padding:2px 7px;border-radius:999px;background:#E0F2FE;color:#075985;border:1px solid #7DD3FC;white-space:nowrap}
+.tf{font-size:.6rem;font-weight:700;padding:1px 6px;border-radius:5px}
+.tf.F{background:#FEE2E2;color:#991B1B}.tf.UF{background:#E0E7FF;color:#3730A3}
+.pick{font-family:'Poppins';font-weight:700;color:var(--secondary)}
+.as{font-family:'Poppins';font-weight:700}
+.as.hi{color:var(--bad)}.as.mid{color:var(--warn)}.as.lo{color:var(--ok)}
+.pill{font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill.st{background:#FCA5A5;color:#7F1D1D;border:1px solid #F87171}
+.pill.t{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+.pill.sd{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D}
+.pill.r{background:#DCFCE7;color:#166534;border:1px solid #86EFAC}
+.barwrap{display:flex;align-items:center;gap:8px}.barwrap b{font-family:'Poppins';font-size:.78rem;min-width:34px}
+.bar{height:10px;border-radius:999px;background:#E2E8F0;overflow:hidden;min-width:70px;flex:1}.bar>i{display:block;height:100%;border-radius:999px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:4px 0 8px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:14px;text-align:center;box-shadow:var(--sh)}
+.stat .v{font-family:'Poppins';font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .l{font-size:.7rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat.bad .v{color:var(--bad)}.stat.warn .v{color:var(--warn)}.stat.ok .v{color:var(--ok)}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+.chart-box{background:#fff;border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;box-shadow:var(--sh)}
+.chart-box h4{font-size:.92rem;color:var(--secondary);margin-bottom:8px;text-align:center}
+.cw{position:relative;height:280px}
+.note{background:var(--soft);border:1px solid #BAE6FD;border-radius:var(--r-sm);padding:13px 16px;color:#075985;font-size:.85rem;margin-top:12px}
+.note b{color:#0369A1}
+footer.foot{color:var(--muted);font-size:.8rem;text-align:center;padding:28px 18px 46px}
+@media(max-width:760px){.idgrid{grid-template-columns:repeat(2,1fr)}.stat-grid{grid-template-columns:repeat(2,1fr)}.chart-grid{grid-template-columns:1fr}table{font-size:.78rem}}
+@media print{.crumbs{display:none}.card,.chart-box{box-shadow:none;break-inside:avoid}body{background:#fff}}
+</style></head>
+<body>
+<header class="app-header"><div class="wrap">
+  <span class="eyebrow">Simulasi Respons Afektif · Role-Play</span>
+  <h1>Skala Kecemasan Matematika — Andi Pratama</h1>
+  <p class="sub">Simulasi 28 pernyataan Likert dijawab dalam karakter Andi (takut ujian, jantung berdebar saat dipanggil ke depan, khawatir nilai jelek, nyaman latihan sendiri, tidak takut guru tetapi takut salah, masih menikmati matematika di luar tes). Item Unfavorable (UF) di-reverse otomatis (skor = 6 − pilihan).</p>
+  <div class="crumbs"><a href="index.html">← Portal</a> · <a href="Simulasi_Respons_Andi_Pratama.html">Respons Kognitif</a> · <a href="EduMind_AI_Dashboard_Andi_Pratama.html">Dashboard</a></div>
+</div></header>
+
+<main class="wrap">
+
+  <section class="card">
+    <div class="section-title">Identitas &amp; Catatan Dimensi</div>
+    <div class="idgrid">
+      <div class="idcell"><div class="l">Nama</div><div class="v">Andi Pratama</div></div>
+      <div class="idcell"><div class="l">Kelas · Usia</div><div class="v">VII SMP · 13 th</div></div>
+      <div class="idcell"><div class="l">Skor total</div><div class="v">92 / 140 (65,7%)</div></div>
+      <div class="idcell"><div class="l">Rerata item</div><div class="v">3,29 / 5</div></div>
+    </div>
+    <div class="warnbox"><b>⚠️ Ketidaksesuaian dimensi.</b> Skala ini (index_2.html) memakai empat dimensi <b>Kognitif · Afektif · Fisiologis · Perilaku</b> (7 item per dimensi). Target Anda memakai <b>Learning · Evaluation · Numerical · Teacher</b> — taksonomi berbeda yang <b>tidak</b> menjadi struktur skala ini. Skor utama di bawah memakai dimensi asli instrumen; rekonsiliasi ke dimensi target diberikan pada Bagian "Reconciliation". Disarankan menyatukan kerangka dimensi sebelum analisis akhir.</div>
+  </section>
+
+  <section class="card">
+    <span class="sec-label">Lembar Respons (28 Item)</span>
+    <div class="section-title">Jawaban Andi per Item + Alasan</div>
+    <p class="section-desc">Pilihan = SS(5)/S(4)/N(3)/TS(2)/STS(1). Skor = pilihan untuk F; (6 − pilihan) untuk UF.</p>
+    <div class="table-scroll"><table class="log">
+      <thead><tr><th>No</th><th>Pernyataan (ringkas)</th><th class="center">Dim</th><th class="center">F/UF</th><th class="center">Pilihan</th><th class="center">Skor</th><th>Alasan (karakter Andi)</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+    <p class="note"><b>Pola jawaban:</b> Andi memuncak pada item bernuansa <b>ujian/penilaian/tampil di depan</b> (no.8,12,15,19,20 → skor 5) dan gejala <b>fisiologis saat tes</b>. Ia justru <b>rendah</b> pada item belajar mandiri (no.25,27 latihan & tepat waktu → skor 1) dan menikmati matematika (no.13,14 → skor rendah). Profil "cemas saat dinilai, nyaman saat belajar sendiri" tergambar konsisten.</p>
+  </section>
+
+  <section class="card">
+    <span class="sec-label">1 · 2 · 3 — Skor Dimensi, Total &amp; Klasifikasi (Dimensi Instrumen)</span>
+    <div class="section-title">Skor per Dimensi Instrumen</div>
+    <p class="section-desc">Klasifikasi rerata: 1,00–1,79 Sangat Rendah · 1,80–2,59 Rendah · 2,60–3,39 Sedang · 3,40–4,19 Tinggi · 4,20–5,00 Sangat Tinggi.</p>
+    <div class="stat-grid">
+      <div class="stat warn"><div class="v">3,71</div><div class="l">Kognitif</div></div>
+      <div class="stat warn"><div class="v">3,00</div><div class="l">Afektif</div></div>
+      <div class="stat bad"><div class="v">4,14</div><div class="l">Fisiologis</div></div>
+      <div class="stat ok"><div class="v">2,29</div><div class="l">Perilaku</div></div>
+    </div>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Dimensi</th><th class="center">Jumlah Skor</th><th class="center">Maks</th><th style="min-width:130px">Rerata / Persentase</th><th class="center">Kategori</th></tr></thead>
+      <tbody>
+        <tr><td>Kognitif</td><td class="center">26</td><td class="center">35</td><td><div class="barwrap"><div class="bar"><i style="width:74%;background:#D97706"></i></div><b>3,71</b></div></td><td class="center"><span class="pill t">Tinggi</span></td></tr>
+        <tr><td>Afektif</td><td class="center">21</td><td class="center">35</td><td><div class="barwrap"><div class="bar"><i style="width:60%;background:#F59E0B"></i></div><b>3,00</b></div></td><td class="center"><span class="pill sd">Sedang</span></td></tr>
+        <tr><td>Fisiologis</td><td class="center">29</td><td class="center">35</td><td><div class="barwrap"><div class="bar"><i style="width:83%;background:#DC2626"></i></div><b>4,14</b></div></td><td class="center"><span class="pill t">Tinggi</span></td></tr>
+        <tr><td>Perilaku</td><td class="center">16</td><td class="center">35</td><td><div class="barwrap"><div class="bar"><i style="width:46%;background:#16A34A"></i></div><b>2,29</b></div></td><td class="center"><span class="pill r">Rendah</span></td></tr>
+        <tr style="font-weight:700;background:#E0F2FE"><td>TOTAL</td><td class="center">92</td><td class="center">140</td><td><div class="barwrap"><div class="bar"><i style="width:66%;background:#0EA5E9"></i></div><b>3,29</b></div></td><td class="center"><span class="pill sd">Sedang</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="chart-grid">
+      <div class="chart-box"><h4>Radar Dimensi Instrumen</h4><div class="cw"><canvas id="radarIns"></canvas></div></div>
+      <div class="chart-box"><h4>Target vs Hasil (Dimensi Target)</h4><div class="cw"><canvas id="barRec"></canvas></div></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <span class="sec-label">Reconciliation · Pemetaan ke Dimensi Target</span>
+    <div class="section-title">Rekonsiliasi ke Learning / Evaluation / Numerical / Teacher</div>
+    <p class="section-desc">Tiap item dipetakan ulang ke dimensi target (interpretasi berbasis konteks item). Karena instrumen tak dirancang untuk dimensi ini, jumlah item per dimensi tidak seimbang.</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Dimensi Target</th><th class="center">Item (no)</th><th class="center">Hasil Rerata</th><th class="center">Target</th><th class="center">Kategori</th><th>Kecocokan</th></tr></thead>
+      <tbody>
+        <tr><td><b>Evaluation Anxiety</b></td><td class="center">5,8,12,15,18,19,20,28</td><td class="center"><b>4,63</b></td><td class="center">4,5</td><td class="center"><span class="pill st">Sangat Tinggi</span></td><td>✅ Sangat cocok</td></tr>
+        <tr><td><b>Teacher Anxiety</b></td><td class="center">23,26</td><td class="center"><b>3,00</b></td><td class="center">2,9</td><td class="center"><span class="pill sd">Sedang</span></td><td>✅ Cocok (hanya 2 item)</td></tr>
+        <tr><td><b>Numerical Anxiety</b></td><td class="center">2,11,14,16,17,21,24</td><td class="center"><b>3,00</b></td><td class="center">3,6</td><td class="center"><span class="pill sd">Sedang</span></td><td>⚠️ Lebih rendah dari target</td></tr>
+        <tr><td><b>Learning Anxiety</b></td><td class="center">1,3,4,6,7,9,10,13,22,25,27</td><td class="center"><b>2,55</b></td><td class="center">3,8</td><td class="center"><span class="pill r">Rendah</span></td><td>⚠️ Jauh lebih rendah dari target</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><b>Mengapa Learning &amp; Numerical lebih rendah dari target?</b> Karena karakter Andi yang Anda tetapkan secara eksplisit <b>"masih menikmati matematika di luar tes"</b> dan <b>"lebih nyaman latihan sendiri"</b> membuat ia menjawab rendah pada item belajar-mandiri & kesenangan (no.7,9,13,25,27). Jadi kecemasan Andi sebenarnya <b>terpusat pada situasi evaluatif</b>, bukan pada proses belajar. Ini profil <i>test-anxiety murni</i> yang internal-konsisten. Bila Anda ingin simulasi mereproduksi persis Learning 3,8 &amp; Numerical 3,6, vinyet karakter perlu disesuaikan (mengurangi unsur "menikmati/ nyaman sendiri"), atau saya dapat menyetel ulang beberapa skor item — beri tahu saja.</div>
+  </section>
+
+  <section class="card">
+    <span class="sec-label">4 — Dimensi Dominan</span>
+    <div class="section-title">Dimensi yang Paling Dominan</div>
+    <p class="body">Secara instrumen, dimensi dominan adalah <b>Fisiologis (4,14 — Tinggi)</b>, diikuti <b>Kognitif (3,71)</b>. Secara dimensi target, dominannya adalah <b>Evaluation Anxiety (4,63 — Sangat Tinggi)</b>. Kedua sudut pandang menunjuk ke hal yang sama: <b>gejolak tubuh dan kecemasan saat dinilai/ujian</b> adalah puncak kecemasan Andi — jantung berdebar (no.15), otot menegang saat lembar soal dibagikan (no.20), napas tak normal di depan kelas (no.19), takut dipanggil ke papan (no.8). Sebaliknya, dimensi <b>Perilaku rendah (2,29)</b> menegaskan ia tetap rajin (mengerjakan latihan tambahan, mengumpulkan tepat waktu) — kecemasannya tidak berubah menjadi penghindaran belajar.</p>
+  </section>
+
+  <section class="card">
+    <span class="sec-label">5 — Dampak terhadap Pembelajaran</span>
+    <div class="section-title">Dampak terhadap Pembelajaran Matematika</div>
+    <p class="body">Profil ini berdampak khas: <b>kesenjangan antara kemampuan dan performa saat dinilai (performance gap)</b>. Andi nyaman dan kompeten saat belajar/berlatih sendiri, tetapi kecemasan evaluatif-fisiologis yang tinggi menekan kinerjanya tepat di momen ulangan — sehingga nilai tes berpotensi <b>di bawah kemampuan sebenarnya</b>. Ini berarti sebagian skor kognitif rendah (mis. aljabar/persamaan) patut diperiksa ulang dalam kondisi rendah-tekanan, karena bisa jadi sebagian adalah <i>performance gap</i> afektif, bukan murni <i>competence gap</i>.</p>
+    <p class="body">Dalam kerangka HO-DINA, skor ini menjadi <b>kovariat afektif (θ-afektif)</b> di level struktural — θ-afektif yang tinggi menggeser turun probabilitas teramati penguasaan pada tugas berpenilaian. Implikasi pembelajaran: (1) gunakan <b>asesmen formatif rendah-tekanan</b> dan paparan ujian bertahap; (2) kurangi tampil dadakan di depan kelas, ganti dengan penyelesaian terbimbing; (3) manfaatkan kekuatan <b>belajar mandiri</b> Andi sebagai jangkar membangun rasa berhasil; (4) karena ia <b>tidak takut guru</b>, relasi guru adalah kanal pendampingan yang aman.</p>
+    <div class="note"><b>Disclaimer.</b> Seluruh respons & skor adalah <b>simulasi role-play berbasis vinyet karakter</b>, bukan data siswa nyata, dan untuk pengujian instrumen. Penskoran θ-afektif final harus distandarkan pada sampel kalibrasi dengan konvensi norming yang didokumentasikan.</div>
+  </section>
+
+</main>
+<footer class="foot">Simulasi Respons Afektif (role-play) · Skala Kecemasan Matematika MCDM · Khusnul Marom — Pengembangan Model Diagnostik Kesulitan Belajar Matematika Bagi Murid SMP Berbasis AI.</footer>
+
+<script>
+Chart.defaults.font.family="Inter, sans-serif"; Chart.defaults.color='#64748B';
+const DATA=[
+ [1,"Khawatir tidak mampu menyelesaikan soal","Kognitif","F","S · 4",4,"Sering khawatir nilai jelek → ragu pada kemampuan sendiri."],
+ [2,"Pikiran kosong saat soal sulit","Kognitif","F","S · 4",4,"Soal sulit membuatnya buntu/panik sesaat."],
+ [3,"Yakin dapat memahami materi","Kognitif","UF","TS · 2",4,"Kekhawatiran menggerus rasa percaya diri akan pemahaman."],
+ [4,"Sulit konsentrasi saat tugas","Kognitif","F","N · 3",3,"Konsentrasi terganggu sedang; lebih baik bila sendiri."],
+ [5,"Optimis memulai ulangan","Kognitif","UF","STS · 1",5,"Sangat tidak optimis — ulangan adalah pemicu utama cemas."],
+ [6,"Memikirkan kemungkinan gagal saat belajar","Kognitif","F","S · 4",4,"Pikiran 'takut nilai jelek' muncul bahkan saat belajar."],
+ [7,"Mampu fokus selama pelajaran","Kognitif","UF","S · 4",2,"Saat pelajaran (bukan tes) ia masih menikmati & fokus."],
+ [8,"Takut saat ditunjuk ke papan tulis","Afektif","F","SS · 5",5,"Persis profil: dipanggil ke depan membuatnya sangat takut."],
+ [9,"Menyukai tantangan matematika","Afektif","UF","S · 4",2,"Masih menikmati matematika di luar situasi tes."],
+ [10,"Tegang saat pelajaran akan dimulai","Afektif","F","N · 3",3,"Sedikit tegang, tapi pelajaran biasa tidak menakutkan."],
+ [11,"Tenang saat mengerjakan soal","Afektif","UF","N · 3",3,"Tenang bila mudah/sendiri; kurang tenang bila sulit."],
+ [12,"Cemas saat hari ulangan dekat","Afektif","F","SS · 5",5,"Sangat cemas menjelang ulangan."],
+ [13,"Matematika membuat tidak nyaman","Afektif","F","TS · 2",2,"Tidak setuju — ia masih menyukai matematika."],
+ [14,"Senang saat berhasil memecahkan soal","Afektif","UF","SS · 5",1,"Sangat menikmati keberhasilan → kecemasan rendah di sini."],
+ [15,"Jantung berdebar saat ulangan","Fisiologis","F","SS · 5",5,"Persis profil: jantung berdebar saat dinilai."],
+ [16,"Telapak tangan berkeringat saat soal sulit","Fisiologis","F","S · 4",4,"Gejala fisik muncul pada soal sulit."],
+ [17,"Tubuh rileks saat tugas","Fisiologis","UF","S · 4",2,"Saat latihan sendiri tubuhnya cukup rileks."],
+ [18,"Mual/pusing menjelang ujian","Fisiologis","F","S · 4",4,"Ada rasa tidak enak menjelang ujian (tak selalu parah)."],
+ [19,"Pernapasan normal saat di depan kelas","Fisiologis","UF","STS · 1",5,"Justru panik & napas tak teratur saat tampil di depan."],
+ [20,"Otot menegang saat lembar soal dibagikan","Fisiologis","F","SS · 5",5,"Momen lembar soal dibagikan memicu ketegangan kuat."],
+ [21,"Tangan gemetar saat soal sulit","Fisiologis","F","S · 4",4,"Tangan gemetar saat menemui soal sulit di bawah tekanan."],
+ [22,"Menunda PR hingga menit terakhir","Perilaku","F","TS · 2",2,"Tidak menunda — ia tertib mengerjakan."],
+ [23,"Aktif bertanya kepada guru","Perilaku","UF","N · 3",3,"Tidak takut guru, tapi takut salah → bertanya secukupnya."],
+ [24,"Menghindari kegiatan dengan perhitungan","Perilaku","F","N · 3",3,"Menghindar hanya bila di bawah tekanan; umumnya tidak."],
+ [25,"Latihan tambahan atas kemauan sendiri","Perilaku","UF","SS · 5",1,"Nyaman & rajin berlatih sendiri → kecemasan sangat rendah."],
+ [26,"Memilih diam daripada bertanya","Perilaku","F","N · 3",3,"Takut salah membuatnya kadang diam, tapi tak selalu."],
+ [27,"Mengumpulkan tugas tepat waktu","Perilaku","UF","SS · 5",1,"Bertanggung jawab; selalu tepat waktu."],
+ [28,"Mencari alasan tidak masuk saat ulangan","Perilaku","F","N · 3",3,"Sangat takut ulangan, tapi tetap bertanggung jawab masuk."]
+];
+const tb=document.getElementById('rows');
+DATA.forEach(d=>{
+  const cls=d[5]>=4?'hi':d[5]>=3?'mid':'lo';
+  tb.insertAdjacentHTML('beforeend',`<tr><td>${d[0]}</td><td>${d[1]}</td><td class="center"><span class="tag">${d[2]}</span></td><td class="center"><span class="tf ${d[3]}">${d[3]}</span></td><td class="center pick">${d[4]}</td><td class="center as ${cls}">${d[5]}</td><td>${d[6]}</td></tr>`);
+});
+
+new Chart(document.getElementById('radarIns'),{type:'radar',
+ data:{labels:['Kognitif','Afektif','Fisiologis','Perilaku'],datasets:[{data:[3.71,3.00,4.14,2.29],fill:true,backgroundColor:'rgba(14,165,233,.18)',borderColor:'#0369A1',pointBackgroundColor:['#D97706','#F59E0B','#DC2626','#16A34A'],pointRadius:6,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:2.5}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.r.toFixed(2)}}},
+  scales:{r:{min:0,max:5,ticks:{stepSize:1,backdropColor:'transparent'},grid:{color:'#E2E8F0'},angleLines:{color:'#E2E8F0'},pointLabels:{font:{size:12,weight:'600'}}}}}});
+
+new Chart(document.getElementById('barRec'),{type:'bar',
+ data:{labels:['Learning','Evaluation','Numerical','Teacher'],
+   datasets:[
+     {label:'Target',data:[3.8,4.5,3.6,2.9],backgroundColor:'#CBD5E1',borderRadius:5},
+     {label:'Hasil Andi',data:[2.55,4.63,3.00,3.00],backgroundColor:['#16A34A','#DC2626','#F59E0B','#0EA5E9'],borderRadius:5}
+   ]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}},
+   tooltip:{callbacks:{label:c=>c.dataset.label+': '+c.parsed.y.toFixed(2)}}},
+   scales:{y:{min:0,max:5,ticks:{stepSize:1}},x:{grid:{display:false}}}}});
+</script>
+</body></html>

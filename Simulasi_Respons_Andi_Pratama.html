@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulasi Respons Siswa · Andi Pratama · Tes Diagnostik MCDM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--primary:#0F766E;--secondary:#134E4A;--accent:#14B8A6;--accent-2:#0EA5E9;--bg:#F1F5F9;--surface:#FFF;--soft:#F0FDFA;--line:#E2E8F0;--ink:#1E293B;--muted:#64748B;--ok:#16A34A;--warn:#D97706;--bad:#DC2626;--r:14px;--rs:10px;--sh:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06)}
+*{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px}
+h1,h2,h3,h4,.disp{font-family:'Poppins',sans-serif}.mono{font-family:'JetBrains Mono',monospace}
+.wrap{max-width:1120px;margin:0 auto;padding:0 18px}
+.app-header{background:linear-gradient(135deg,var(--secondary),var(--primary) 60%,var(--accent));color:#fff;position:relative;overflow:hidden}
+.app-header::after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%}
+.app-header .wrap{padding:32px 18px 28px;position:relative;z-index:1}
+.eyebrow{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:999px;margin-bottom:12px}
+.app-header h1{font-size:clamp(1.35rem,3.2vw,1.95rem);font-weight:700;line-height:1.2}
+.app-header p.sub{margin-top:8px;max-width:780px;color:rgba(255,255,255,.92);font-size:.93rem}
+.crumbs{margin-top:12px;font-size:.84rem}.crumbs a{color:#CCFBF1;text-decoration:none;border-bottom:1px dashed rgba(204,251,241,.5)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:22px;margin:18px 0}
+.sec-label{display:inline-block;font-weight:700;font-size:.74rem;letter-spacing:.1em;color:var(--accent);background:var(--soft);border:1px solid #99F6E4;padding:4px 10px;border-radius:8px;margin-bottom:8px;font-family:'Poppins'}
+.section-title{font-size:1.16rem;font-weight:600;color:var(--secondary);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--accent)}
+.section-desc{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+p.body{margin:10px 0}
+.flag{background:#FFFBEB;border:1.5px solid #FCD34D;border-left:5px solid var(--warn);border-radius:var(--rs);padding:14px 16px;color:#92400E;font-size:.88rem;margin:14px 0}
+.flag b{color:#78350F}
+.idgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.idcell{background:var(--soft);border:1px solid #CCFBF1;border-radius:var(--rs);padding:11px 13px}
+.idcell .l{font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+.idcell .v{font-family:'Poppins';font-weight:600;color:var(--secondary);font-size:.96rem;margin-top:2px}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0}
+.stat{border:1px solid var(--line);border-radius:var(--rs);padding:15px;text-align:center;box-shadow:var(--sh)}
+.stat .v{font-family:'Poppins';font-size:1.6rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .l{font-size:.72rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat.ok .v{color:var(--ok)}.stat.bad .v{color:var(--bad)}.stat.warn .v{color:var(--warn)}
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--rs);box-shadow:var(--sh);margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.85rem;min-width:640px}
+thead th{background:var(--secondary);color:#fff;font-family:'Poppins';font-weight:600;font-size:.76rem;padding:9px 10px;text-align:left;position:sticky;top:0}
+tbody td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:#F8FAFC}
+.center{text-align:center}
+.tag{font-size:.64rem;font-weight:600;padding:2px 6px;border-radius:6px;background:#CCFBF1;color:#0F766E;border:1px solid #5EEAD4;margin-right:2px;font-family:'JetBrains Mono'}
+.res{font-family:'Poppins';font-weight:700;font-size:.78rem}.res.y{color:var(--ok)}.res.n{color:var(--bad)}
+.misc{color:var(--bad);font-size:.78rem;display:block;margin-top:3px}
+.misc::before{content:"⚠ miskonsepsi: ";font-weight:600}
+.pill{display:inline-block;font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill.g{background:#DCFCE7;color:#166534;border:1px solid #86EFAC}
+.pill.b{background:#DBEAFE;color:#1E40AF;border:1px solid #93C5FD}
+.pill.y{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D}
+.pill.r{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+.barw{display:flex;align-items:center;gap:9px}.barw b{font-family:'Poppins';font-size:.8rem;min-width:42px}
+.bar{height:11px;border-radius:999px;background:#E2E8F0;overflow:hidden;min-width:70px;flex:1}.bar>i{display:block;height:100%;border-radius:999px}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:14px 0}
+.chart-box{background:#fff;border:1px solid var(--line);border-radius:var(--rs);padding:16px;box-shadow:var(--sh)}
+.chart-box h4{font-size:.92rem;color:var(--secondary);margin-bottom:10px;text-align:center}
+.cw{position:relative;height:300px}
+.chain{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0;font-family:'Poppins';font-size:.84rem}
+.node{padding:8px 12px;border-radius:10px;border:1.5px solid;font-weight:600}
+.node.g{background:#F0FDF4;border-color:#86EFAC;color:#166534}
+.node.r{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+.node.y{background:#FFFBEB;border-color:#FCD34D;color:#92400E}
+.arr{color:var(--muted);font-weight:700}.arr.brk{color:var(--bad)}
+.note{background:var(--soft);border:1px solid #99F6E4;border-radius:var(--rs);padding:13px 16px;color:#115E59;font-size:.84rem;margin-top:14px}
+.vec{background:#0B1120;color:#5EEAD4;padding:12px 14px;border-radius:var(--rs);font-family:'JetBrains Mono';font-size:.8rem;overflow-x:auto;margin-top:8px;letter-spacing:1px}
+footer{color:var(--muted);font-size:.8rem;text-align:center;padding:28px 18px 46px}
+@media(max-width:760px){.idgrid,.stat-grid{grid-template-columns:repeat(2,1fr)}.chart-grid{grid-template-columns:1fr}}
+@media print{.crumbs{display:none}.card,.chart-box{box-shadow:none;break-inside:avoid}body{background:#fff}}
+</style></head>
+<body>
+<header class="app-header"><div class="wrap">
+  <span class="eyebrow">Simulasi Respons Siswa · Tes Diagnostik MCDM (40 butir)</span>
+  <h1>Andi Pratama Mengerjakan Tes Diagnostik Kognitif</h1>
+  <p class="sub">Setiap butir dijawab sesuai karakteristik Andi (kuat bilangan bulat–geometri–pengukuran; lemah pecahan–aljabar–persamaan linear; cemas saat dinilai), lalu diskor memakai Q-matrix & kunci asli instrumen.</p>
+  <div class="crumbs"><a href="index.html">← Portal</a> · <a href="Laporan_Diagnostik_Andi_Pratama.html">Laporan Diagnostik</a> · <a href="EduMind_AI_Dashboard_Andi_Pratama.html">Dashboard</a></div>
+</div></header>
+
+<main class="wrap">
+
+  <section class="card">
+    <div class="idgrid">
+      <div class="idcell"><div class="l">Nama</div><div class="v">Andi Pratama</div></div>
+      <div class="idcell"><div class="l">Kelas / Usia</div><div class="v">VII SMP · 13 th</div></div>
+      <div class="idcell"><div class="l">Skor Total</div><div class="v">24 / 40 (60)</div></div>
+      <div class="idcell"><div class="l">Rerata Smt Lalu</div><div class="v">± 70</div></div>
+    </div>
+    <div class="flag"><b>⚠ Catatan pelabelan atribut.</b> Tag atribut pada butir mengikuti skema <b>instrumen</b> (A2 = Operasi Bilangan Bulat, A3 = Konsep Pecahan, A4 = Operasi Pecahan, A5 = Aljabar, A6 = PLSV, A7 = Geometri, A8 = Pengukuran) — berbeda dari penomoran pada prompt profil. Jawaban Andi dipilih berdasarkan <b>kompetensi nyata</b> tiap soal, sehingga hasil tetap konsisten dengan profilnya. Seragamkan kedua skema label di Bab Metode.</div>
+  </section>
+
+  <!-- RESPONSE RECORD -->
+  <section class="card">
+    <span class="sec-label">Rekaman Jawaban · 40 Butir</span>
+    <div class="section-title">Jawaban Andi per Butir + Alasan & Miskonsepsi</div>
+    <p class="section-desc">Kolom "Andi" = pilihan siswa; "Kunci" = jawaban benar; centang/silang = hasil. Baris merah memuat miskonsepsi yang teridentifikasi.</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th>No</th><th>Atribut</th><th class="center">Andi</th><th class="center">Kunci</th><th class="center">Hasil</th><th>Alasan Andi memilih / Miskonsepsi</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+    <p class="section-desc" style="margin-top:10px">Vektor respons (1 = benar), urut butir 1→40:</p>
+    <div class="vec" id="vec"></div>
+  </section>
+
+  <!-- A & B & C: SCORES, MASTERY, DIAGNOSIS -->
+  <section class="card">
+    <span class="sec-label">A · B · C</span>
+    <div class="section-title">Skor Atribut, Probabilitas Mastery & Tabel Diagnosis</div>
+    <p class="section-desc">Skor atribut = benar / butir pengukur (butir kombinasi dihitung untuk tiap atributnya). P(mastery) = estimasi gaya DINA dengan koreksi tebakan; ambang mastery ≥ 0,60.</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Kode</th><th>Atribut (instrumen)</th><th class="center">Butir</th><th class="center">Benar</th><th style="min-width:140px">Skor</th><th class="center">P(mastery)</th><th class="center">Status</th></tr></thead>
+      <tbody id="attrRows"></tbody>
+    </table></div>
+    <div class="chart-grid">
+      <div class="chart-box"><h4>Radar Profil Hasil (A1–A8)</h4><div class="cw"><canvas id="radar"></canvas></div></div>
+      <div class="chart-box"><h4>Skor Mastery per Atribut</h4><div class="cw"><canvas id="bar"></canvas></div></div>
+    </div>
+  </section>
+
+  <!-- D: UNMASTERED -->
+  <section class="card">
+    <span class="sec-label">D · Atribut Belum Dikuasai</span>
+    <div class="section-title">Atribut yang Belum Dikuasai</div>
+    <p class="body">Empat atribut berada di bawah ambang 0,60 dan membentuk satu klaster yang saling terkait:</p>
+    <div class="stat-grid">
+      <div class="stat warn"><div class="v">40%</div><div class="l">A3 Konsep Pecahan</div></div>
+      <div class="stat bad"><div class="v">25%</div><div class="l">A4 Operasi Pecahan</div></div>
+      <div class="stat bad"><div class="v">29%</div><div class="l">A5 Aljabar Dasar</div></div>
+      <div class="stat bad"><div class="v">20%</div><div class="l">A6 PLSV</div></div>
+    </div>
+    <p class="body"><b>Pola kunci:</b> fondasi bilangan bulat (A1 100%, A2 89%) kokoh, tetapi kemampuan runtuh begitu masuk <b>ranah pecahan</b> (A3/A4) dan menjalar ke aljabar (A5) lalu persamaan linear (A6). Geometri (A7 83%) dan pengukuran (A8 67%) tetap baik karena relatif lepas dari rantai pecahan–aljabar.</p>
+    <div class="note"><b>Insight diagnostik halus:</b> pada butir 14 (perkalian pecahan) Andi <b>benar</b> dengan aturan "kali lurus", namun aturan "lurus" yang sama membuatnya <b>salah</b> di butir 13 & 15 (penjumlahan/pengurangan pecahan). Ini menandakan akar masalah adalah <b>whole-number bias</b> pada penjumlahan/pengurangan pecahan, bukan ketidakmampuan menyeluruh.</div>
+  </section>
+
+  <!-- E: PREREQUISITE CHAIN -->
+  <section class="card">
+    <span class="sec-label">E · Rantai Prasyarat Bermasalah</span>
+    <div class="section-title">Rantai Prasyarat yang Bermasalah</div>
+    <p class="section-desc">Mengikuti hierarki atribut: titik patah berada di transisi bilangan bulat → pecahan.</p>
+    <div class="chain">
+      <span class="node g">A1 Konsep Bil. Bulat ✓</span><span class="arr">→</span>
+      <span class="node g">A2 Operasi Bil. Bulat ✓</span><span class="arr brk">⇏ PUTUS</span>
+      <span class="node r">A3 Konsep Pecahan ✗</span><span class="arr">→</span>
+      <span class="node r">A4 Operasi Pecahan ✗</span><span class="arr">→</span>
+      <span class="node r">A5 Aljabar ✗</span><span class="arr">→</span>
+      <span class="node r">A6 PLSV ✗</span>
+    </div>
+    <div class="chain"><span class="node g">A1/A2 (bilangan) ✓</span><span class="arr">→</span><span class="node y">A7 Geometri ✓</span><span class="arr">→</span><span class="node b">A8 Pengukuran ✓</span> &nbsp;<span style="color:var(--muted);font-size:.82rem">(jalur konkret–spasial tetap utuh)</span></div>
+    <p class="body"><b>Diagnosis rantai:</b> keterputusan terjadi tepat saat bilangan bulat harus diperluas menjadi <b>bilangan rasional (pecahan)</b>. Karena A4 (operasi pecahan) menjadi prasyarat untuk manipulasi aljabar (A5), dan A5 prasyarat PLSV (A6), satu sumbatan di pecahan menekan tiga atribut hilir sekaligus.</p>
+  </section>
+
+  <!-- F: NEXT SEMESTER -->
+  <section class="card">
+    <span class="sec-label">F · Prediksi Semester Berikutnya</span>
+    <div class="section-title">Prediksi Kesulitan Belajar Semester Depan</div>
+    <p class="section-desc">Materi Kelas VII Semester 2 (Kurikulum Merdeka) bertumpu pada atribut yang justru paling lemah.</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Topik Semester Depan</th><th>Atribut prasyarat</th><th class="center">Estimasi Kesiapan</th><th class="center">Risiko</th></tr></thead>
+      <tbody>
+        <tr><td>Persamaan & Pertidaksamaan Linear (PtLSV)</td><td>A5, A6</td><td class="center">± 24%</td><td class="center"><span class="pill r">Sangat Tinggi</span></td></tr>
+        <tr><td>Bentuk & Operasi Aljabar</td><td>A4, A5</td><td class="center">± 27%</td><td class="center"><span class="pill r">Tinggi</span></td></tr>
+        <tr><td>Perbandingan & Skala</td><td>A3, A4</td><td class="center">± 33%</td><td class="center"><span class="pill r">Tinggi</span></td></tr>
+        <tr><td>Aritmetika Sosial (pecahan/persen)</td><td>A2, A4</td><td class="center">± 45%</td><td class="center"><span class="pill y">Sedang–Tinggi</span></td></tr>
+        <tr><td>Penyajian & Pengukuran Data</td><td>A7, A8</td><td class="center">± 72%</td><td class="center"><span class="pill g">Rendah</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="body"><b>Kesimpulan prediksi:</b> Andi diperkirakan paling kesulitan pada <b>Aljabar dan Persamaan/Pertidaksamaan Linear</b>, serta <b>Perbandingan/Skala</b> (penalaran rasio lemah — terlihat pada butir 40). Topik geometri-pengukuran-data relatif aman. Karena hulu masalah adalah pecahan, <b>intervensi paling berdaya ungkit adalah pemulihan operasi pecahan (A3→A4)</b> sebelum menyentuh aljabar.</p>
+    <div class="note"><b>Disclaimer.</b> Skor & P(mastery) di sini dihitung dari satu set 40 butir yang relatif berfokus pada materi fondasi; estimasi P bersifat ilustratif gaya DINA. Pada penerapan riil, kalibrasi HO-DINA/NCDM atas sampel empiris akan menghaluskan nilai (mis. A1 yang di sini 100% kemungkinan regresi ke ±90% pada bank butir yang lebih sulit).</div>
+  </section>
+
+</main>
+<footer>Simulasi Respons Siswa (fiktif) · Tes Diagnostik Kognitif MCDM · Khusnul Marom — Pengembangan Model Diagnostik Kesulitan Belajar Matematika Bagi Murid SMP Berbasis AI.</footer>
+
+<script>
+const ATTRNAME={A1:'Konsep Bilangan Bulat',A2:'Operasi Bilangan Bulat',A3:'Konsep Pecahan',A4:'Operasi Pecahan',A5:'Aljabar Dasar',A6:'PLSV (Persamaan Linear)',A7:'Geometri Dasar',A8:'Pengukuran'};
+const D=[
+{n:1,a:['A1'],andi:'B',k:'B',r:'−3 lebih ke kanan dari −8 pada garis bilangan → kota A lebih hangat.'},
+{n:2,a:['A1'],andi:'B',k:'B',r:'Mengurutkan bilangan bulat negatif dengan tepat.'},
+{n:3,a:['A1','A2'],andi:'A',k:'A',r:'−2 + 5 − 3 = 0; operasi bilangan bulat lancar.'},
+{n:4,a:['A1'],andi:'B',k:'B',r:'Tahu lawan 7 = −7 dan |−7| = 7.'},
+{n:5,a:['A2'],andi:'A',k:'A',r:'−15 + 9 = −6; penjumlahan bilangan bulat dikuasai.'},
+{n:6,a:['A2'],andi:'B',k:'B',r:'Negatif × negatif = positif → 24.'},
+{n:7,a:['A2'],andi:'A',k:'A',r:'Dahulukan perkalian: 12 − (−6) = 18.'},
+{n:8,a:['A2','A4'],andi:'B',k:'A',r:'Mencoba 1½ × 4 lalu membalik pengurangan jadi 6 − 2 = 4.',m:'Kesulitan mengoperasikan bilangan campuran (1½) & salah menentukan tanda akhir pada konteks bertingkat.'},
+{n:9,a:['A3'],andi:'B',k:'B',r:'Konteks gambar (pizza): 8 − 3 = 5 bagian tersisa → 5/8. Konkret/visual menolongnya.'},
+{n:10,a:['A3'],andi:'C',k:'B',r:'Membaca 0,75 sebagai "75 per 10".',m:'Kesalahan nilai tempat saat mengubah desimal ke pecahan (0,75 → 75/10, bukan 75/100 lalu disederhanakan).'},
+{n:11,a:['A3'],andi:'A',k:'B',r:'Menganggap 3/5 lebih besar karena penyebut 5 > 3.',m:'Membandingkan pecahan dengan logika bilangan bulat (penyebut besar dianggap nilai besar).'},
+{n:12,a:['A1','A3'],andi:'B',k:'B',r:'Negatif di kiri 0; −1/2 antara 0 dan −1. Penalaran garis bilangan (kekuatannya) menolong.'},
+{n:13,a:['A4'],andi:'A',k:'B',r:'(1+1)/(2+3) = 2/5.',m:'Whole-number bias: menjumlah pembilang & penyebut tanpa menyamakan penyebut.'},
+{n:14,a:['A4'],andi:'A',k:'A',r:'Mengalikan lurus: (2×3)/(3×4) = 6/12 = 1/2. Untuk perkalian, aturan "lurus" memang benar.'},
+{n:15,a:['A4'],andi:'A',k:'B',r:'Mengurangi lurus: (3−1)/(4−2) = 2/2.',m:'Whole-number bias pada pengurangan pecahan (insting "lurus" yang benar di perkalian, salah di sini).'},
+{n:16,a:['A2','A4'],andi:'A',k:'A',r:'Konteks uang: 1/5 dari 50.000 = 10.000 → 2/5 = 20.000; sisa 30.000 + 8.000 = 38.000. Konteks nyata membantunya.'},
+{n:17,a:['A3','A4'],andi:'B',k:'A',r:'3/4 ÷ 1/8 dikira dikali langsung: 3/4 × 1/8 = 3/32.',m:'Pembagian pecahan tidak dibalik (÷ tidak diubah menjadi × kebalikan pembagi).'},
+{n:18,a:['A4'],andi:'A',k:'B',r:'2/3 ÷ 4/5 dikali lurus = 8/15 tanpa membalik pembagi.',m:'Sama: tidak membalik pembagi pada pembagian pecahan.'},
+{n:19,a:['A2'],andi:'A',k:'A',r:'7×4 − 3×2 = 28 − 6 = 22; operasi bilangan bulat dikuasai.'},
+{n:20,a:['A1','A2'],andi:'A',k:'A',r:'−18 + (2×5) = −18 + 10 = −8.'},
+{n:21,a:['A5'],andi:'A',k:'A',r:'Hafal definisi: koefisien = 5, konstanta = 3.'},
+{n:22,a:['A5'],andi:'A',k:'B',r:'Menggabungkan semua menjadi 9ab.',m:'Conjoining — menyatukan suku-suku tak sejenis menjadi satu suku.'},
+{n:23,a:['A5'],andi:'A',k:'B',r:'3 hanya dikalikan ke suku pertama: 6x, lalu +4 disalin.',m:'Distribusi tidak lengkap (suku kedua tidak ikut dikalikan).'},
+{n:24,a:['A4','A5'],andi:'A',k:'B',r:'Koefisien pecahan dijumlah lurus: (1+1)/(2+4) = 2/6.',m:'Whole-number bias pecahan menular ke koefisien aljabar.'},
+{n:25,a:['A5'],andi:'B',k:'B',r:'(−2)² = 4 (tahu negatif kuadrat = positif), lalu 2×4 + 3 = 11. Kekuatan bilangan bulat menolong substitusi.'},
+{n:26,a:['A5','A6'],andi:'A',k:'B',r:'"Dikurangi 7 menghasilkan 12" dimodelkan x + 7 = 12.',m:'Menukar operasi (pengurangan dimodelkan sebagai penjumlahan) saat menerjemahkan kalimat.'},
+{n:27,a:['A6'],andi:'A',k:'A',r:'Menalar aritmetika: berapa + 5 = 12 → 7. Kasus paling sederhana masih bisa.'},
+{n:28,a:['A6'],andi:'B',k:'A',r:'3x = 18 diselesaikan dengan mengalikan 3 × 18 = 54.',m:'"=" dianggap perintah hitung; operasi invers (bagi) tidak dipakai.'},
+{n:29,a:['A6'],andi:'B',k:'A',r:'2x − 3 = 7 → memindah −3 tetap −3: 2x = 7 − 3 = 4 → x = 2.',m:'Tidak mengubah tanda saat memindah ruas (error dua langkah).'},
+{n:30,a:['A5','A6'],andi:'C',k:'A',r:'Membagi total dua sama: 27 ÷ 2 = 13,5.',m:'Mengabaikan kendala selisih 3 tahun saat memodelkan soal cerita.'},
+{n:31,a:['A7'],andi:'B',k:'B',r:'120° > 90° → sudut tumpul.'},
+{n:32,a:['A7'],andi:'B',k:'B',r:'Dua sisi sama (5,5) → segitiga sama kaki.'},
+{n:33,a:['A7'],andi:'B',k:'B',r:'Dua pasang sisi sejajar + sudut 90° → persegi panjang.'},
+{n:34,a:['A7'],andi:'B',k:'B',r:'Keliling persegi panjang = 2 × (p + l).'},
+{n:35,a:['A7','A8'],andi:'A',k:'A',r:'Pagar = keliling = 2 × (12 + 7) = 38 m.'},
+{n:36,a:['A8'],andi:'B',k:'B',r:'2,5 km = 2.500 m; konversi satuan dikuasai.'},
+{n:37,a:['A8'],andi:'B',k:'B',r:'Luas persegi = 9 × 9 = 81 cm².'},
+{n:38,a:['A2','A8'],andi:'A',k:'A',r:'Butuh 6 × 4 = 24 ubin; sisa 30 − 24 = 6 (luas + bilangan bulat, keduanya kuat).'},
+{n:39,a:['A7','A8'],andi:'B',k:'A',r:'Menghitung 6 × 8 = 48 dan lupa faktor ½.',m:'Mengabaikan ½ pada rumus luas segitiga — sebagian karena kurang nyaman dengan pecahan.'},
+{n:40,a:['A8'],andi:'C',k:'A',r:'Skala 1:200 dihitung dengan membagi 4 ÷ 200 = 0,02 m.',m:'Arah operasi skala terbalik (penalaran rasio/perbandingan lemah).'}
+];
+
+// render rows + vector
+const rows=document.getElementById('rows');
+D.forEach(d=>{
+  const ok=d.andi===d.k;
+  rows.insertAdjacentHTML('beforeend',`<tr>
+    <td class="center mono">${d.n}</td>
+    <td>${d.a.map(x=>`<span class="tag" title="${ATTRNAME[x]}">${x}</span>`).join('')}</td>
+    <td class="center mono"><b>${d.andi}</b></td>
+    <td class="center mono">${d.k}</td>
+    <td class="center res ${ok?'y':'n'}">${ok?'✓':'✗'}</td>
+    <td>${d.r}${d.m?`<span class="misc">${d.m}</span>`:''}</td></tr>`);
+});
+document.getElementById('vec').textContent = D.map(d=>d.andi===d.k?1:0).join(' ');
+
+// attribute scoring
+const order=['A1','A2','A3','A4','A5','A6','A7','A8'];
+const tally={}; order.forEach(a=>tally[a]={t:0,c:0});
+D.forEach(d=>{const ok=d.andi===d.k; d.a.forEach(a=>{tally[a].t++; if(ok)tally[a].c++;});});
+const Pmap={A1:0.95,A2:0.88,A3:0.38,A4:0.22,A5:0.28,A6:0.20,A7:0.82,A8:0.66};
+const scores=order.map(a=>tally[a].c/tally[a].t);
+const attrRows=document.getElementById('attrRows');
+order.forEach((a,i)=>{
+  const sc=scores[i], pct=Math.round(sc*100), P=Pmap[a];
+  const col=sc>=0.8?'linear-gradient(90deg,#16A34A,#22C55E)':sc>=0.6?'linear-gradient(90deg,#0EA5E9,#38BDF8)':sc>=0.4?'linear-gradient(90deg,#D97706,#FBBF24)':'linear-gradient(90deg,#DC2626,#F97316)';
+  const stat = P>=0.6?(P>=0.8?'<span class="pill g">Mastered</span>':'<span class="pill b">Mastered</span>'):(P>=0.4?'<span class="pill y">Belum (rendah)</span>':'<span class="pill r">Belum (sangat rendah)</span>');
+  attrRows.insertAdjacentHTML('beforeend',`<tr>
+    <td class="mono"><b>${a}</b></td><td>${ATTRNAME[a]}</td>
+    <td class="center">${tally[a].t}</td><td class="center">${tally[a].c}</td>
+    <td><div class="barw"><div class="bar"><i style="width:${pct}%;background:${col}"></i></div><b>${pct}%</b></div></td>
+    <td class="center mono"><b>${P.toFixed(2)}</b></td><td class="center">${stat}</td></tr>`);
+});
+
+// charts
+const FONT="Inter, sans-serif"; Chart.defaults.font.family=FONT; Chart.defaults.color='#64748B';
+const colOf=v=>v>=0.8?'#16A34A':v>=0.6?'#0EA5E9':v>=0.4?'#D97706':'#DC2626';
+new Chart(document.getElementById('radar'),{type:'radar',
+ data:{labels:order,datasets:[{data:scores,fill:true,backgroundColor:'rgba(20,184,166,.18)',borderColor:'#0F766E',pointBackgroundColor:scores.map(colOf),pointRadius:5,borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.r.toFixed(2)}}},
+  scales:{r:{min:0,max:1,ticks:{stepSize:0.2,backdropColor:'transparent'},grid:{color:'#E2E8F0'},angleLines:{color:'#E2E8F0'},pointLabels:{font:{size:12,weight:'600'}}}}}});
+new Chart(document.getElementById('bar'),{type:'bar',
+ data:{labels:order,datasets:[{data:scores,backgroundColor:scores.map(colOf),borderRadius:6}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.parsed.y*100).toFixed(0)+'%'}}},
+  scales:{y:{min:0,max:1,ticks:{stepSize:0.2}},x:{grid:{display:false}}}}});
+</script>
+</body></html>
