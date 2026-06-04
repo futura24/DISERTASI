@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Tes Diagnostik Kognitif MCDM — instrumen MCDM">
+<title>Tes Diagnostik Kognitif MCDM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<!-- Chart.js untuk radar / bar / gauge -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --primary:#0F766E; --secondary:#134E4A; --accent:#14B8A6; --accent-2:#0EA5E9;
+  --bg:#F1F5F9; --surface:#FFFFFF; --soft:#F0FDFA; --line:#E2E8F0;
+  --ink:#1E293B; --muted:#64748B; --ok:#16A34A; --warn:#D97706; --bad:#DC2626;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.brand,.q-num,.btn{font-family:'Poppins',sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+/* ---------- Header ---------- */
+.app-header{
+  background:linear-gradient(135deg,var(--secondary),var(--primary) 60%,var(--accent));
+  color:#fff;position:relative;overflow:hidden;
+}
+.app-header::after{
+  content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%;
+}
+.app-header .wrap{padding:34px 18px 30px;position:relative;z-index:1}
+.eyebrow{
+  display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  padding:6px 14px;border-radius:999px;margin-bottom:14px;
+}
+.app-header h1{font-size:clamp(1.4rem,3.4vw,2.05rem);font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.app-header p.sub{margin-top:8px;max-width:760px;color:rgba(255,255,255,.9);font-size:.95rem}
+.crumbs{margin-top:16px;font-size:.85rem}
+.crumbs a{color:#CCFBF1;text-decoration:none;border-bottom:1px dashed rgba(204,251,241,.5)}
+.crumbs a:hover{color:#fff}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px 22px 24px;margin:18px 0;
+}
+.card.identity{border-top:4px solid var(--accent)}
+.section-title{
+  font-size:1.15rem;font-weight:600;color:var(--secondary);margin-bottom:4px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--accent)}
+.section-desc{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+
+/* ---------- Form fields ---------- */
+.grid{display:grid;gap:14px}
+.grid.cols-2{grid-template-columns:repeat(2,1fr)}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.field label{display:block;font-weight:600;font-size:.82rem;color:var(--secondary);margin-bottom:6px}
+.field label .req{color:var(--bad)}
+.field input,.field select{
+  width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  font-family:inherit;font-size:.92rem;color:var(--ink);background:#fff;transition:.15s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(20,184,166,.15)}
+.field.invalid input,.field.invalid select{border-color:var(--bad);box-shadow:0 0 0 3px rgba(220,38,38,.12)}
+.field .err{color:var(--bad);font-size:.76rem;margin-top:4px;display:none}
+.field.invalid .err{display:block}
+
+/* ---------- Question card ---------- */
+.q-card{
+  background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);
+  border-radius:var(--radius-sm);padding:18px 18px 14px;margin:14px 0;transition:.2s;
+}
+.q-card.answered{border-left-color:var(--accent);background:linear-gradient(90deg,var(--soft),#fff 12%)}
+.q-card.flag{border-left-color:var(--warn)}
+.q-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:6px}
+.q-num{
+  flex:none;width:34px;height:34px;border-radius:9px;background:var(--secondary);color:#fff;
+  display:grid;place-items:center;font-weight:600;font-size:.9rem;
+}
+.q-attr{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto}
+.tag{font-size:.66rem;font-weight:600;padding:3px 8px;border-radius:999px;background:#CCFBF1;color:#0F766E;border:1px solid #5EEAD4}
+.q-stim{color:var(--muted);font-size:.9rem;font-style:italic;margin:2px 0 8px 46px;padding-left:12px;border-left:2px solid var(--line)}
+.q-ask{font-weight:600;margin:0 0 12px 46px;color:var(--ink)}
+.opts{list-style:none;margin-left:46px;display:grid;gap:8px}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:10px 13px;border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);cursor:pointer;transition:.15s;background:#fff;
+}
+.opt:hover{border-color:var(--accent);background:var(--soft)}
+.opt input{accent-color:var(--primary);width:17px;height:17px;flex:none}
+.opt .ol{font-weight:600;color:var(--secondary);flex:none}
+.opt.sel{border-color:var(--primary);background:var(--soft);box-shadow:0 0 0 2px rgba(15,118,110,.12)}
+/* result colouring */
+.opt.correct{border-color:var(--ok);background:#F0FDF4}
+.opt.wrong{border-color:var(--bad);background:#FEF2F2}
+.opt .mark{margin-left:auto;font-weight:700;font-size:.8rem}
+.opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--bad)}
+
+/* Likert row */
+.likert{margin-left:0}
+.likert .opts{margin-left:0;grid-template-columns:repeat(5,1fr)}
+.likert .opt{flex-direction:column;text-align:center;gap:6px;padding:10px 6px;font-size:.78rem}
+.likert .opt .ol{font-size:.95rem}
+@media(max-width:640px){.likert .opts{grid-template-columns:repeat(5,1fr);gap:5px}.likert .opt{padding:8px 3px;font-size:.66rem}}
+
+/* ---------- Tables ---------- */
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);margin:6px 0}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:560px}
+thead th{background:var(--secondary);color:#fff;font-family:'Poppins';font-weight:600;font-size:.82rem;
+  padding:11px 12px;text-align:left;position:sticky;top:0}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:nth-child(even){background:#F8FAFC}
+tbody tr:hover{background:var(--soft)}
+.center{text-align:center}
+td.score-cell select{width:72px;padding:6px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit}
+.ess-toggle{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.ess-toggle button{border:none;background:#fff;padding:6px 12px;font-size:.78rem;cursor:pointer;font-family:inherit;color:var(--muted)}
+.ess-toggle button.on-y{background:var(--ok);color:#fff}
+.ess-toggle button.on-n{background:var(--bad);color:#fff}
+
+/* progress bar */
+.bar{height:14px;border-radius:999px;background:#E2E8F0;overflow:hidden;min-width:90px}
+.bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .8s ease}
+.bar.lo > i{background:linear-gradient(90deg,#DC2626,#F97316)}
+.bar.mid > i{background:linear-gradient(90deg,#D97706,#FBBF24)}
+
+/* ---------- Buttons / action bar ---------- */
+.actionbar{
+  position:sticky;bottom:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(15,23,42,.06);
+  padding:12px 0;margin-top:22px;
+}
+.actionbar .wrap{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.progress-mini{font-size:.82rem;color:var(--muted);margin-right:auto}
+.progress-mini b{color:var(--primary)}
+.btn{
+  border:none;border-radius:10px;padding:11px 20px;font-size:.9rem;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;transition:.15s;font-family:'Poppins';
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--secondary)}
+.btn-accent{background:var(--accent);color:#04302c}.btn-accent:hover{filter:brightness(1.05)}
+.btn-ghost{background:#fff;color:var(--secondary);border:1.5px solid var(--line)}.btn-ghost:hover{border-color:var(--accent)}
+.btn-danger{background:#fff;color:var(--bad);border:1.5px solid #FCA5A5}.btn-danger:hover{background:#FEF2F2}
+
+/* ---------- Result panel ---------- */
+.results{display:none;animation:fade .4s ease}
+.results.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:6px 0 18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat .v{font-family:'Poppins';font-size:1.8rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .l{font-size:.76rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat.ok .v{color:var(--ok)}.stat.bad .v{color:var(--bad)}.stat.warn .v{color:var(--warn)}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0}
+.chart-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)}
+.chart-box h4{font-size:.95rem;color:var(--secondary);margin-bottom:10px;text-align:center}
+.chart-box .cw{position:relative;height:300px}
+.verdict{padding:16px 18px;border-radius:var(--radius-sm);font-weight:600;margin:8px 0 16px;border:1.5px solid}
+.verdict.good{background:#F0FDF4;border-color:#86EFAC;color:#166534}
+.verdict.mid{background:#FFFBEB;border-color:#FCD34D;color:#92400E}
+.verdict.bad{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+pre.json{background:#0B1120;color:#5EEAD4;padding:16px;border-radius:var(--radius-sm);overflow-x:auto;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.82rem;line-height:1.55;border:1px solid #1E293B}
+
+/* ---------- Toast ---------- */
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:var(--secondary);color:#fff;padding:12px 20px;border-radius:999px;font-size:.86rem;font-weight:500;
+  box-shadow:var(--shadow-lg);z-index:50;transition:.25s;pointer-events:none;max-width:90vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--bad)} #toast.ok{background:var(--ok)}
+
+footer.foot{color:var(--muted);font-size:.8rem;text-align:center;padding:30px 18px 50px}
+
+@media(max-width:760px){
+  .grid.cols-2,.grid.cols-3{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-grid{grid-template-columns:1fr}
+  .q-stim,.q-ask,.opts{margin-left:0}
+  .q-attr{margin-left:0}
+}
+@media print{
+  .actionbar,.crumbs{display:none}
+  .card,.q-card,.chart-box{box-shadow:none;break-inside:avoid}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="wrap">
+    <span class="eyebrow">Asesmen 1 · Tes Diagnostik</span>
+    <h1>Tes Diagnostik Kognitif MCDM</h1>
+    <p class="sub">40 butir pilihan ganda memetakan 8 atribut kognitif (A1–A8) matematika SMP Kelas VII. Menghasilkan skor, persentase, dan profil mastery per atribut.</p>
+    <div class="crumbs"><a href="index.html">← Portal Asesmen</a></div>
+  </div>
+</header>
+<main class="wrap">
+
+<!-- ===== Identitas ===== -->
+<section class="card identity">
+  <div class="section-title">Identitas Peserta</div>
+  <p class="section-desc">Lengkapi data berikut sebelum mengerjakan. Bertanda <span style="color:var(--bad)">*</span> wajib diisi.</p>
+  <div class="grid cols-2">
+    <div class="field"><label>Nama Siswa <span class="req">*</span></label><input id="nama" type="text" placeholder="Nama lengkap"><div class="err">Wajib diisi.</div></div>
+    <div class="field"><label>NIS <span class="req">*</span></label><input id="nis" type="text" inputmode="numeric" placeholder="Nomor Induk Siswa"><div class="err">Wajib diisi.</div></div>
+    <div class="field"><label>Kelas <span class="req">*</span></label><input id="kelas" type="text" placeholder="mis. VII-A"><div class="err">Wajib diisi.</div></div>
+    <div class="field"><label>Sekolah <span class="req">*</span></label><input id="sekolah" type="text" placeholder="Nama sekolah"><div class="err">Wajib diisi.</div></div>
+  </div>
+</section>
+
+<!-- ===== Petunjuk ===== -->
+<section class="card">
+  <div class="section-title">Petunjuk Pengerjaan</div>
+  <p class="section-desc">Pilih satu jawaban paling tepat untuk setiap butir. Tersedia 40 butir yang memetakan 8 atribut kognitif (A1–A8). Gunakan <b>Simpan Jawaban</b> untuk menyimpan kemajuan ke peramban, lalu <b>Submit</b> untuk melihat skor dan analisis mastery atribut.</p>
+</section>
+
+<!-- ===== Soal (dirender otomatis) ===== -->
+<div id="soal"></div>
+
+<!-- ===== Hasil ===== -->
+<section class="card results" id="hasil">
+  <div class="section-title">Hasil &amp; Analisis Diagnostik</div>
+  <div class="stat-grid" id="stats"></div>
+  <h3 style="color:var(--secondary);margin:10px 0 6px">Analisis Penguasaan per Atribut Kognitif</h3>
+  <p class="section-desc">Mastery = jumlah jawaban benar / jumlah butir pengukur atribut tersebut.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:7%">Kode</th><th>Atribut Kognitif</th><th class="center" style="width:13%">Benar / Butir</th><th class="center" style="width:11%">Mastery</th><th style="width:28%">Capaian</th></tr></thead>
+      <tbody id="attrRows"></tbody>
+    </table>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-box"><h4>Profil Mastery (Radar)</h4><div class="cw"><canvas id="radar"></canvas></div></div>
+    <div class="chart-box"><h4>Mastery per Atribut (Bar)</h4><div class="cw"><canvas id="bar"></canvas></div></div>
+  </div>
+  <h3 style="color:var(--secondary);margin:12px 0 6px">Output JSON</h3>
+  <pre class="json" id="jsonOut"></pre>
+  <div style="margin-top:12px"><button class="btn btn-accent" onclick="exportJSON()">⬇ Ekspor Hasil (JSON)</button></div>
+</section>
+
+<!-- ===== Action bar ===== -->
+<div class="actionbar"><div class="wrap">
+  <span class="progress-mini">Terjawab <b id="cnt">0</b> / 40</span>
+  <button class="btn btn-ghost" onclick="saveAnswers()">💾 Simpan Jawaban</button>
+  <button class="btn btn-danger" onclick="resetAll()">↺ Reset</button>
+  <button class="btn btn-primary" onclick="submitTest()">✔ Submit</button>
+</div></div>
+
+</main>
+<footer class="foot">
+  Instrumen MCDM &middot; Pengembangan Model Diagnostik Awal Kesulitan Belajar Matematika Siswa SMP Berbasis Artificial Intelligence (Multidimensional CDM)<br>
+  Aplikasi statis (tanpa backend) &middot; data tersimpan lokal di peramban &amp; dapat diekspor ke JSON.
+</footer>
+<div id="toast"></div>
+<script>
+/* ---------- Util umum ---------- */
+const $  = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+
+/* Toast notifikasi ringan */
+let toastT;
+function toast(msg,type=''){
+  let t=$('#toast'); if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t);}
+  t.className=''; t.classList.add('show'); if(type)t.classList.add(type); t.textContent=msg;
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* localStorage (per-asesmen) */
+function saveLocal(key,obj){ try{localStorage.setItem(key,JSON.stringify(obj));return true;}catch(e){return false;} }
+function loadLocal(key){ try{const v=localStorage.getItem(key);return v?JSON.parse(v):null;}catch(e){return null;} }
+function clearLocal(key){ try{localStorage.removeItem(key);}catch(e){} }
+
+/* Unduh objek sebagai berkas .json */
+function downloadJSON(obj,filename){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+/* Validasi field identitas wajib; mengembalikan true bila valid */
+function validateIdentity(ids){
+  let ok=true;
+  ids.forEach(id=>{
+    const f=$('#'+id), wrap=f.closest('.field');
+    if(!f.value.trim()){ wrap.classList.add('invalid'); ok=false; }
+    else wrap.classList.remove('invalid');
+  });
+  if(!ok) toast('Lengkapi dahulu data identitas yang wajib diisi.','err');
+  return ok;
+}
+</script>
+<script>
+const SOAL = [{"no": 1, "atribut": ["A1"], "stimulus": "Suhu kota A tercatat −3°C, sedangkan kota B tercatat −8°C pada waktu yang sama.", "pertanyaan": "Pernyataan yang benar tentang kedua suhu itu adalah…", "opsi": [{"label": "A", "teks": "Kota B lebih hangat karena 8 lebih besar dari 3."}, {"label": "B", "teks": "Kota A lebih hangat karena −3 lebih besar dari −8."}, {"label": "C", "teks": "Kedua kota memiliki suhu yang sama."}, {"label": "D", "teks": "Suhu keduanya tidak dapat dibandingkan."}], "kunci": "B"}, {"no": 2, "atribut": ["A1"], "stimulus": "Diberikan empat bilangan: −5, 2, −1, dan 0.", "pertanyaan": "Urutan dari yang terkecil ke terbesar adalah…", "opsi": [{"label": "A", "teks": "0, −1, 2, −5"}, {"label": "B", "teks": "−5, −1, 0, 2"}, {"label": "C", "teks": "2, 0, −1, −5"}, {"label": "D", "teks": "−1, −5, 0, 2"}], "kunci": "B"}, {"no": 3, "atribut": ["A1", "A2"], "stimulus": "Sebuah lift berada di lantai −2 (basement). Lift naik 5 lantai, lalu turun 3 lantai.", "pertanyaan": "Lift sekarang berada di lantai…", "opsi": [{"label": "A", "teks": "0"}, {"label": "B", "teks": "4"}, {"label": "C", "teks": "10"}, {"label": "D", "teks": "−10"}], "kunci": "A"}, {"no": 4, "atribut": ["A1"], "stimulus": "Perhatikan pernyataan tentang nilai mutlak dan lawan bilangan.", "pertanyaan": "Pernyataan yang benar adalah…", "opsi": [{"label": "A", "teks": "|−7| = −7"}, {"label": "B", "teks": "Lawan dari 7 adalah −7, dan |−7| = 7"}, {"label": "C", "teks": "|−7| = 0"}, {"label": "D", "teks": "Lawan dari 7 adalah 7"}], "kunci": "B"}, {"no": 5, "atribut": ["A2"], "stimulus": "Seekor ikan berada 15 m di bawah permukaan laut, lalu naik 9 m.", "pertanyaan": "Hasil dari −15 + 9 adalah…", "opsi": [{"label": "A", "teks": "−6"}, {"label": "B", "teks": "6"}, {"label": "C", "teks": "−24"}, {"label": "D", "teks": "24"}], "kunci": "A"}, {"no": 6, "atribut": ["A2"], "stimulus": "Hitunglah hasil perkalian berikut.", "pertanyaan": "(−4) × (−6) = …", "opsi": [{"label": "A", "teks": "−24"}, {"label": "B", "teks": "24"}, {"label": "C", "teks": "−10"}, {"label": "D", "teks": "10"}], "kunci": "B"}, {"no": 7, "atribut": ["A2"], "stimulus": "Hitunglah dengan memperhatikan urutan operasi.", "pertanyaan": "12 − 3 × (−2) = …", "opsi": [{"label": "A", "teks": "18"}, {"label": "B", "teks": "−18"}, {"label": "C", "teks": "6"}, {"label": "D", "teks": "−6"}], "kunci": "A"}, {"no": 8, "atribut": ["A2", "A4"], "stimulus": "Suhu sebuah ruang penyimpanan mula-mula 2°C. Setiap jam suhunya turun 1½°C selama 4 jam.", "pertanyaan": "Suhu ruang setelah 4 jam adalah…", "opsi": [{"label": "A", "teks": "−4°C"}, {"label": "B", "teks": "4°C"}, {"label": "C", "teks": "8°C"}, {"label": "D", "teks": "−10°C"}], "kunci": "A"}, {"no": 9, "atribut": ["A3"], "stimulus": "Sebuah pizza dipotong menjadi 8 bagian sama besar. Sebanyak 3 bagian telah dimakan.", "pertanyaan": "Pecahan yang menyatakan bagian pizza yang tersisa adalah…", "opsi": [{"label": "A", "teks": "3/8"}, {"label": "B", "teks": "5/8"}, {"label": "C", "teks": "3/5"}, {"label": "D", "teks": "8/3"}], "kunci": "B"}, {"no": 10, "atribut": ["A3"], "stimulus": "Seorang siswa diminta menuliskan 0,75 dalam bentuk pecahan paling sederhana.", "pertanyaan": "Pecahan yang senilai dengan 0,75 adalah…", "opsi": [{"label": "A", "teks": "7/5"}, {"label": "B", "teks": "3/4"}, {"label": "C", "teks": "75/10"}, {"label": "D", "teks": "1/75"}], "kunci": "B"}, {"no": 11, "atribut": ["A3"], "stimulus": "Bandingkan dua pecahan 2/3 dan 3/5.", "pertanyaan": "Pernyataan yang benar adalah…", "opsi": [{"label": "A", "teks": "3/5 lebih besar karena penyebutnya lebih besar."}, {"label": "B", "teks": "2/3 lebih besar daripada 3/5."}, {"label": "C", "teks": "Keduanya sama besar."}, {"label": "D", "teks": "3/5 lebih besar karena 3 > 2."}], "kunci": "B"}, {"no": 12, "atribut": ["A1", "A3"], "stimulus": "Perhatikan garis bilangan dengan titik 0 di tengah.", "pertanyaan": "Letak bilangan −1/2 pada garis bilangan adalah…", "opsi": [{"label": "A", "teks": "di kanan 0, antara 0 dan 1"}, {"label": "B", "teks": "di kiri 0, antara 0 dan −1"}, {"label": "C", "teks": "tepat di titik −2"}, {"label": "D", "teks": "sama dengan letak 1/2"}], "kunci": "B"}, {"no": 13, "atribut": ["A4"], "stimulus": "Seorang siswa menjumlahkan dua pecahan.", "pertanyaan": "1/2 + 1/3 = …", "opsi": [{"label": "A", "teks": "2/5"}, {"label": "B", "teks": "5/6"}, {"label": "C", "teks": "2/6"}, {"label": "D", "teks": "1/6"}], "kunci": "B"}, {"no": 14, "atribut": ["A4"], "stimulus": "Hitunglah hasil perkalian pecahan berikut.", "pertanyaan": "2/3 × 3/4 = …", "opsi": [{"label": "A", "teks": "1/2"}, {"label": "B", "teks": "5/7"}, {"label": "C", "teks": "6/7"}, {"label": "D", "teks": "8/9"}], "kunci": "A"}, {"no": 15, "atribut": ["A4"], "stimulus": "Hitunglah hasil pengurangan pecahan berikut.", "pertanyaan": "3/4 − 1/2 = …", "opsi": [{"label": "A", "teks": "2/2"}, {"label": "B", "teks": "1/4"}, {"label": "C", "teks": "1/2"}, {"label": "D", "teks": "2/6"}], "kunci": "B"}, {"no": 16, "atribut": ["A2", "A4"], "stimulus": "Andi memiliki uang Rp50.000. Ia membelanjakan 2/5 dari uangnya, kemudian menerima tambahan Rp8.000.", "pertanyaan": "Uang Andi sekarang adalah…", "opsi": [{"label": "A", "teks": "Rp38.000"}, {"label": "B", "teks": "Rp22.000"}, {"label": "C", "teks": "Rp30.000"}, {"label": "D", "teks": "Rp42.000"}], "kunci": "A"}, {"no": 17, "atribut": ["A3", "A4"], "stimulus": "Sebuah pita sepanjang 3/4 meter dipotong menjadi potongan-potongan sepanjang 1/8 meter.", "pertanyaan": "Banyak potongan yang dihasilkan adalah…", "opsi": [{"label": "A", "teks": "6"}, {"label": "B", "teks": "3/32"}, {"label": "C", "teks": "2"}, {"label": "D", "teks": "8"}], "kunci": "A"}, {"no": 18, "atribut": ["A4"], "stimulus": "Hitunglah hasil pembagian pecahan berikut.", "pertanyaan": "2/3 ÷ 4/5 = …", "opsi": [{"label": "A", "teks": "8/15"}, {"label": "B", "teks": "5/6"}, {"label": "C", "teks": "6/5"}, {"label": "D", "teks": "3/10"}], "kunci": "B"}, {"no": 19, "atribut": ["A2"], "stimulus": "Dalam sebuah kuis, jawaban benar bernilai +4 dan jawaban salah bernilai −2. Budi menjawab 7 soal benar dan 3 soal salah.", "pertanyaan": "Skor total Budi adalah…", "opsi": [{"label": "A", "teks": "22"}, {"label": "B", "teks": "34"}, {"label": "C", "teks": "10"}, {"label": "D", "teks": "26"}], "kunci": "A"}, {"no": 20, "atribut": ["A1", "A2"], "stimulus": "Sebuah freezer bersuhu −18°C. Ketika listrik mati, suhunya naik 2°C setiap jam selama 5 jam.", "pertanyaan": "Suhu freezer setelah 5 jam adalah…", "opsi": [{"label": "A", "teks": "−8°C"}, {"label": "B", "teks": "−28°C"}, {"label": "C", "teks": "8°C"}, {"label": "D", "teks": "−16°C"}], "kunci": "A"}, {"no": 21, "atribut": ["A5"], "stimulus": "Perhatikan bentuk aljabar 5x + 3.", "pertanyaan": "Koefisien dan konstanta pada bentuk tersebut adalah…", "opsi": [{"label": "A", "teks": "koefisien 5, konstanta 3"}, {"label": "B", "teks": "koefisien 3, konstanta 5"}, {"label": "C", "teks": "koefisien x, konstanta 3"}, {"label": "D", "teks": "variabel 5, konstanta x"}], "kunci": "A"}, {"no": 22, "atribut": ["A5"], "stimulus": "Sederhanakan bentuk aljabar berikut.", "pertanyaan": "7a + 3b − 2a + b = …", "opsi": [{"label": "A", "teks": "9ab"}, {"label": "B", "teks": "5a + 4b"}, {"label": "C", "teks": "5a + 2b"}, {"label": "D", "teks": "9a + 4b"}], "kunci": "B"}, {"no": 23, "atribut": ["A5"], "stimulus": "Jabarkan bentuk aljabar berikut.", "pertanyaan": "3(2x + 4) = …", "opsi": [{"label": "A", "teks": "6x + 4"}, {"label": "B", "teks": "6x + 12"}, {"label": "C", "teks": "5x + 7"}, {"label": "D", "teks": "2x + 12"}], "kunci": "B"}, {"no": 24, "atribut": ["A4", "A5"], "stimulus": "Sederhanakan bentuk aljabar berikut.", "pertanyaan": "1/2 x + 1/4 x = …", "opsi": [{"label": "A", "teks": "2/6 x"}, {"label": "B", "teks": "3/4 x"}, {"label": "C", "teks": "1/8 x"}, {"label": "D", "teks": "2/4 x"}], "kunci": "B"}, {"no": 25, "atribut": ["A5"], "stimulus": "Diketahui bentuk 2x² + 3.", "pertanyaan": "Nilai bentuk tersebut untuk x = −2 adalah…", "opsi": [{"label": "A", "teks": "−5"}, {"label": "B", "teks": "11"}, {"label": "C", "teks": "19"}, {"label": "D", "teks": "−13"}], "kunci": "B"}, {"no": 26, "atribut": ["A5", "A6"], "stimulus": "Sebuah bilangan dikurangi 7 menghasilkan 12.", "pertanyaan": "Persamaan yang tepat untuk pernyataan tersebut adalah…", "opsi": [{"label": "A", "teks": "x + 7 = 12"}, {"label": "B", "teks": "x − 7 = 12"}, {"label": "C", "teks": "7 − x = 12"}, {"label": "D", "teks": "7x = 12"}], "kunci": "B"}, {"no": 27, "atribut": ["A6"], "stimulus": "Selesaikan persamaan linear berikut.", "pertanyaan": "x + 5 = 12, maka x = …", "opsi": [{"label": "A", "teks": "7"}, {"label": "B", "teks": "17"}, {"label": "C", "teks": "5/12"}, {"label": "D", "teks": "−7"}], "kunci": "A"}, {"no": 28, "atribut": ["A6"], "stimulus": "Selesaikan persamaan linear berikut.", "pertanyaan": "3x = 18, maka x = …", "opsi": [{"label": "A", "teks": "6"}, {"label": "B", "teks": "54"}, {"label": "C", "teks": "15"}, {"label": "D", "teks": "21"}], "kunci": "A"}, {"no": 29, "atribut": ["A6"], "stimulus": "Selesaikan persamaan linear berikut.", "pertanyaan": "2x − 3 = 7, maka x = …", "opsi": [{"label": "A", "teks": "5"}, {"label": "B", "teks": "2"}, {"label": "C", "teks": "8"}, {"label": "D", "teks": "10"}], "kunci": "A"}, {"no": 30, "atribut": ["A5", "A6"], "stimulus": "Umur Ani 3 tahun lebih tua daripada Budi. Jumlah umur mereka 27 tahun.", "pertanyaan": "Umur Budi adalah…", "opsi": [{"label": "A", "teks": "12 tahun"}, {"label": "B", "teks": "15 tahun"}, {"label": "C", "teks": "13,5 tahun"}, {"label": "D", "teks": "24 tahun"}], "kunci": "A"}, {"no": 31, "atribut": ["A7"], "stimulus": "Sebuah sudut memiliki besar 120°.", "pertanyaan": "Sudut tersebut termasuk jenis sudut…", "opsi": [{"label": "A", "teks": "lancip"}, {"label": "B", "teks": "tumpul"}, {"label": "C", "teks": "siku-siku"}, {"label": "D", "teks": "lurus"}], "kunci": "B"}, {"no": 32, "atribut": ["A7"], "stimulus": "Sebuah segitiga memiliki panjang sisi 5 cm, 5 cm, dan 8 cm.", "pertanyaan": "Segitiga tersebut termasuk…", "opsi": [{"label": "A", "teks": "segitiga sama sisi"}, {"label": "B", "teks": "segitiga sama kaki"}, {"label": "C", "teks": "segitiga siku-siku"}, {"label": "D", "teks": "segitiga sembarang"}], "kunci": "B"}, {"no": 33, "atribut": ["A7"], "stimulus": "Sebuah bangun datar memiliki dua pasang sisi sejajar dan keempat sudutnya 90°.", "pertanyaan": "Bangun tersebut adalah…", "opsi": [{"label": "A", "teks": "jajargenjang"}, {"label": "B", "teks": "persegi panjang"}, {"label": "C", "teks": "trapesium"}, {"label": "D", "teks": "belah ketupat"}], "kunci": "B"}, {"no": 34, "atribut": ["A7"], "stimulus": "Sebuah persegi panjang memiliki panjang 8 cm dan lebar 5 cm.", "pertanyaan": "Keliling persegi panjang dihitung dengan…", "opsi": [{"label": "A", "teks": "8 × 5"}, {"label": "B", "teks": "2 × (8 + 5)"}, {"label": "C", "teks": "8 + 5"}, {"label": "D", "teks": "2 × 8 × 5"}], "kunci": "B"}, {"no": 35, "atribut": ["A7", "A8"], "stimulus": "Sebuah taman berbentuk persegi panjang berukuran 12 m × 7 m akan dipasangi pagar mengelilingi tepinya.", "pertanyaan": "Panjang pagar yang dibutuhkan adalah…", "opsi": [{"label": "A", "teks": "38 m"}, {"label": "B", "teks": "84 m"}, {"label": "C", "teks": "19 m"}, {"label": "D", "teks": "76 m"}], "kunci": "A"}, {"no": 36, "atribut": ["A8"], "stimulus": "Jarak rumah ke sekolah adalah 2,5 km.", "pertanyaan": "Jarak tersebut sama dengan… meter.", "opsi": [{"label": "A", "teks": "250"}, {"label": "B", "teks": "2.500"}, {"label": "C", "teks": "25"}, {"label": "D", "teks": "25.000"}], "kunci": "B"}, {"no": 37, "atribut": ["A8"], "stimulus": "Sebuah ubin berbentuk persegi dengan panjang sisi 9 cm.", "pertanyaan": "Luas ubin tersebut adalah…", "opsi": [{"label": "A", "teks": "36 cm²"}, {"label": "B", "teks": "81 cm²"}, {"label": "C", "teks": "18 cm²"}, {"label": "D", "teks": "324 cm²"}], "kunci": "B"}, {"no": 38, "atribut": ["A2", "A8"], "stimulus": "Lantai berukuran 6 m × 4 m akan ditutup ubin berukuran 1 m × 1 m. Tersedia 30 ubin.", "pertanyaan": "Banyak ubin yang tersisa setelah lantai tertutup penuh adalah…", "opsi": [{"label": "A", "teks": "6"}, {"label": "B", "teks": "24"}, {"label": "C", "teks": "0"}, {"label": "D", "teks": "16"}], "kunci": "A"}, {"no": 39, "atribut": ["A7", "A8"], "stimulus": "Sebuah segitiga siku-siku memiliki panjang alas 6 cm dan tinggi 8 cm.", "pertanyaan": "Luas segitiga tersebut adalah…", "opsi": [{"label": "A", "teks": "24 cm²"}, {"label": "B", "teks": "48 cm²"}, {"label": "C", "teks": "14 cm²"}, {"label": "D", "teks": "28 cm²"}], "kunci": "A"}, {"no": 40, "atribut": ["A8"], "stimulus": "Pada denah berskala 1 : 200, panjang sebuah ruang tergambar 4 cm.", "pertanyaan": "Panjang ruang sebenarnya adalah…", "opsi": [{"label": "A", "teks": "8 m"}, {"label": "B", "teks": "800 m"}, {"label": "C", "teks": "0,02 m"}, {"label": "D", "teks": "50 m"}], "kunci": "A"}];
+const ATTR = {"A1": "Konsep Bilangan Bulat", "A2": "Operasi Bilangan Bulat", "A3": "Konsep Pecahan", "A4": "Operasi Pecahan", "A5": "Aljabar Dasar", "A6": "Persamaan Linear Satu Variabel (PLSV)", "A7": "Geometri Dasar", "A8": "Pengukuran"};
+const KEY = 'mcdm_asesmen1';
+let submitted = false;
+
+/* ---- Render kartu soal dari data ---- */
+function renderSoal(){
+  const box = $('#soal');
+  box.innerHTML = SOAL.map(s=>{
+    const tags = s.atribut.map(a=>`<span class="tag" title="${ATTR[a]}">${a}</span>`).join('');
+    const opts = s.opsi.map(o=>`
+      <li><label class="opt" data-q="${s.no}" data-opt="${o.label}">
+        <input type="radio" name="q${s.no}" value="${o.label}">
+        <span class="ol">${o.label}.</span><span>${o.teks}</span>
+      </label></li>`).join('');
+    return `<div class="q-card" id="qc${s.no}">
+      <div class="q-head"><span class="q-num">${s.no}</span>
+        <div style="flex:1"></div><div class="q-attr">${tags}</div></div>
+      <div class="q-stim">${s.stimulus}</div>
+      <p class="q-ask">${s.pertanyaan}</p>
+      <ul class="opts">${opts}</ul></div>`;
+  }).join('');
+
+  /* interaksi pilih */
+  $$('.opt').forEach(l=>l.addEventListener('click',()=>{
+    if(submitted) return;
+    const no=l.dataset.q;
+    $$(`.opt[data-q="${no}"]`).forEach(x=>x.classList.remove('sel'));
+    l.classList.add('sel'); $('#qc'+no).classList.add('answered');
+    setTimeout(updateCount,0);
+  }));
+}
+
+function getAnswers(){
+  const a={}; SOAL.forEach(s=>{const c=$(`input[name="q${s.no}"]:checked`); if(c)a[s.no]=c.value;}); return a;
+}
+function updateCount(){ $('#cnt').textContent = Object.keys(getAnswers()).length; }
+
+function identity(){
+  return {nama:$('#nama').value.trim(), nis:$('#nis').value.trim(),
+          kelas:$('#kelas').value.trim(), sekolah:$('#sekolah').value.trim()};
+}
+
+/* ---- Simpan ke localStorage ---- */
+function saveAnswers(){
+  saveLocal(KEY,{identitas:identity(),jawaban:getAnswers(),ts:Date.now()});
+  toast('Jawaban tersimpan di peramban.','ok');
+}
+
+/* ---- Reset ---- */
+function resetAll(){
+  if(!confirm('Hapus seluruh jawaban dan data identitas?')) return;
+  clearLocal(KEY); submitted=false;
+  $$('input[type=radio]').forEach(r=>r.checked=false);
+  ['nama','nis','kelas','sekolah'].forEach(id=>$('#'+id).value='');
+  $$('.q-card').forEach(c=>c.className='q-card');
+  $$('.opt').forEach(o=>o.classList.remove('sel','correct','wrong'));
+  $$('.opt input').forEach(i=>i.disabled=false);
+  $$('.opt .mark').forEach(m=>m.remove());
+  $('#hasil').classList.remove('show'); updateCount();
+  destroyCharts(); window.scrollTo({top:0,behavior:'smooth'});
+  toast('Formulir telah direset.');
+}
+
+/* ---- Submit & penilaian ---- */
+let chRadar, chBar;
+function destroyCharts(){ if(chRadar)chRadar.destroy(); if(chBar)chBar.destroy(); chRadar=chBar=null; }
+
+function submitTest(){
+  if(!validateIdentity(['nama','nis','kelas','sekolah'])){ window.scrollTo({top:0,behavior:'smooth'}); return; }
+  const ans=getAnswers(), n=Object.keys(ans).length;
+  if(n<40 && !confirm(`Masih ada ${40-n} butir belum dijawab (dihitung salah). Tetap submit?`)) return;
+
+  submitted=true;
+  let benar=0;
+  const tot={}, ben={};
+  Object.keys(ATTR).forEach(a=>{tot[a]=0;ben[a]=0;});
+  SOAL.forEach(s=>{
+    const pick=ans[s.no]||null, ok=pick===s.kunci;
+    if(ok)benar++;
+    s.atribut.forEach(a=>{tot[a]++; if(ok)ben[a]++;});
+    /* warnai opsi */
+    $$(`.opt[data-q="${s.no}"]`).forEach(l=>{
+      l.querySelector('input').disabled=true; l.classList.remove('sel');
+      const v=l.dataset.opt;
+      if(v===s.kunci){l.classList.add('correct'); l.insertAdjacentHTML('beforeend','<span class="mark">✓ Kunci</span>');}
+      else if(v===pick){l.classList.add('wrong'); l.insertAdjacentHTML('beforeend','<span class="mark">✗</span>');}
+    });
+  });
+  const salah=40-benar, persen=Math.round(benar/40*1000)/10;
+
+  /* statistik ringkas */
+  $('#stats').innerHTML = `
+    <div class="stat"><div class="v">${benar}</div><div class="l">Skor Total</div></div>
+    <div class="stat ${persen>=70?'ok':persen>=50?'warn':'bad'}"><div class="v">${persen}%</div><div class="l">Persentase</div></div>
+    <div class="stat ok"><div class="v">${benar}</div><div class="l">Jumlah Benar</div></div>
+    <div class="stat bad"><div class="v">${salah}</div><div class="l">Jumlah Salah</div></div>`;
+
+  /* tabel + progress + data atribut */
+  const codes=Object.keys(ATTR), mastery={};
+  $('#attrRows').innerHTML = codes.map(a=>{
+    const m = tot[a]? ben[a]/tot[a] : 0; mastery[a]=Math.round(m*100)/100;
+    const pct=Math.round(m*100), cls=pct>=70?'':pct>=50?'mid':'lo';
+    return `<tr><td class="center"><span class="tag">${a}</span></td><td>${ATTR[a]}</td>
+      <td class="center">${ben[a]} / ${tot[a]}</td><td class="center"><b>${pct}%</b></td>
+      <td><div class="bar ${cls}"><i style="width:${pct}%"></i></div></td></tr>`;
+  }).join('');
+
+  /* radar + bar */
+  destroyCharts();
+  const labels=codes, vals=codes.map(a=>Math.round(mastery[a]*100));
+  chRadar=new Chart($('#radar'),{type:'radar',data:{labels,datasets:[{label:'Mastery (%)',data:vals,
+    fill:true,backgroundColor:'rgba(20,184,166,.25)',borderColor:'#0F766E',pointBackgroundColor:'#0F766E',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:25}}},plugins:{legend:{display:false}}}});
+  chBar=new Chart($('#bar'),{type:'bar',data:{labels,datasets:[{label:'Mastery (%)',data:vals,
+    backgroundColor:vals.map(v=>v>=70?'#16A34A':v>=50?'#D97706':'#DC2626'),borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0,max:100}},plugins:{legend:{display:false}}}});
+
+  /* JSON */
+  const id=identity();
+  window._result={nama:id.nama,nis:id.nis,kelas:id.kelas,sekolah:id.sekolah,
+    skor:benar,persentase:persen,benar,salah,atribut:mastery,jawaban:ans,
+    waktu:new Date().toISOString()};
+  $('#jsonOut').textContent=JSON.stringify(window._result,null,2);
+  saveLocal(KEY,{identitas:id,jawaban:ans,hasil:window._result,ts:Date.now()});
+
+  $('#hasil').classList.add('show');
+  $('#hasil').scrollIntoView({behavior:'smooth'});
+  toast('Asesmen selesai dinilai.','ok');
+}
+
+function exportJSON(){
+  if(!window._result){toast('Submit dahulu untuk menghasilkan output.','err');return;}
+  const f=`diagnostik_${(window._result.nama||'siswa').replace(/\s+/g,'_')}.json`;
+  downloadJSON(window._result,f);
+}
+
+/* ---- Pulihkan dari localStorage ---- */
+function restore(){
+  const d=loadLocal(KEY); if(!d) return;
+  if(d.identitas){['nama','nis','kelas','sekolah'].forEach(k=>{if(d.identitas[k])$('#'+k).value=d.identitas[k];});}
+  if(d.jawaban){Object.entries(d.jawaban).forEach(([no,v])=>{
+    const r=$(`input[name="q${no}"][value="${v}"]`); if(r){r.checked=true; r.closest('.opt').classList.add('sel'); $('#qc'+no).classList.add('answered');}
+  });}
+  updateCount();
+}
+
+renderSoal(); restore();
+</script>
+</body>
+</html>

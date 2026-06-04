@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Validasi Ahli AI / Data Mining — instrumen MCDM">
+<title>Validasi Ahli AI / Data Mining</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<!-- Chart.js untuk radar / bar / gauge -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --primary:#0F766E; --secondary:#134E4A; --accent:#14B8A6; --accent-2:#0EA5E9;
+  --bg:#F1F5F9; --surface:#FFFFFF; --soft:#F0FDFA; --line:#E2E8F0;
+  --ink:#1E293B; --muted:#64748B; --ok:#16A34A; --warn:#D97706; --bad:#DC2626;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.brand,.q-num,.btn{font-family:'Poppins',sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+/* ---------- Header ---------- */
+.app-header{
+  background:linear-gradient(135deg,var(--secondary),var(--primary) 60%,var(--accent));
+  color:#fff;position:relative;overflow:hidden;
+}
+.app-header::after{
+  content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%;
+}
+.app-header .wrap{padding:34px 18px 30px;position:relative;z-index:1}
+.eyebrow{
+  display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  padding:6px 14px;border-radius:999px;margin-bottom:14px;
+}
+.app-header h1{font-size:clamp(1.4rem,3.4vw,2.05rem);font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.app-header p.sub{margin-top:8px;max-width:760px;color:rgba(255,255,255,.9);font-size:.95rem}
+.crumbs{margin-top:16px;font-size:.85rem}
+.crumbs a{color:#CCFBF1;text-decoration:none;border-bottom:1px dashed rgba(204,251,241,.5)}
+.crumbs a:hover{color:#fff}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px 22px 24px;margin:18px 0;
+}
+.card.identity{border-top:4px solid var(--accent)}
+.section-title{
+  font-size:1.15rem;font-weight:600;color:var(--secondary);margin-bottom:4px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--accent)}
+.section-desc{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+
+/* ---------- Form fields ---------- */
+.grid{display:grid;gap:14px}
+.grid.cols-2{grid-template-columns:repeat(2,1fr)}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.field label{display:block;font-weight:600;font-size:.82rem;color:var(--secondary);margin-bottom:6px}
+.field label .req{color:var(--bad)}
+.field input,.field select{
+  width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  font-family:inherit;font-size:.92rem;color:var(--ink);background:#fff;transition:.15s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(20,184,166,.15)}
+.field.invalid input,.field.invalid select{border-color:var(--bad);box-shadow:0 0 0 3px rgba(220,38,38,.12)}
+.field .err{color:var(--bad);font-size:.76rem;margin-top:4px;display:none}
+.field.invalid .err{display:block}
+
+/* ---------- Question card ---------- */
+.q-card{
+  background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);
+  border-radius:var(--radius-sm);padding:18px 18px 14px;margin:14px 0;transition:.2s;
+}
+.q-card.answered{border-left-color:var(--accent);background:linear-gradient(90deg,var(--soft),#fff 12%)}
+.q-card.flag{border-left-color:var(--warn)}
+.q-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:6px}
+.q-num{
+  flex:none;width:34px;height:34px;border-radius:9px;background:var(--secondary);color:#fff;
+  display:grid;place-items:center;font-weight:600;font-size:.9rem;
+}
+.q-attr{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto}
+.tag{font-size:.66rem;font-weight:600;padding:3px 8px;border-radius:999px;background:#CCFBF1;color:#0F766E;border:1px solid #5EEAD4}
+.q-stim{color:var(--muted);font-size:.9rem;font-style:italic;margin:2px 0 8px 46px;padding-left:12px;border-left:2px solid var(--line)}
+.q-ask{font-weight:600;margin:0 0 12px 46px;color:var(--ink)}
+.opts{list-style:none;margin-left:46px;display:grid;gap:8px}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:10px 13px;border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);cursor:pointer;transition:.15s;background:#fff;
+}
+.opt:hover{border-color:var(--accent);background:var(--soft)}
+.opt input{accent-color:var(--primary);width:17px;height:17px;flex:none}
+.opt .ol{font-weight:600;color:var(--secondary);flex:none}
+.opt.sel{border-color:var(--primary);background:var(--soft);box-shadow:0 0 0 2px rgba(15,118,110,.12)}
+/* result colouring */
+.opt.correct{border-color:var(--ok);background:#F0FDF4}
+.opt.wrong{border-color:var(--bad);background:#FEF2F2}
+.opt .mark{margin-left:auto;font-weight:700;font-size:.8rem}
+.opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--bad)}
+
+/* Likert row */
+.likert{margin-left:0}
+.likert .opts{margin-left:0;grid-template-columns:repeat(5,1fr)}
+.likert .opt{flex-direction:column;text-align:center;gap:6px;padding:10px 6px;font-size:.78rem}
+.likert .opt .ol{font-size:.95rem}
+@media(max-width:640px){.likert .opts{grid-template-columns:repeat(5,1fr);gap:5px}.likert .opt{padding:8px 3px;font-size:.66rem}}
+
+/* ---------- Tables ---------- */
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);margin:6px 0}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:560px}
+thead th{background:var(--secondary);color:#fff;font-family:'Poppins';font-weight:600;font-size:.82rem;
+  padding:11px 12px;text-align:left;position:sticky;top:0}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:nth-child(even){background:#F8FAFC}
+tbody tr:hover{background:var(--soft)}
+.center{text-align:center}
+td.score-cell select{width:72px;padding:6px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit}
+.ess-toggle{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.ess-toggle button{border:none;background:#fff;padding:6px 12px;font-size:.78rem;cursor:pointer;font-family:inherit;color:var(--muted)}
+.ess-toggle button.on-y{background:var(--ok);color:#fff}
+.ess-toggle button.on-n{background:var(--bad);color:#fff}
+
+/* progress bar */
+.bar{height:14px;border-radius:999px;background:#E2E8F0;overflow:hidden;min-width:90px}
+.bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .8s ease}
+.bar.lo > i{background:linear-gradient(90deg,#DC2626,#F97316)}
+.bar.mid > i{background:linear-gradient(90deg,#D97706,#FBBF24)}
+
+/* ---------- Buttons / action bar ---------- */
+.actionbar{
+  position:sticky;bottom:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(15,23,42,.06);
+  padding:12px 0;margin-top:22px;
+}
+.actionbar .wrap{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.progress-mini{font-size:.82rem;color:var(--muted);margin-right:auto}
+.progress-mini b{color:var(--primary)}
+.btn{
+  border:none;border-radius:10px;padding:11px 20px;font-size:.9rem;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;transition:.15s;font-family:'Poppins';
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--secondary)}
+.btn-accent{background:var(--accent);color:#04302c}.btn-accent:hover{filter:brightness(1.05)}
+.btn-ghost{background:#fff;color:var(--secondary);border:1.5px solid var(--line)}.btn-ghost:hover{border-color:var(--accent)}
+.btn-danger{background:#fff;color:var(--bad);border:1.5px solid #FCA5A5}.btn-danger:hover{background:#FEF2F2}
+
+/* ---------- Result panel ---------- */
+.results{display:none;animation:fade .4s ease}
+.results.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:6px 0 18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat .v{font-family:'Poppins';font-size:1.8rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .l{font-size:.76rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat.ok .v{color:var(--ok)}.stat.bad .v{color:var(--bad)}.stat.warn .v{color:var(--warn)}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0}
+.chart-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)}
+.chart-box h4{font-size:.95rem;color:var(--secondary);margin-bottom:10px;text-align:center}
+.chart-box .cw{position:relative;height:300px}
+.verdict{padding:16px 18px;border-radius:var(--radius-sm);font-weight:600;margin:8px 0 16px;border:1.5px solid}
+.verdict.good{background:#F0FDF4;border-color:#86EFAC;color:#166534}
+.verdict.mid{background:#FFFBEB;border-color:#FCD34D;color:#92400E}
+.verdict.bad{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+pre.json{background:#0B1120;color:#5EEAD4;padding:16px;border-radius:var(--radius-sm);overflow-x:auto;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.82rem;line-height:1.55;border:1px solid #1E293B}
+
+/* ---------- Toast ---------- */
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:var(--secondary);color:#fff;padding:12px 20px;border-radius:999px;font-size:.86rem;font-weight:500;
+  box-shadow:var(--shadow-lg);z-index:50;transition:.25s;pointer-events:none;max-width:90vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--bad)} #toast.ok{background:var(--ok)}
+
+footer.foot{color:var(--muted);font-size:.8rem;text-align:center;padding:30px 18px 50px}
+
+@media(max-width:760px){
+  .grid.cols-2,.grid.cols-3{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-grid{grid-template-columns:1fr}
+  .q-stim,.q-ask,.opts{margin-left:0}
+  .q-attr{margin-left:0}
+}
+@media print{
+  .actionbar,.crumbs{display:none}
+  .card,.q-card,.chart-box{box-shadow:none;break-inside:avoid}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="wrap">
+    <span class="eyebrow">Asesmen 5 · Validasi Komputasional</span>
+    <h1>Validasi Ahli AI / Data Mining</h1>
+    <p class="sub">Telaah pakar AI terhadap kelayakan data, kualitas fitur, integrasi MCDM–AI, dan interpretabilitas. Dashboard ringkas dengan gauge kelayakan, CVR, dan CVI.</p>
+    <div class="crumbs"><a href="index.html">← Portal Asesmen</a></div>
+  </div>
+</header>
+<main class="wrap">
+
+<section class="card identity">
+  <div class="section-title">Identitas Validator</div>
+  <p class="section-desc">Lengkapi identitas, lalu beri skor 1–5 dan tandai esensialitas tiap indikator.</p>
+  <div class="grid cols-3">
+    <div class="field"><label>Nama Validator <span class="req">*</span></label><input id="vname" type="text" placeholder="Nama &amp; gelar"><div class="err">Wajib diisi.</div></div>
+    <div class="field"><label>Instansi <span class="req">*</span></label><input id="vinst" type="text" placeholder="Universitas / lembaga"><div class="err">Wajib diisi.</div></div>
+    <div class="field"><label>Tanggal <span class="req">*</span></label><input id="vdate" type="date"><div class="err">Wajib diisi.</div></div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="section-title">Lembar Validasi Ahli Artificial Intelligence / Data Mining</div>
+  <p class="section-desc">Menilai kelayakan instrumen sebagai sumber data untuk pemodelan MCDM berbasis AI. Skala: 1 = sangat kurang … 5 = sangat baik. Kolom <b>Esensial?</b> dipakai untuk perhitungan CVR (Lawshe).</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th class="center" style="width:5%">No</th><th style="width:20%">Aspek</th><th>Indikator</th>
+        <th class="center" style="width:13%">Skor (1–5)</th><th class="center" style="width:15%">Esensial?</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="field" style="margin-top:16px"><label>Catatan / Saran Perbaikan</label><input id="vnote" type="text" placeholder="(opsional)"></div>
+</section>
+
+<section class="card results" id="hasil">
+  <div class="section-title">Analisis Validasi</div>
+  <div id="verdict"></div>
+  <div class="stat-grid" id="stats"></div>
+  <h3 style="color:var(--secondary);margin:8px 0 6px">Rata-rata per Aspek</h3>
+  <div class="table-scroll"><table>
+    <thead><tr><th>Aspek</th><th class="center" style="width:16%">Rata-rata</th><th class="center" style="width:16%">Persentase</th><th style="width:30%">Capaian</th></tr></thead>
+    <tbody id="aspekRows"></tbody></table></div>
+  <div class="chart-grid" id="chartGrid"></div>
+  <h3 style="color:var(--secondary);margin:8px 0 6px">Output JSON</h3>
+  <pre class="json" id="jsonOut"></pre>
+  <div style="margin-top:12px"><button class="btn btn-accent" onclick="exportJSON()">⬇ Ekspor Hasil (JSON)</button></div>
+</section>
+
+<div class="actionbar"><div class="wrap">
+  <span class="progress-mini">Dinilai <b id="cnt">0</b> / 12</span>
+  <button class="btn btn-ghost" onclick="saveAnswers()">💾 Simpan Penilaian</button>
+  <button class="btn btn-danger" onclick="resetAll()">↺ Reset</button>
+  <button class="btn btn-primary" onclick="submitTest()">✔ Submit</button>
+</div></div>
+
+</main>
+<footer class="foot">
+  Instrumen MCDM &middot; Pengembangan Model Diagnostik Awal Kesulitan Belajar Matematika Siswa SMP Berbasis Artificial Intelligence (Multidimensional CDM)<br>
+  Aplikasi statis (tanpa backend) &middot; data tersimpan lokal di peramban &amp; dapat diekspor ke JSON.
+</footer>
+<div id="toast"></div>
+<script>
+/* ---------- Util umum ---------- */
+const $  = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+
+/* Toast notifikasi ringan */
+let toastT;
+function toast(msg,type=''){
+  let t=$('#toast'); if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t);}
+  t.className=''; t.classList.add('show'); if(type)t.classList.add(type); t.textContent=msg;
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* localStorage (per-asesmen) */
+function saveLocal(key,obj){ try{localStorage.setItem(key,JSON.stringify(obj));return true;}catch(e){return false;} }
+function loadLocal(key){ try{const v=localStorage.getItem(key);return v?JSON.parse(v):null;}catch(e){return null;} }
+function clearLocal(key){ try{localStorage.removeItem(key);}catch(e){} }
+
+/* Unduh objek sebagai berkas .json */
+function downloadJSON(obj,filename){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+/* Validasi field identitas wajib; mengembalikan true bila valid */
+function validateIdentity(ids){
+  let ok=true;
+  ids.forEach(id=>{
+    const f=$('#'+id), wrap=f.closest('.field');
+    if(!f.value.trim()){ wrap.classList.add('invalid'); ok=false; }
+    else wrap.classList.remove('invalid');
+  });
+  if(!ok) toast('Lengkapi dahulu data identitas yang wajib diisi.','err');
+  return ok;
+}
+</script>
+<script>
+const IND = [{"no": 1, "aspek": "Kelayakan data mining", "rowspan": 3, "indikator": "Struktur data respons (format, label, skala) sesuai untuk pelatihan model klasifikasi."}, {"no": 2, "aspek": null, "rowspan": null, "indikator": "Volume dan kualitas data yang dihasilkan memadai untuk supervised learning."}, {"no": 3, "aspek": null, "rowspan": null, "indikator": "Strategi penanganan data hilang (missing) dan ketidakseimbangan kelas dipertimbangkan."}, {"no": 4, "aspek": "Kualitas fitur", "rowspan": 3, "indikator": "Fitur (respons butir, skor atribut, kovariat afektif) informatif dan relevan untuk diagnosis."}, {"no": 5, "aspek": null, "rowspan": null, "indikator": "Tidak terdapat kebocoran informasi (data leakage) antara fitur dan label target."}, {"no": 6, "aspek": null, "rowspan": null, "indikator": "Fitur dapat diekstraksi secara reliabel dan konsisten dari instrumen."}, {"no": 7, "aspek": "Integrasi MCDM–AI", "rowspan": 3, "indikator": "Q-matrix dapat diintegrasikan sebagai struktur prior/penyekat pada arsitektur NCDM/HO-DINA."}, {"no": 8, "aspek": null, "rowspan": null, "indikator": "Arsitektur model mempertahankan interpretabilitas khas Cognitive Diagnostic Model."}, {"no": 9, "aspek": null, "rowspan": null, "indikator": "Kovariat afektif terintegrasi pada lapisan higher-order secara metodologis tepat."}, {"no": 10, "aspek": "Interpretabilitas model", "rowspan": 3, "indikator": "Keluaran model dapat dijelaskan (mis. SHAP/LIME) kepada guru non-teknis."}, {"no": 11, "aspek": null, "rowspan": null, "indikator": "Profil mastery dipetakan kembali ke atribut kognitif yang bermakna pedagogis."}, {"no": 12, "aspek": null, "rowspan": null, "indikator": "Rekomendasi intervensi dapat dipertanggungjawabkan dan akuntabel (prinsip FITAP)."}];
+const CFG = {"key": "mcdm_asesmen5", "charts": ["gauge", "aspek"], "show_cvi": true};
+const KEY = CFG.key;
+const N = IND.length;
+let submitted=false;
+const skor={}, ess={};   // skor[no]=1..5 ; ess[no]='Y'|'N'
+
+function renderRows(){
+  // kelompokkan aspek untuk rowspan
+  const tb=$('#rows'); let html='';
+  IND.forEach(r=>{
+    const aspekCell = r.aspek ? `<td rowspan="${r.rowspan}"><strong>${r.aspek}</strong></td>` : '';
+    html+=`<tr>
+      <td class="center">${r.no}</td>${aspekCell}<td>${r.indikator}</td>
+      <td class="center score-cell">
+        <select onchange="setSkor(${r.no},this.value)">
+          <option value="">–</option>${[1,2,3,4,5].map(v=>`<option value="${v}">${v}</option>`).join('')}
+        </select></td>
+      <td class="center"><span class="ess-toggle">
+        <button type="button" id="ey${r.no}" onclick="setEss(${r.no},'Y')">Ya</button>
+        <button type="button" id="en${r.no}" onclick="setEss(${r.no},'N')">Tidak</button>
+      </span></td></tr>`;
+  });
+  tb.innerHTML=html;
+}
+function setSkor(no,v){ if(submitted)return; if(v)skor[no]=+v; else delete skor[no]; updateCount(); }
+function setEss(no,val){ if(submitted)return; ess[no]=val;
+  $('#ey'+no).classList.toggle('on-y',val==='Y'); $('#en'+no).classList.toggle('on-n',val==='N');
+  updateCount(); }
+function updateCount(){ const done=IND.filter(r=>skor[r.no]&&ess[r.no]).length; $('#cnt').textContent=done; }
+function identity(){return{validator:$('#vname').value.trim(),instansi:$('#vinst').value.trim(),
+  tanggal:$('#vdate').value,catatan:$('#vnote').value.trim()};}
+
+function saveAnswers(){saveLocal(KEY,{identitas:identity(),skor,ess,ts:Date.now()});toast('Penilaian tersimpan.','ok');}
+function resetAll(){
+  if(!confirm('Hapus seluruh penilaian?'))return; clearLocal(KEY);submitted=false;
+  Object.keys(skor).forEach(k=>delete skor[k]); Object.keys(ess).forEach(k=>delete ess[k]);
+  ['vname','vinst','vdate','vnote'].forEach(id=>$('#'+id).value='');
+  renderRows(); $('#hasil').classList.remove('show'); updateCount(); destroyCharts();
+  window.scrollTo({top:0,behavior:'smooth'}); toast('Formulir direset.');
+}
+
+let charts=[]; function destroyCharts(){charts.forEach(c=>c.destroy());charts=[];$('#chartGrid').innerHTML='';}
+
+function kelayakan(p){ if(p>=80)return['Layak digunakan','good'];
+  if(p>=60)return['Layak dengan Revisi','mid']; return['Tidak Layak','bad']; }
+
+/* Gauge setengah lingkaran (Chart.js doughnut) */
+function makeGauge(canvas,value){
+  const color=value>=80?'#16A34A':value>=60?'#D97706':'#DC2626';
+  const c=new Chart(canvas,{type:'doughnut',
+    data:{datasets:[{data:[value,100-value],backgroundColor:[color,'#E2E8F0'],borderWidth:0,circumference:180,rotation:270}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{enabled:false}}},
+    plugins:[{id:'cen',afterDraw(ch){const{ctx,chartArea:a}=ch;ctx.save();const x=(a.left+a.right)/2,y=a.bottom-6;
+      ctx.textAlign='center';ctx.font='700 30px Poppins';ctx.fillStyle=color;ctx.fillText(value+'%',x,y);
+      ctx.font='500 12px Inter';ctx.fillStyle='#64748B';ctx.fillText('Kelayakan',x,y+20);ctx.restore();}}]});
+  return c;
+}
+
+function submitTest(){
+  if(!validateIdentity(['vname','vinst','vdate'])){window.scrollTo({top:0,behavior:'smooth'});return;}
+  const incomplete=IND.filter(r=>!skor[r.no]||!ess[r.no]);
+  if(incomplete.length){toast(`Masih ada ${incomplete.length} indikator belum lengkap (skor & esensial).`,'err');return;}
+  submitted=true; $$('#rows select').forEach(s=>s.disabled=true); $$('.ess-toggle button').forEach(b=>b.disabled=true);
+
+  const total=IND.reduce((a,r)=>a+skor[r.no],0);
+  const rata=Math.round(total/N*100)/100;
+  const persen=Math.round(total/(N*5)*1000)/10;
+  const Ne=IND.filter(r=>ess[r.no]==='Y').length;
+  const CVR=Math.round((Ne-N/2)/(N/2)*1000)/1000;             // rasio esensialitas (validator ini)
+  const relevan=IND.filter(r=>skor[r.no]>=4).length;          // relevan bila skor 4–5
+  const SCVI=Math.round(relevan/N*1000)/1000;                 // S-CVI/Ave (sheet ini)
+  const [verd,vc]=kelayakan(persen);
+
+  $('#verdict').innerHTML=`<div class="verdict ${vc}">Kesimpulan kelayakan: <b>${verd}</b> — persentase ${persen}% (rata-rata ${rata} dari skala 5).</div>`;
+
+  /* kartu statistik (disesuaikan per asesmen) */
+  let cards=`
+    <div class="stat"><div class="v">${total}</div><div class="l">Total Skor</div></div>
+    <div class="stat"><div class="v">${rata}</div><div class="l">Rata-rata</div></div>
+    <div class="stat ${persen>=80?'ok':persen>=60?'warn':'bad'}"><div class="v">${persen}%</div><div class="l">Kelayakan</div></div>
+    <div class="stat ${CVR>=0.8?'ok':CVR>=0?'warn':'bad'}"><div class="v">${CVR.toFixed(2)}</div><div class="l">CVR (Lawshe)</div></div>`;
+  if(CFG.show_cvi) cards+=`<div class="stat ${SCVI>=0.8?'ok':'warn'}"><div class="v">${SCVI.toFixed(2)}</div><div class="l">S-CVI/Ave</div></div>
+    <div class="stat"><div class="v">${Ne}/${N}</div><div class="l">Esensial</div></div>`;
+  $('#stats').innerHTML=cards;
+
+  /* rata-rata per aspek */
+  const groups={}; let cur=null;
+  IND.forEach(r=>{ if(r.aspek)cur=r.aspek; (groups[cur]=groups[cur]||[]).push(skor[r.no]); });
+  const aspekNames=Object.keys(groups), aspekAvg=aspekNames.map(a=>groups[a].reduce((x,y)=>x+y,0)/groups[a].length);
+  $('#aspekRows').innerHTML=aspekNames.map((a,i)=>{const av=Math.round(aspekAvg[i]*100)/100,p=Math.round(av/5*100);
+    const cls=p>=80?'':p>=60?'mid':'lo';
+    return `<tr><td><b>${a}</b></td><td class="center">${av}</td><td class="center">${p}%</td>
+      <td><div class="bar ${cls}"><i style="width:${p}%"></i></div></td></tr>`;}).join('');
+
+  /* charts sesuai konfigurasi */
+  destroyCharts();
+  const grid=$('#chartGrid');
+  if(CFG.charts.includes('gauge')){
+    grid.insertAdjacentHTML('beforeend','<div class="chart-box"><h4>Gauge Kelayakan</h4><div class="cw"><canvas id="cGauge"></canvas></div></div>');
+    charts.push(makeGauge($('#cGauge'),persen));
+  }
+  if(CFG.charts.includes('aspek')){
+    grid.insertAdjacentHTML('beforeend','<div class="chart-box"><h4>Rata-rata per Aspek</h4><div class="cw"><canvas id="cAspek"></canvas></div></div>');
+    charts.push(new Chart($('#cAspek'),{type:'bar',data:{labels:aspekNames,datasets:[{data:aspekAvg.map(v=>Math.round(v*100)/100),
+      backgroundColor:'#0F766E',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,
+      scales:{y:{min:0,max:5}},plugins:{legend:{display:false}}}}));
+  }
+  if(CFG.charts.includes('indicator')){
+    grid.insertAdjacentHTML('beforeend','<div class="chart-box" style="grid-column:1/-1"><h4>Skor per Indikator</h4><div class="cw"><canvas id="cInd"></canvas></div></div>');
+    charts.push(new Chart($('#cInd'),{type:'bar',data:{labels:IND.map(r=>r.no),datasets:[{label:'Skor',data:IND.map(r=>skor[r.no]),
+      backgroundColor:IND.map(r=>skor[r.no]>=4?'#16A34A':skor[r.no]==3?'#D97706':'#DC2626'),borderRadius:5}]},
+      options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0,max:5}},plugins:{legend:{display:false},
+        tooltip:{callbacks:{title:i=>'Indikator '+IND[i[0].dataIndex].no,label:i=>'Skor: '+i.raw}}}}}));
+  }
+
+  const id=identity();
+  window._result={validator:id.validator,instansi:id.instansi,tanggal:id.tanggal,
+    total_skor:total,rata_rata:rata,persentase_kelayakan:persen,CVR:CVR,
+    ...(CFG.show_cvi?{S_CVI_Ave:SCVI,esensial:Ne+'/'+N}:{}),
+    kelayakan:verd,rata_rata_aspek:Object.fromEntries(aspekNames.map((a,i)=>[a,Math.round(aspekAvg[i]*100)/100])),
+    skor_indikator:skor,esensial_indikator:ess,catatan:id.catatan,waktu:new Date().toISOString()};
+  $('#jsonOut').textContent=JSON.stringify(window._result,null,2);
+  saveLocal(KEY,{identitas:id,skor,ess,hasil:window._result,ts:Date.now()});
+  $('#hasil').classList.add('show'); $('#hasil').scrollIntoView({behavior:'smooth'}); toast('Validasi selesai dianalisis.','ok');
+}
+function exportJSON(){if(!window._result){toast('Submit dahulu.','err');return;}
+  downloadJSON(window._result,`${CFG.key}_${(window._result.validator||'validator').replace(/\s+/g,'_')}.json`);}
+
+function restore(){const d=loadLocal(KEY);if(!d)return;
+  if(d.identitas){const m={validator:'vname',instansi:'vinst',tanggal:'vdate',catatan:'vnote'};
+    Object.entries(m).forEach(([k,id])=>{if(d.identitas[k])$('#'+id).value=d.identitas[k];});}
+  if(d.skor)Object.assign(skor,d.skor); if(d.ess)Object.assign(ess,d.ess);
+  // pulihkan tampilan
+  IND.forEach(r=>{if(skor[r.no]){const sel=$(`#rows tr:nth-child(${IND.indexOf(r)+1}) select`);}});
+  renderRowsRestore(); updateCount();
+}
+function renderRowsRestore(){
+  $$('#rows select').forEach((sel,i)=>{const no=IND[i].no; if(skor[no])sel.value=skor[no];});
+  IND.forEach(r=>{if(ess[r.no]==='Y')$('#ey'+r.no).classList.add('on-y'); if(ess[r.no]==='N')$('#en'+r.no).classList.add('on-n');});
+}
+renderRows(); restore();
+</script>
+</body>
+</html>

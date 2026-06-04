@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Skala Kecemasan Matematika — instrumen MCDM">
+<title>Skala Kecemasan Matematika</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<!-- Chart.js untuk radar / bar / gauge -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{
+  --primary:#0F766E; --secondary:#134E4A; --accent:#14B8A6; --accent-2:#0EA5E9;
+  --bg:#F1F5F9; --surface:#FFFFFF; --soft:#F0FDFA; --line:#E2E8F0;
+  --ink:#1E293B; --muted:#64748B; --ok:#16A34A; --warn:#D97706; --bad:#DC2626;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.brand,.q-num,.btn{font-family:'Poppins',sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+/* ---------- Header ---------- */
+.app-header{
+  background:linear-gradient(135deg,var(--secondary),var(--primary) 60%,var(--accent));
+  color:#fff;position:relative;overflow:hidden;
+}
+.app-header::after{
+  content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%;
+}
+.app-header .wrap{padding:34px 18px 30px;position:relative;z-index:1}
+.eyebrow{
+  display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  padding:6px 14px;border-radius:999px;margin-bottom:14px;
+}
+.app-header h1{font-size:clamp(1.4rem,3.4vw,2.05rem);font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.app-header p.sub{margin-top:8px;max-width:760px;color:rgba(255,255,255,.9);font-size:.95rem}
+.crumbs{margin-top:16px;font-size:.85rem}
+.crumbs a{color:#CCFBF1;text-decoration:none;border-bottom:1px dashed rgba(204,251,241,.5)}
+.crumbs a:hover{color:#fff}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px 22px 24px;margin:18px 0;
+}
+.card.identity{border-top:4px solid var(--accent)}
+.section-title{
+  font-size:1.15rem;font-weight:600;color:var(--secondary);margin-bottom:4px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--accent)}
+.section-desc{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+
+/* ---------- Form fields ---------- */
+.grid{display:grid;gap:14px}
+.grid.cols-2{grid-template-columns:repeat(2,1fr)}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.field label{display:block;font-weight:600;font-size:.82rem;color:var(--secondary);margin-bottom:6px}
+.field label .req{color:var(--bad)}
+.field input,.field select{
+  width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  font-family:inherit;font-size:.92rem;color:var(--ink);background:#fff;transition:.15s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(20,184,166,.15)}
+.field.invalid input,.field.invalid select{border-color:var(--bad);box-shadow:0 0 0 3px rgba(220,38,38,.12)}
+.field .err{color:var(--bad);font-size:.76rem;margin-top:4px;display:none}
+.field.invalid .err{display:block}
+
+/* ---------- Question card ---------- */
+.q-card{
+  background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);
+  border-radius:var(--radius-sm);padding:18px 18px 14px;margin:14px 0;transition:.2s;
+}
+.q-card.answered{border-left-color:var(--accent);background:linear-gradient(90deg,var(--soft),#fff 12%)}
+.q-card.flag{border-left-color:var(--warn)}
+.q-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:6px}
+.q-num{
+  flex:none;width:34px;height:34px;border-radius:9px;background:var(--secondary);color:#fff;
+  display:grid;place-items:center;font-weight:600;font-size:.9rem;
+}
+.q-attr{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto}
+.tag{font-size:.66rem;font-weight:600;padding:3px 8px;border-radius:999px;background:#CCFBF1;color:#0F766E;border:1px solid #5EEAD4}
+.q-stim{color:var(--muted);font-size:.9rem;font-style:italic;margin:2px 0 8px 46px;padding-left:12px;border-left:2px solid var(--line)}
+.q-ask{font-weight:600;margin:0 0 12px 46px;color:var(--ink)}
+.opts{list-style:none;margin-left:46px;display:grid;gap:8px}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:10px 13px;border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);cursor:pointer;transition:.15s;background:#fff;
+}
+.opt:hover{border-color:var(--accent);background:var(--soft)}
+.opt input{accent-color:var(--primary);width:17px;height:17px;flex:none}
+.opt .ol{font-weight:600;color:var(--secondary);flex:none}
+.opt.sel{border-color:var(--primary);background:var(--soft);box-shadow:0 0 0 2px rgba(15,118,110,.12)}
+/* result colouring */
+.opt.correct{border-color:var(--ok);background:#F0FDF4}
+.opt.wrong{border-color:var(--bad);background:#FEF2F2}
+.opt .mark{margin-left:auto;font-weight:700;font-size:.8rem}
+.opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--bad)}
+
+/* Likert row */
+.likert{margin-left:0}
+.likert .opts{margin-left:0;grid-template-columns:repeat(5,1fr)}
+.likert .opt{flex-direction:column;text-align:center;gap:6px;padding:10px 6px;font-size:.78rem}
+.likert .opt .ol{font-size:.95rem}
+@media(max-width:640px){.likert .opts{grid-template-columns:repeat(5,1fr);gap:5px}.likert .opt{padding:8px 3px;font-size:.66rem}}
+
+/* ---------- Tables ---------- */
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);margin:6px 0}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:560px}
+thead th{background:var(--secondary);color:#fff;font-family:'Poppins';font-weight:600;font-size:.82rem;
+  padding:11px 12px;text-align:left;position:sticky;top:0}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:nth-child(even){background:#F8FAFC}
+tbody tr:hover{background:var(--soft)}
+.center{text-align:center}
+td.score-cell select{width:72px;padding:6px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit}
+.ess-toggle{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.ess-toggle button{border:none;background:#fff;padding:6px 12px;font-size:.78rem;cursor:pointer;font-family:inherit;color:var(--muted)}
+.ess-toggle button.on-y{background:var(--ok);color:#fff}
+.ess-toggle button.on-n{background:var(--bad);color:#fff}
+
+/* progress bar */
+.bar{height:14px;border-radius:999px;background:#E2E8F0;overflow:hidden;min-width:90px}
+.bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .8s ease}
+.bar.lo > i{background:linear-gradient(90deg,#DC2626,#F97316)}
+.bar.mid > i{background:linear-gradient(90deg,#D97706,#FBBF24)}
+
+/* ---------- Buttons / action bar ---------- */
+.actionbar{
+  position:sticky;bottom:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(15,23,42,.06);
+  padding:12px 0;margin-top:22px;
+}
+.actionbar .wrap{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.progress-mini{font-size:.82rem;color:var(--muted);margin-right:auto}
+.progress-mini b{color:var(--primary)}
+.btn{
+  border:none;border-radius:10px;padding:11px 20px;font-size:.9rem;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;transition:.15s;font-family:'Poppins';
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--secondary)}
+.btn-accent{background:var(--accent);color:#04302c}.btn-accent:hover{filter:brightness(1.05)}
+.btn-ghost{background:#fff;color:var(--secondary);border:1.5px solid var(--line)}.btn-ghost:hover{border-color:var(--accent)}
+.btn-danger{background:#fff;color:var(--bad);border:1.5px solid #FCA5A5}.btn-danger:hover{background:#FEF2F2}
+
+/* ---------- Result panel ---------- */
+.results{display:none;animation:fade .4s ease}
+.results.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:6px 0 18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat .v{font-family:'Poppins';font-size:1.8rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .l{font-size:.76rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat.ok .v{color:var(--ok)}.stat.bad .v{color:var(--bad)}.stat.warn .v{color:var(--warn)}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0}
+.chart-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)}
+.chart-box h4{font-size:.95rem;color:var(--secondary);margin-bottom:10px;text-align:center}
+.chart-box .cw{position:relative;height:300px}
+.verdict{padding:16px 18px;border-radius:var(--radius-sm);font-weight:600;margin:8px 0 16px;border:1.5px solid}
+.verdict.good{background:#F0FDF4;border-color:#86EFAC;color:#166534}
+.verdict.mid{background:#FFFBEB;border-color:#FCD34D;color:#92400E}
+.verdict.bad{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+pre.json{background:#0B1120;color:#5EEAD4;padding:16px;border-radius:var(--radius-sm);overflow-x:auto;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.82rem;line-height:1.55;border:1px solid #1E293B}
+
+/* ---------- Toast ---------- */
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:var(--secondary);color:#fff;padding:12px 20px;border-radius:999px;font-size:.86rem;font-weight:500;
+  box-shadow:var(--shadow-lg);z-index:50;transition:.25s;pointer-events:none;max-width:90vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--bad)} #toast.ok{background:var(--ok)}
+
+footer.foot{color:var(--muted);font-size:.8rem;text-align:center;padding:30px 18px 50px}
+
+@media(max-width:760px){
+  .grid.cols-2,.grid.cols-3{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-grid{grid-template-columns:1fr}
+  .q-stim,.q-ask,.opts{margin-left:0}
+  .q-attr{margin-left:0}
+}
+@media print{
+  .actionbar,.crumbs{display:none}
+  .card,.q-card,.chart-box{box-shadow:none;break-inside:avoid}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+<header class="app-header">
+  <div class="wrap">
+    <span class="eyebrow">Asesmen 2 · Skala Afektif</span>
+    <h1>Skala Kecemasan Matematika</h1>
+    <p class="sub">28 pernyataan Likert lima titik pada empat dimensi: kognitif, afektif, fisiologis, dan perilaku. Skor terstandar menjadi kovariat afektif (θ) bagi model HO-DINA.</p>
+    <div class="crumbs"><a href="index.html">← Portal Asesmen</a></div>
+  </div>
+</header>
+<main class="wrap">
+
+<section class="card identity">
+  <div class="section-title">Identitas Responden</div>
+  <p class="section-desc">Tidak ada jawaban benar/salah. Isilah sesuai keadaan Anda yang sebenarnya.</p>
+  <div class="grid cols-3">
+    <div class="field"><label>Nama Siswa <span class="req">*</span></label><input id="nama" type="text" placeholder="Nama lengkap"><div class="err">Wajib diisi.</div></div>
+    <div class="field"><label>Kelas <span class="req">*</span></label><input id="kelas" type="text" placeholder="mis. VII-A"><div class="err">Wajib diisi.</div></div>
+    <div class="field"><label>Sekolah <span class="req">*</span></label><input id="sekolah" type="text" placeholder="Nama sekolah"><div class="err">Wajib diisi.</div></div>
+  </div>
+</section>
+
+<section class="card">
+  <div class="section-title">Petunjuk</div>
+  <p class="section-desc">Pilih satu dari lima pilihan: <b>SS</b> Sangat Setuju, <b>S</b> Setuju, <b>N</b> Netral, <b>TS</b> Tidak Setuju, <b>STS</b> Sangat Tidak Setuju. Pernyataan <b>favorable (F)</b> searah dengan kecemasan; <b>unfavorable (UF)</b> dibalik secara otomatis saat penskoran.</p>
+</section>
+
+<div id="soal"></div>
+
+<section class="card results" id="hasil">
+  <div class="section-title">Hasil &amp; Interpretasi</div>
+  <div id="verdict"></div>
+  <div class="stat-grid" id="stats"></div>
+  <h3 style="color:var(--secondary);margin:8px 0 6px">Skor per Dimensi</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Dimensi</th><th class="center" style="width:13%">Skor</th><th class="center" style="width:12%">Maks</th><th class="center" style="width:13%">Persentase</th><th class="center" style="width:16%">Kategori</th><th style="width:22%">Tingkat</th></tr></thead>
+      <tbody id="dimRows"></tbody>
+    </table>
+  </div>
+  <div class="chart-grid">
+    <div class="chart-box"><h4>Profil Kecemasan (Radar)</h4><div class="cw"><canvas id="radar"></canvas></div></div>
+    <div class="chart-box"><h4>Persentase per Dimensi (Bar)</h4><div class="cw"><canvas id="bar"></canvas></div></div>
+  </div>
+  <h3 style="color:var(--secondary);margin:8px 0 6px">Output JSON</h3>
+  <pre class="json" id="jsonOut"></pre>
+  <div style="margin-top:12px"><button class="btn btn-accent" onclick="exportJSON()">⬇ Ekspor Hasil (JSON)</button></div>
+</section>
+
+<div class="actionbar"><div class="wrap">
+  <span class="progress-mini">Terjawab <b id="cnt">0</b> / 28</span>
+  <button class="btn btn-ghost" onclick="saveAnswers()">💾 Simpan Jawaban</button>
+  <button class="btn btn-danger" onclick="resetAll()">↺ Reset</button>
+  <button class="btn btn-primary" onclick="submitTest()">✔ Submit</button>
+</div></div>
+
+</main>
+<footer class="foot">
+  Instrumen MCDM &middot; Pengembangan Model Diagnostik Awal Kesulitan Belajar Matematika Siswa SMP Berbasis Artificial Intelligence (Multidimensional CDM)<br>
+  Aplikasi statis (tanpa backend) &middot; data tersimpan lokal di peramban &amp; dapat diekspor ke JSON.
+</footer>
+<div id="toast"></div>
+<script>
+/* ---------- Util umum ---------- */
+const $  = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+
+/* Toast notifikasi ringan */
+let toastT;
+function toast(msg,type=''){
+  let t=$('#toast'); if(!t){t=document.createElement('div');t.id='toast';document.body.appendChild(t);}
+  t.className=''; t.classList.add('show'); if(type)t.classList.add(type); t.textContent=msg;
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* localStorage (per-asesmen) */
+function saveLocal(key,obj){ try{localStorage.setItem(key,JSON.stringify(obj));return true;}catch(e){return false;} }
+function loadLocal(key){ try{const v=localStorage.getItem(key);return v?JSON.parse(v):null;}catch(e){return null;} }
+function clearLocal(key){ try{localStorage.removeItem(key);}catch(e){} }
+
+/* Unduh objek sebagai berkas .json */
+function downloadJSON(obj,filename){
+  const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+/* Validasi field identitas wajib; mengembalikan true bila valid */
+function validateIdentity(ids){
+  let ok=true;
+  ids.forEach(id=>{
+    const f=$('#'+id), wrap=f.closest('.field');
+    if(!f.value.trim()){ wrap.classList.add('invalid'); ok=false; }
+    else wrap.classList.remove('invalid');
+  });
+  if(!ok) toast('Lengkapi dahulu data identitas yang wajib diisi.','err');
+  return ok;
+}
+</script>
+<script>
+const ITEMS = [{"no": 1, "pernyataan": "Saya khawatir tidak mampu menyelesaikan soal matematika.", "dimensi": "Kognitif", "tipe": "F"}, {"no": 2, "pernyataan": "Pikiran saya kosong ketika menghadapi soal matematika yang sulit.", "dimensi": "Kognitif", "tipe": "F"}, {"no": 3, "pernyataan": "Saya yakin dapat memahami materi matematika yang diajarkan.", "dimensi": "Kognitif", "tipe": "UF"}, {"no": 4, "pernyataan": "Saya sulit berkonsentrasi saat mengerjakan tugas matematika.", "dimensi": "Kognitif", "tipe": "F"}, {"no": 5, "pernyataan": "Saya merasa optimis setiap kali memulai ulangan matematika.", "dimensi": "Kognitif", "tipe": "UF"}, {"no": 6, "pernyataan": "Saya terus memikirkan kemungkinan gagal saat belajar matematika.", "dimensi": "Kognitif", "tipe": "F"}, {"no": 7, "pernyataan": "Saya mampu memusatkan perhatian selama pelajaran matematika berlangsung.", "dimensi": "Kognitif", "tipe": "UF"}, {"no": 8, "pernyataan": "Saya merasa takut ketika guru menunjuk saya mengerjakan soal di papan tulis.", "dimensi": "Afektif", "tipe": "F"}, {"no": 9, "pernyataan": "Saya menyukai tantangan dalam pelajaran matematika.", "dimensi": "Afektif", "tipe": "UF"}, {"no": 10, "pernyataan": "Saya merasa tegang saat pelajaran matematika akan dimulai.", "dimensi": "Afektif", "tipe": "F"}, {"no": 11, "pernyataan": "Saya merasa tenang ketika mengerjakan soal matematika.", "dimensi": "Afektif", "tipe": "UF"}, {"no": 12, "pernyataan": "Saya merasa cemas ketika hari ulangan matematika semakin dekat.", "dimensi": "Afektif", "tipe": "F"}, {"no": 13, "pernyataan": "Matematika membuat saya merasa tidak nyaman.", "dimensi": "Afektif", "tipe": "F"}, {"no": 14, "pernyataan": "Saya merasa senang ketika berhasil memecahkan soal matematika.", "dimensi": "Afektif", "tipe": "UF"}, {"no": 15, "pernyataan": "Jantung saya berdebar lebih cepat saat mengerjakan ulangan matematika.", "dimensi": "Fisiologis", "tipe": "F"}, {"no": 16, "pernyataan": "Telapak tangan saya berkeringat ketika menghadapi soal matematika yang sulit.", "dimensi": "Fisiologis", "tipe": "F"}, {"no": 17, "pernyataan": "Tubuh saya terasa rileks saat mengerjakan tugas matematika.", "dimensi": "Fisiologis", "tipe": "UF"}, {"no": 18, "pernyataan": "Saya merasa mual atau pusing menjelang ujian matematika.", "dimensi": "Fisiologis", "tipe": "F"}, {"no": 19, "pernyataan": "Pernapasan saya tetap normal saat mengerjakan soal matematika di depan kelas.", "dimensi": "Fisiologis", "tipe": "UF"}, {"no": 20, "pernyataan": "Otot tubuh saya menegang saat guru membagikan lembar soal matematika.", "dimensi": "Fisiologis", "tipe": "F"}, {"no": 21, "pernyataan": "Tangan saya gemetar ketika harus mengerjakan soal matematika yang sulit.", "dimensi": "Fisiologis", "tipe": "F"}, {"no": 22, "pernyataan": "Saya menunda mengerjakan PR matematika hingga menit terakhir.", "dimensi": "Perilaku", "tipe": "F"}, {"no": 23, "pernyataan": "Saya aktif bertanya kepada guru ketika tidak memahami materi matematika.", "dimensi": "Perilaku", "tipe": "UF"}, {"no": 24, "pernyataan": "Saya berusaha menghindari kegiatan yang melibatkan perhitungan matematika.", "dimensi": "Perilaku", "tipe": "F"}, {"no": 25, "pernyataan": "Saya mengerjakan latihan soal matematika tambahan atas kemauan sendiri.", "dimensi": "Perilaku", "tipe": "UF"}, {"no": 26, "pernyataan": "Saya memilih diam daripada bertanya saat kesulitan memahami matematika.", "dimensi": "Perilaku", "tipe": "F"}, {"no": 27, "pernyataan": "Saya mengumpulkan tugas matematika tepat waktu.", "dimensi": "Perilaku", "tipe": "UF"}, {"no": 28, "pernyataan": "Saya mencari alasan untuk tidak masuk kelas ketika ada ulangan matematika.", "dimensi": "Perilaku", "tipe": "F"}];
+const DIMENSI = ['Kognitif','Afektif','Fisiologis','Perilaku'];
+const LIKERT = [['SS',5,'Sangat Setuju'],['S',4,'Setuju'],['N',3,'Netral'],['TS',2,'Tidak Setuju'],['STS',1,'Sangat Tidak Setuju']];
+const KEY='mcdm_asesmen2'; let submitted=false;
+
+function renderSoal(){
+  $('#soal').innerHTML = ITEMS.map(it=>{
+    const opts=LIKERT.map(([code,lvl,full])=>`
+      <li><label class="opt" data-q="${it.no}" title="${full}">
+        <input type="radio" name="q${it.no}" value="${lvl}">
+        <span class="ol">${code}</span></label></li>`).join('');
+    return `<div class="q-card likert" id="qc${it.no}">
+      <div class="q-head"><span class="q-num">${it.no}</span>
+        <p class="q-ask" style="margin:4px 0 0">${it.pernyataan}</p>
+        <div class="q-attr"><span class="tag">${it.dimensi}</span>
+          <span class="tag" style="background:${it.tipe==='F'?'#FEE2E2':'#DBEAFE'};color:${it.tipe==='F'?'#991B1B':'#1E40AF'};border-color:transparent">${it.tipe}</span></div>
+      </div>
+      <ul class="opts">${opts}</ul></div>`;
+  }).join('');
+  $$('.opt').forEach(l=>l.addEventListener('click',()=>{
+    if(submitted)return; const no=l.dataset.q;
+    $$(`.opt[data-q="${no}"]`).forEach(x=>x.classList.remove('sel'));
+    l.classList.add('sel'); $('#qc'+no).classList.add('answered'); setTimeout(updateCount,0);
+  }));
+}
+function getAnswers(){const a={};ITEMS.forEach(it=>{const c=$(`input[name="q${it.no}"]:checked`);if(c)a[it.no]=+c.value;});return a;}
+function updateCount(){$('#cnt').textContent=Object.keys(getAnswers()).length;}
+function identity(){return{nama:$('#nama').value.trim(),kelas:$('#kelas').value.trim(),sekolah:$('#sekolah').value.trim()};}
+
+function kategori(p){ if(p>=81)return['Sangat Tinggi','bad'];if(p>=61)return['Tinggi','bad'];
+  if(p>=41)return['Sedang','mid'];if(p>=21)return['Rendah','ok'];return['Sangat Rendah','ok']; }
+
+function saveAnswers(){saveLocal(KEY,{identitas:identity(),jawaban:getAnswers(),ts:Date.now()});toast('Jawaban tersimpan.','ok');}
+function resetAll(){
+  if(!confirm('Hapus seluruh jawaban?'))return; clearLocal(KEY);submitted=false;
+  $$('input[type=radio]').forEach(r=>{r.checked=false;r.disabled=false});
+  ['nama','kelas','sekolah'].forEach(id=>$('#'+id).value='');
+  $$('.q-card').forEach(c=>c.className='q-card likert');
+  $$('.opt').forEach(o=>o.classList.remove('sel'));
+  $('#hasil').classList.remove('show');updateCount();destroyCharts();
+  window.scrollTo({top:0,behavior:'smooth'});toast('Formulir direset.');
+}
+
+let chRadar,chBar; function destroyCharts(){if(chRadar)chRadar.destroy();if(chBar)chBar.destroy();chRadar=chBar=null;}
+
+function submitTest(){
+  if(!validateIdentity(['nama','kelas','sekolah'])){window.scrollTo({top:0,behavior:'smooth'});return;}
+  const ans=getAnswers(),n=Object.keys(ans).length;
+  if(n<28){toast(`Masih ada ${28-n} pernyataan belum dijawab.`,'err');
+    const first=ITEMS.find(it=>!ans[it.no]); if(first)$('#qc'+first.no).scrollIntoView({behavior:'smooth',block:'center'}); return;}
+  submitted=true; $$('.opt input').forEach(i=>i.disabled=true);
+
+  /* skor per dimensi (UF dibalik: skor = 6 - level) */
+  const sum={},cnt={}; DIMENSI.forEach(d=>{sum[d]=0;cnt[d]=0;});
+  ITEMS.forEach(it=>{const lvl=ans[it.no]; const sc=it.tipe==='F'?lvl:(6-lvl); sum[it.dimensi]+=sc;cnt[it.dimensi]++;});
+  const persen={}; DIMENSI.forEach(d=>{persen[d]=Math.round(sum[d]/(cnt[d]*5)*1000)/10;});
+  const totalSkor=DIMENSI.reduce((a,d)=>a+sum[d],0);
+  const totalPersen=Math.round(totalSkor/140*1000)/10;
+  const [katTotal,clsTotal]=kategori(totalPersen);
+
+  $('#verdict').innerHTML=`<div class="verdict ${clsTotal==='ok'?'good':clsTotal==='mid'?'mid':'bad'}">
+    Tingkat kecemasan matematika keseluruhan: <b>${katTotal}</b> (${totalPersen}%). 
+    ${clsTotal==='bad'?'Disarankan pendampingan afektif dan strategi regulasi kecemasan.':clsTotal==='mid'?'Perlu pemantauan pada dimensi dengan skor tinggi.':'Kondisi afektif tergolong terkendali.'}</div>`;
+
+  $('#stats').innerHTML = DIMENSI.map(d=>{const[k,c]=kategori(persen[d]);
+    return `<div class="stat ${c==='bad'?'bad':c==='mid'?'warn':'ok'}"><div class="v">${persen[d]}%</div><div class="l">${d}</div></div>`;}).join('');
+
+  $('#dimRows').innerHTML = DIMENSI.map(d=>{const[k,c]=kategori(persen[d]);
+    const cls=c==='bad'?'lo':c==='mid'?'mid':'';
+    return `<tr><td><b>${d}</b></td><td class="center">${sum[d]}</td><td class="center">${cnt[d]*5}</td>
+      <td class="center"><b>${persen[d]}%</b></td><td class="center">${k}</td>
+      <td><div class="bar ${cls}"><i style="width:${persen[d]}%"></i></div></td></tr>`;}).join('');
+
+  destroyCharts();
+  const vals=DIMENSI.map(d=>persen[d]);
+  chRadar=new Chart($('#radar'),{type:'radar',data:{labels:DIMENSI,datasets:[{label:'Kecemasan (%)',data:vals,
+    fill:true,backgroundColor:'rgba(14,165,233,.22)',borderColor:'#0EA5E9',pointBackgroundColor:'#0EA5E9',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:100,ticks:{stepSize:25}}},plugins:{legend:{display:false}}}});
+  chBar=new Chart($('#bar'),{type:'bar',data:{labels:DIMENSI,datasets:[{data:vals,
+    backgroundColor:vals.map(v=>v>=61?'#DC2626':v>=41?'#D97706':'#16A34A'),borderRadius:6}]},
+    options:{responsive:true,maintainAspectRatio:false,scales:{y:{min:0,max:100}},plugins:{legend:{display:false}}}});
+
+  const id=identity();
+  window._result={nama:id.nama,kelas:id.kelas,sekolah:id.sekolah,
+    kognitif:persen.Kognitif,afektif:persen.Afektif,fisiologis:persen.Fisiologis,perilaku:persen.Perilaku,
+    total_persentase:totalPersen,kategori:katTotal,skor_dimensi:sum,jawaban:ans,waktu:new Date().toISOString()};
+  $('#jsonOut').textContent=JSON.stringify({kognitif:persen.Kognitif,afektif:persen.Afektif,
+    fisiologis:persen.Fisiologis,perilaku:persen.Perilaku,kategori:katTotal},null,2);
+  saveLocal(KEY,{identitas:id,jawaban:ans,hasil:window._result,ts:Date.now()});
+  $('#hasil').classList.add('show'); $('#hasil').scrollIntoView({behavior:'smooth'}); toast('Skala selesai dinilai.','ok');
+}
+function exportJSON(){if(!window._result){toast('Submit dahulu.','err');return;}
+  downloadJSON(window._result,`kecemasan_${(window._result.nama||'siswa').replace(/\s+/g,'_')}.json`);}
+
+function restore(){const d=loadLocal(KEY);if(!d)return;
+  if(d.identitas)['nama','kelas','sekolah'].forEach(k=>{if(d.identitas[k])$('#'+k).value=d.identitas[k];});
+  if(d.jawaban)Object.entries(d.jawaban).forEach(([no,v])=>{const r=$(`input[name="q${no}"][value="${v}"]`);
+    if(r){r.checked=true;r.closest('.opt').classList.add('sel');$('#qc'+no).classList.add('answered');}});
+  updateCount();}
+renderSoal(); restore();
+</script>
+</body>
+</html>
