@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal Asesmen MCDM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#0F766E; --secondary:#134E4A; --accent:#14B8A6; --accent-2:#0EA5E9;
+  --bg:#F1F5F9; --surface:#FFFFFF; --soft:#F0FDFA; --line:#E2E8F0;
+  --ink:#1E293B; --muted:#64748B; --ok:#16A34A; --warn:#D97706; --bad:#DC2626;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,.brand,.q-num,.btn{font-family:'Poppins',sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+/* ---------- Header ---------- */
+.app-header{
+  background:linear-gradient(135deg,var(--secondary),var(--primary) 60%,var(--accent));
+  color:#fff;position:relative;overflow:hidden;
+}
+.app-header::after{
+  content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;
+  background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%;
+}
+.app-header .wrap{padding:34px 18px 30px;position:relative;z-index:1}
+.eyebrow{
+  display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  padding:6px 14px;border-radius:999px;margin-bottom:14px;
+}
+.app-header h1{font-size:clamp(1.4rem,3.4vw,2.05rem);font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.app-header p.sub{margin-top:8px;max-width:760px;color:rgba(255,255,255,.9);font-size:.95rem}
+.crumbs{margin-top:16px;font-size:.85rem}
+.crumbs a{color:#CCFBF1;text-decoration:none;border-bottom:1px dashed rgba(204,251,241,.5)}
+.crumbs a:hover{color:#fff}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:22px 22px 24px;margin:18px 0;
+}
+.card.identity{border-top:4px solid var(--accent)}
+.section-title{
+  font-size:1.15rem;font-weight:600;color:var(--secondary);margin-bottom:4px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-title::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--accent)}
+.section-desc{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+
+/* ---------- Form fields ---------- */
+.grid{display:grid;gap:14px}
+.grid.cols-2{grid-template-columns:repeat(2,1fr)}
+.grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.field label{display:block;font-weight:600;font-size:.82rem;color:var(--secondary);margin-bottom:6px}
+.field label .req{color:var(--bad)}
+.field input,.field select{
+  width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--radius-sm);
+  font-family:inherit;font-size:.92rem;color:var(--ink);background:#fff;transition:.15s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(20,184,166,.15)}
+.field.invalid input,.field.invalid select{border-color:var(--bad);box-shadow:0 0 0 3px rgba(220,38,38,.12)}
+.field .err{color:var(--bad);font-size:.76rem;margin-top:4px;display:none}
+.field.invalid .err{display:block}
+
+/* ---------- Question card ---------- */
+.q-card{
+  background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--line);
+  border-radius:var(--radius-sm);padding:18px 18px 14px;margin:14px 0;transition:.2s;
+}
+.q-card.answered{border-left-color:var(--accent);background:linear-gradient(90deg,var(--soft),#fff 12%)}
+.q-card.flag{border-left-color:var(--warn)}
+.q-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:6px}
+.q-num{
+  flex:none;width:34px;height:34px;border-radius:9px;background:var(--secondary);color:#fff;
+  display:grid;place-items:center;font-weight:600;font-size:.9rem;
+}
+.q-attr{display:flex;gap:5px;flex-wrap:wrap;margin-left:auto}
+.tag{font-size:.66rem;font-weight:600;padding:3px 8px;border-radius:999px;background:#CCFBF1;color:#0F766E;border:1px solid #5EEAD4}
+.q-stim{color:var(--muted);font-size:.9rem;font-style:italic;margin:2px 0 8px 46px;padding-left:12px;border-left:2px solid var(--line)}
+.q-ask{font-weight:600;margin:0 0 12px 46px;color:var(--ink)}
+.opts{list-style:none;margin-left:46px;display:grid;gap:8px}
+.opt{
+  display:flex;align-items:center;gap:11px;padding:10px 13px;border:1.5px solid var(--line);
+  border-radius:var(--radius-sm);cursor:pointer;transition:.15s;background:#fff;
+}
+.opt:hover{border-color:var(--accent);background:var(--soft)}
+.opt input{accent-color:var(--primary);width:17px;height:17px;flex:none}
+.opt .ol{font-weight:600;color:var(--secondary);flex:none}
+.opt.sel{border-color:var(--primary);background:var(--soft);box-shadow:0 0 0 2px rgba(15,118,110,.12)}
+/* result colouring */
+.opt.correct{border-color:var(--ok);background:#F0FDF4}
+.opt.wrong{border-color:var(--bad);background:#FEF2F2}
+.opt .mark{margin-left:auto;font-weight:700;font-size:.8rem}
+.opt.correct .mark{color:var(--ok)} .opt.wrong .mark{color:var(--bad)}
+
+/* Likert row */
+.likert{margin-left:0}
+.likert .opts{margin-left:0;grid-template-columns:repeat(5,1fr)}
+.likert .opt{flex-direction:column;text-align:center;gap:6px;padding:10px 6px;font-size:.78rem}
+.likert .opt .ol{font-size:.95rem}
+@media(max-width:640px){.likert .opts{grid-template-columns:repeat(5,1fr);gap:5px}.likert .opt{padding:8px 3px;font-size:.66rem}}
+
+/* ---------- Tables ---------- */
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);margin:6px 0}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:560px}
+thead th{background:var(--secondary);color:#fff;font-family:'Poppins';font-weight:600;font-size:.82rem;
+  padding:11px 12px;text-align:left;position:sticky;top:0}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:nth-child(even){background:#F8FAFC}
+tbody tr:hover{background:var(--soft)}
+.center{text-align:center}
+td.score-cell select{width:72px;padding:6px;border:1.5px solid var(--line);border-radius:8px;font-family:inherit}
+.ess-toggle{display:inline-flex;border:1.5px solid var(--line);border-radius:8px;overflow:hidden}
+.ess-toggle button{border:none;background:#fff;padding:6px 12px;font-size:.78rem;cursor:pointer;font-family:inherit;color:var(--muted)}
+.ess-toggle button.on-y{background:var(--ok);color:#fff}
+.ess-toggle button.on-n{background:var(--bad);color:#fff}
+
+/* progress bar */
+.bar{height:14px;border-radius:999px;background:#E2E8F0;overflow:hidden;min-width:90px}
+.bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .8s ease}
+.bar.lo > i{background:linear-gradient(90deg,#DC2626,#F97316)}
+.bar.mid > i{background:linear-gradient(90deg,#D97706,#FBBF24)}
+
+/* ---------- Buttons / action bar ---------- */
+.actionbar{
+  position:sticky;bottom:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border-top:1px solid var(--line);box-shadow:0 -4px 20px rgba(15,23,42,.06);
+  padding:12px 0;margin-top:22px;
+}
+.actionbar .wrap{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.progress-mini{font-size:.82rem;color:var(--muted);margin-right:auto}
+.progress-mini b{color:var(--primary)}
+.btn{
+  border:none;border-radius:10px;padding:11px 20px;font-size:.9rem;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:8px;transition:.15s;font-family:'Poppins';
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--secondary)}
+.btn-accent{background:var(--accent);color:#04302c}.btn-accent:hover{filter:brightness(1.05)}
+.btn-ghost{background:#fff;color:var(--secondary);border:1.5px solid var(--line)}.btn-ghost:hover{border-color:var(--accent)}
+.btn-danger{background:#fff;color:var(--bad);border:1.5px solid #FCA5A5}.btn-danger:hover{background:#FEF2F2}
+
+/* ---------- Result panel ---------- */
+.results{display:none;animation:fade .4s ease}
+.results.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:6px 0 18px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat .v{font-family:'Poppins';font-size:1.8rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .l{font-size:.76rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat.ok .v{color:var(--ok)}.stat.bad .v{color:var(--bad)}.stat.warn .v{color:var(--warn)}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0}
+.chart-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)}
+.chart-box h4{font-size:.95rem;color:var(--secondary);margin-bottom:10px;text-align:center}
+.chart-box .cw{position:relative;height:300px}
+.verdict{padding:16px 18px;border-radius:var(--radius-sm);font-weight:600;margin:8px 0 16px;border:1.5px solid}
+.verdict.good{background:#F0FDF4;border-color:#86EFAC;color:#166534}
+.verdict.mid{background:#FFFBEB;border-color:#FCD34D;color:#92400E}
+.verdict.bad{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+pre.json{background:#0B1120;color:#5EEAD4;padding:16px;border-radius:var(--radius-sm);overflow-x:auto;
+  font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.82rem;line-height:1.55;border:1px solid #1E293B}
+
+/* ---------- Toast ---------- */
+#toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(20px);opacity:0;
+  background:var(--secondary);color:#fff;padding:12px 20px;border-radius:999px;font-size:.86rem;font-weight:500;
+  box-shadow:var(--shadow-lg);z-index:50;transition:.25s;pointer-events:none;max-width:90vw}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{background:var(--bad)} #toast.ok{background:var(--ok)}
+
+footer.foot{color:var(--muted);font-size:.8rem;text-align:center;padding:30px 18px 50px}
+
+@media(max-width:760px){
+  .grid.cols-2,.grid.cols-3{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-grid{grid-template-columns:1fr}
+  .q-stim,.q-ask,.opts{margin-left:0}
+  .q-attr{margin-left:0}
+}
+@media print{
+  .actionbar,.crumbs{display:none}
+  .card,.q-card,.chart-box{box-shadow:none;break-inside:avoid}
+  body{background:#fff}
+}
+
+.hero{padding:46px 18px 30px}
+.hero h1{font-size:clamp(1.6rem,4vw,2.4rem)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:24px 0 10px}
+.pcard{position:relative;display:block;text-decoration:none;color:inherit;background:#fff;border:1px solid var(--line);
+  border-radius:var(--radius);padding:24px 22px 20px;box-shadow:var(--shadow);transition:.2s;border-top:4px solid var(--c)}
+.pcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.pcard .pnum{font-family:'Poppins';font-weight:700;font-size:2.4rem;color:var(--c);opacity:.18;position:absolute;top:14px;right:20px}
+.pcard h3{font-size:1.12rem;color:var(--secondary);margin-bottom:8px;max-width:80%}
+.pcard p{color:var(--muted);font-size:.88rem;margin-bottom:14px}
+.pcard .go{font-weight:600;color:var(--c);font-size:.88rem}
+.infobox{background:var(--soft);border:1px solid #99F6E4;border-radius:var(--radius-sm);padding:16px 18px;color:#115E59;font-size:.9rem;margin-top:10px}
+</style></head>
+<body>
+<header class="app-header"><div class="wrap hero">
+  <span class="eyebrow">Penelitian Disertasi · Model MCDM</span>
+  <h1>Portal Asesmen Diagnostik MCDM</h1>
+  <p class="sub">Pengembangan Model Diagnostik Awal Kesulitan Belajar Matematika Siswa SMP Berbasis Artificial Intelligence (Multidimensional CDM). Lima instrumen interaktif: tes diagnostik kognitif, skala kecemasan matematika, dan tiga lembar validasi ahli — seluruhnya berjalan di peramban tanpa server.</p>
+</div></header>
+<main class="wrap">
+  <div class="pgrid">
+  <a class="pcard" href="index_1.html" style="--c:#0F766E">
+    <span class="pnum">01</span>
+    <h3>Tes Diagnostik Kognitif MCDM</h3>
+    <p>40 butir pilihan ganda · 8 atribut kognitif (A1–A8) · skor, persentase, dan profil mastery (radar &amp; bar).</p>
+    <span class="go">Buka asesmen →</span>
+  </a>
+
+  <a class="pcard" href="index_2.html" style="--c:#0EA5E9">
+    <span class="pnum">02</span>
+    <h3>Skala Kecemasan Matematika</h3>
+    <p>28 pernyataan Likert · 4 dimensi afektif · interpretasi kategori, radar &amp; bar chart.</p>
+    <span class="go">Buka asesmen →</span>
+  </a>
+
+  <a class="pcard" href="index_3.html" style="--c:#7C3AED">
+    <span class="pnum">03</span>
+    <h3>Validasi Ahli Materi</h3>
+    <p>Telaah keilmuan matematika · total skor, rata-rata, persentase kelayakan, CVR.</p>
+    <span class="go">Buka asesmen →</span>
+  </a>
+
+  <a class="pcard" href="index_4.html" style="--c:#DB2777">
+    <span class="pnum">04</span>
+    <h3>Validasi Ahli Psikometri</h3>
+    <p>Konstruk &amp; Q-matrix · CVR, CVI (S-CVI/Ave), bar chart per indikator.</p>
+    <span class="go">Buka asesmen →</span>
+  </a>
+
+  <a class="pcard" href="index_5.html" style="--c:#D97706">
+    <span class="pnum">05</span>
+    <h3>Validasi Ahli AI / Data Mining</h3>
+    <p>Kelayakan data &amp; integrasi MCDM–AI · dashboard ringkas, gauge kelayakan, CVR, CVI.</p>
+    <span class="go">Buka asesmen →</span>
+  </a></div>
+  <div class="infobox">⚙️ Aplikasi statis siap di-hosting pada GitHub Pages. Data jawaban tersimpan di <b>Local Storage</b> peramban dan dapat diekspor ke <b>JSON</b> pada setiap asesmen. Tidak memerlukan backend; visualisasi memakai Chart.js.</div>
+</main>
+<footer class="foot">Instrumen MCDM · dibangun dengan HTML5, CSS3, JavaScript murni &amp; Chart.js.</footer>
+</body></html>
