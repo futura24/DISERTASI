@@ -1,0 +1,2064 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Instrumen Diagnostik Kognitif — MCDM Matematika SMP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary:#0F766E;
+  --secondary:#134E4A;
+  --accent:#14B8A6;
+  --bg:#F8FAFC;
+  --card:#FFFFFF;
+  --ink:#1E293B;
+  --muted:#64748B;
+  --line:#E2E8F0;
+  --soft:#F0FDFA;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 6px 20px rgba(15,23,42,.05);
+  --shadow-lg:0 4px 12px rgba(15,23,42,.08),0 18px 40px rgba(15,23,42,.07);
+  --radius:12px;
+  --radius-sm:8px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:15px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,h5{font-family:'Poppins',sans-serif;line-height:1.25;margin:0;color:var(--secondary);}
+p{margin:0 0 .85em;}
+a{color:var(--primary);}
+
+.wrap{max-width:1200px;margin:0 auto;padding:32px 24px 80px;}
+
+/* ===== COVER ===== */
+.cover{
+  position:relative;
+  background:linear-gradient(135deg,var(--secondary) 0%,var(--primary) 55%,var(--accent) 130%);
+  color:#fff;
+  border-radius:18px;
+  padding:56px 48px;
+  overflow:hidden;
+  box-shadow:var(--shadow-lg);
+  margin-bottom:40px;
+}
+.cover::before{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(circle at 88% 8%,rgba(255,255,255,.16),transparent 42%),
+    radial-gradient(circle at 12% 92%,rgba(255,255,255,.10),transparent 40%);
+}
+.cover::after{
+  content:"";position:absolute;right:-60px;top:-60px;width:280px;height:280px;
+  border:2px solid rgba(255,255,255,.14);border-radius:50%;
+}
+.cover>*{position:relative;z-index:1;}
+.cover .eyebrow{
+  display:inline-block;font-family:'Poppins';font-weight:600;font-size:.72rem;
+  letter-spacing:.22em;text-transform:uppercase;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  padding:7px 16px;border-radius:999px;margin-bottom:22px;
+}
+.cover h1{color:#fff;font-size:2.05rem;font-weight:800;letter-spacing:-.5px;margin-bottom:10px;}
+.cover .sub{font-size:1.05rem;font-weight:500;color:rgba(255,255,255,.92);max-width:760px;margin-bottom:24px;font-family:'Poppins';}
+.cover .meta-grid{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 6px;}
+.cover .chip{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);
+  padding:8px 15px;border-radius:999px;font-size:.82rem;font-weight:500;
+}
+.cover .note{
+  margin-top:22px;padding:16px 18px;border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.10);border-left:4px solid rgba(255,255,255,.55);
+  font-size:.9rem;line-height:1.6;
+}
+.cover .divider{height:1px;background:rgba(255,255,255,.22);margin:26px 0;}
+.cover .standards{font-size:.86rem;color:rgba(255,255,255,.88);}
+.cover .standards strong{font-family:'Poppins';font-weight:600;}
+
+/* ===== CARDS / SECTIONS ===== */
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:34px 38px;margin-bottom:30px;
+}
+.tugas-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+.tugas-num{
+  flex:none;font-family:'Poppins';font-weight:700;font-size:.78rem;letter-spacing:.05em;
+  background:var(--soft);color:var(--primary);border:1px solid #99F6E4;
+  padding:6px 14px;border-radius:8px;text-transform:uppercase;
+}
+.card h2{
+  font-size:1.5rem;font-weight:700;position:relative;padding-bottom:14px;margin-bottom:22px;
+}
+.card h2::after{content:"";position:absolute;left:0;bottom:0;width:64px;height:4px;background:var(--accent);border-radius:3px;}
+.card h3{font-size:1.16rem;font-weight:600;color:var(--primary);margin:30px 0 12px;}
+.card h4{font-size:1rem;font-weight:600;color:var(--secondary);margin:22px 0 10px;}
+.lead{color:var(--muted);font-size:.97rem;margin-bottom:18px;}
+
+/* ===== TABLES ===== */
+.table-scroll{overflow-x:auto;margin:16px 0 8px;border-radius:var(--radius-sm);border:1px solid var(--line);box-shadow:var(--shadow);}
+table{border-collapse:collapse;width:100%;font-size:.9rem;min-width:560px;}
+thead th{
+  background:linear-gradient(180deg,var(--primary),var(--secondary));
+  color:#fff;font-family:'Poppins';font-weight:600;font-size:.82rem;
+  text-align:left;padding:13px 14px;position:sticky;top:0;z-index:2;
+  letter-spacing:.01em;
+}
+tbody td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+tbody tr:nth-child(even){background:#F8FAFC;}
+tbody tr:hover{background:var(--soft);}
+tbody tr:last-child td{border-bottom:none;}
+td.center,th.center{text-align:center;}
+.matrix td,.matrix th{text-align:center;font-variant-numeric:tabular-nums;}
+.matrix td.rowhead{background:var(--soft);font-weight:600;color:var(--primary);text-align:center;}
+.matrix .one{font-weight:700;color:var(--primary);}
+.matrix .zero{color:#CBD5E1;}
+table.compact{min-width:420px;}
+.sum-row td{background:var(--soft) !important;font-weight:700;color:var(--secondary);}
+
+/* ===== BADGES ===== */
+.badge{
+  display:inline-block;font-family:'Poppins';font-weight:600;font-size:.72rem;
+  padding:3px 9px;border-radius:6px;letter-spacing:.02em;line-height:1.5;white-space:nowrap;
+}
+.b-attr{background:#CCFBF1;color:#0F766E;border:1px solid #5EEAD4;}
+.b-dim{background:#E0F2FE;color:#075985;border:1px solid #BAE6FD;}
+.b-lvl{background:#FEF3C7;color:#92400E;border:1px solid #FDE68A;}
+.b-f{background:#FEE2E2;color:#991B1B;border:1px solid #FECACA;}
+.b-uf{background:#DCFCE7;color:#166534;border:1px solid #BBF7D0;}
+.badge-row{display:flex;flex-wrap:wrap;gap:5px;}
+
+/* ===== CALLOUTS ===== */
+.callout{
+  border-radius:var(--radius-sm);padding:16px 20px;margin:18px 0;
+  border-left:5px solid var(--accent);background:var(--soft);font-size:.93rem;
+}
+.callout .ct{font-family:'Poppins';font-weight:600;color:var(--secondary);display:block;margin-bottom:6px;font-size:.92rem;}
+.callout.note{border-color:#0EA5E9;background:#F0F9FF;}
+.callout.def{border-color:var(--primary);background:var(--soft);}
+.callout.mcdm{border-color:#8B5CF6;background:#F5F3FF;}
+.callout.misk{border-color:#EF4444;background:#FEF2F2;}
+.callout ul{margin:6px 0 0;padding-left:20px;}
+.callout li{margin-bottom:5px;}
+
+ul.clean{padding-left:22px;margin:10px 0;}
+ul.clean li{margin-bottom:8px;}
+
+/* ===== QUESTION CARDS ===== */
+.qgrid{display:grid;gap:18px;}
+.qcard{
+  border:1px solid var(--line);border-radius:var(--radius);background:var(--card);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.qcard-head{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:linear-gradient(180deg,#F0FDFA,#fff);padding:13px 20px;border-bottom:1px solid var(--line);
+}
+.qcard-head .qno{font-family:'Poppins';font-weight:700;color:var(--secondary);font-size:1.02rem;}
+.qcard-body{padding:18px 22px 22px;}
+.q-stim{font-size:.94rem;margin-bottom:10px;}
+.q-stim .lbl,.q-ask .lbl{font-family:'Poppins';font-weight:600;color:var(--primary);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;}
+.q-ask{margin-bottom:14px;font-weight:500;}
+.q-opts{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:7px;}
+.q-opts li{
+  display:flex;gap:10px;padding:9px 13px;border:1px solid var(--line);border-radius:8px;
+  background:#FCFCFD;font-size:.92rem;
+}
+.q-opts li .opt-k{font-family:'Poppins';font-weight:700;color:var(--muted);flex:none;}
+.q-opts li.correct{border-color:var(--accent);background:var(--soft);}
+.q-opts li.correct .opt-k{color:var(--primary);}
+.q-key{display:inline-flex;align-items:center;gap:8px;font-family:'Poppins';font-weight:600;font-size:.85rem;color:var(--primary);background:var(--soft);border:1px solid #99F6E4;padding:6px 14px;border-radius:8px;margin-bottom:14px;}
+.q-rationale{margin-bottom:6px;}
+.q-rationale .lbl{font-family:'Poppins';font-weight:600;color:var(--secondary);font-size:.8rem;display:block;margin-bottom:6px;}
+.q-rationale ul{list-style:none;padding:0;margin:0;display:grid;gap:5px;}
+.q-rationale ul li{font-size:.9rem;padding-left:4px;}
+.q-rationale ul li b{color:var(--secondary);font-family:'Poppins';}
+
+/* code blocks */
+pre{
+  background:#0F1E1C;color:#E6FFFA;border-radius:var(--radius-sm);padding:18px 20px;
+  overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:.82rem;line-height:1.55;
+  margin:14px 0;border:1px solid #134E4A;
+}
+pre .cmt{color:#5EEAD4;opacity:.7;}
+code.inline{font-family:'JetBrains Mono',monospace;background:var(--soft);padding:2px 6px;border-radius:5px;font-size:.85em;color:var(--secondary);}
+
+.formula{font-family:'JetBrains Mono',monospace;background:var(--soft);border:1px solid #99F6E4;border-radius:8px;padding:10px 16px;display:inline-block;margin:6px 0;color:var(--secondary);font-size:.92rem;}
+
+.subnote{font-size:.84rem;color:var(--muted);font-style:italic;margin-top:8px;}
+
+/* validation sheet meta */
+.val-meta{display:grid;grid-template-columns:1fr;gap:0;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;margin:14px 0;}
+.val-meta div{display:flex;border-bottom:1px solid var(--line);font-size:.9rem;}
+.val-meta div:last-child{border-bottom:none;}
+.val-meta div span:first-child{flex:none;width:200px;background:var(--soft);font-weight:600;color:var(--secondary);padding:10px 14px;}
+.val-meta div span:last-child{flex:1;padding:10px 14px;}
+.reco{margin:14px 0;padding:14px 18px;background:#F0F9FF;border:1px dashed #0EA5E9;border-radius:8px;font-size:.9rem;}
+.reco .opt{margin-right:24px;}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:1199px){
+  .wrap{padding:28px 20px 70px;}
+}
+@media (max-width:767px){
+  body{font-size:14px;}
+  .wrap{padding:18px 12px 56px;}
+  .cover{padding:36px 24px;}
+  .cover h1{font-size:1.55rem;}
+  .card{padding:24px 18px;}
+  .card h2{font-size:1.28rem;}
+  .qcard-body{padding:16px 16px 18px;}
+  .val-meta div{flex-direction:column;}
+  .val-meta div span:first-child{width:100%;}
+}
+
+/* ===== PRINT ===== */
+@media print{
+  body{background:#fff;font-size:11pt;}
+  .wrap{max-width:none;padding:0;}
+  .cover{background:var(--secondary) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:none;border-radius:0;}
+  .card,.qcard{box-shadow:none;border:1px solid #cbd5e1;page-break-inside:avoid;}
+  .card{page-break-before:auto;}
+  thead th{background:var(--secondary) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .badge,.callout,.q-opts li.correct,.q-key,.tugas-num{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .table-scroll{overflow:visible;}
+  table{min-width:0;font-size:9.5pt;}
+  pre{-webkit-print-color-adjust:exact;print-color-adjust:exact;white-space:pre-wrap;}
+  .qcard{page-break-inside:avoid;}
+  h2,h3{page-break-after:avoid;}
+}
+
+
+.crumbs{
+  width:100%;
+  margin-top:8px;
+}
+
+.crumbs a{
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.crumbs a:hover{
+  text-decoration:underline;
+  opacity:0.9;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ===================== COVER ===================== -->
+<header class="cover">
+  <span class="eyebrow">Instrumen Diagnostik Kognitif</span>
+  <h1>Berbasis Multidimensional Cognitive Diagnostic Model (MCDM)</h1>
+  <h1 style="font-size:1.35rem;">PAKET INSTRUMEN, VALIDASI &amp; PROSEDUR PSIKOMETRIK</h1>
+  <p class="sub">Pengembangan Model Diagnostik Awal Kesulitan Belajar Matematika Siswa SMP Berbasis Artificial Intelligence (HO-DINA / NCDM)</p>
+  <div class="meta-grid">
+    <span class="chip">SMP Kelas VII</span>
+    <span class="chip">Kurikulum Merdeka</span>
+    <span class="chip">Provinsi Jakarta</span>
+  </div>
+  <div class="meta-grid">
+    <span class="chip">Model target: HO-DINA / NCDM (Deep-IRT)</span>
+    <span class="chip">8 atribut kognitif</span>
+    <span class="chip">40 butir</span>
+  </div>
+  <div class="note">Dimensi afektif (kecemasan matematika) diperlakukan sebagai kovariat higher-order (θ-afektif), bukan atribut Q-matrix.</div>
+  <div class="divider"></div>
+  <p class="standards">Disusun mengikuti AERA/APA/NCME — Standards for Educational and Psychological Testing (2014)</p>
+  <p class="standards">Lampiran terkait: berkas Excel “Template Analisis CVR-CVI &amp; Dataset MCDM”.</p>
+  <div class="crumbs"><a href="index.html">← Portal Asesmen</a></div>
+</header>
+
+<!-- ===================== CATATAN DESAIN ===================== -->
+<section class="card">
+  <h2>Catatan Desain Instrumen (Prinsip Penyelarasan)</h2>
+  <p class="lead">Lima keputusan desain berikut menjaga konsistensi instrumen dengan kerangka teoretis disertasi dan dengan asumsi formal MCDM:</p>
+  <ul class="clean">
+    <li><strong>Atribut Q-matrix bersifat kognitif diskret.</strong> Delapan atribut (A1–A8) adalah konstruk konten yang membentuk hierarki prasyarat alami pada materi Kelas VII (Bilangan → Aljabar; Geometri → Pengukuran). Atribut diperlakukan biner (dikuasai/belum) sesuai struktur DINA.</li>
+    <li><strong>Kecemasan matematika BUKAN atribut Q-matrix.</strong> Sesuai kerangka, kecemasan diukur dengan skala Likert 5 butir per dimensi, diubah menjadi skor komposit terstandar, lalu masuk ke lapisan higher-order sebagai kovariat θ-afektif yang memengaruhi prior probabilitas mastery. Maka ia hadir di Tugas 1 sebagai Variabel B, tetapi tidak muncul di Tugas 2–3.</li>
+    <li><strong>Tiga dimensi kesulitan (Konseptual, Prosedural, Pemecahan Masalah)</strong> tidak menjadi kolom Q-matrix, melainkan level kognitif tempat sebuah atribut diukur. Dimensi ini terbaca di Tugas 1 dan kolom Level Kognitif/Dimensi pada kisi-kisi (Tugas 4).</li>
+    <li><strong>Q-matrix memuat hanya atribut yang langsung diperlukan butir (pure Q-matrix).</strong> Hierarki prasyarat dikodekan terpisah dalam Attribute Hierarchy Matrix (AHM) yang membatasi kelas laten yang sah, bukan dengan menandai seluruh leluhur pada setiap baris Q.</li>
+    <li><strong>Validasi empiris menyusul.</strong> Estimasi parameter (slip/guess, struktur higher-order) dan AHM-fit divalidasi pada data pilot; Q-matrix awal ini adalah Q-matrix teoretis (expert-defined) yang menjadi titik awal estimasi Bayesian/MCMC.</li>
+  </ul>
+</section>
+
+<!-- ===================== TUGAS 1 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 1</span></div>
+  <h2>Konstruk Penelitian</h2>
+
+  <h3>A. Variabel: Kesulitan Belajar Matematika</h3>
+  <div class="callout def">
+    <span class="ct">Definisi konseptual</span>
+    hambatan kognitif yang menyebabkan siswa gagal menguasai atribut matematis tertentu, termanifestasi sebagai pola jawaban salah yang sistematis (miskonsepsi/kesalahan prosedural), bukan kesalahan acak. Tiga dimensi di bawah dipotong silang dengan tiga ranah materi: Bilangan, Aljabar, serta Geometri dan Pengukuran.
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:14%">Variabel</th><th style="width:14%">Dimensi</th><th style="width:36%">Indikator</th><th style="width:36%">Definisi Operasional</th></tr></thead>
+      <tbody>
+        <tr>
+          <td rowspan="3"><strong>Kesulitan Belajar Matematika</strong></td>
+          <td><span class="badge b-dim">Konseptual</span></td>
+          <td>Gagal memaknai/merepresentasikan konsep: makna &amp; urutan bilangan bulat dan pecahan (Bilangan); makna variabel, koefisien, konstanta (Aljabar); sifat bangun, jenis sudut/segitiga (Geometri &amp; Pengukuran).</td>
+          <td>Skor diagnostik pada butir konseptual; kesulitan terdeteksi bila pola respons menunjukkan miskonsepsi pada atribut konseptual (A1, A3, A7, dan aspek konseptual A5). Dinyatakan sebagai probabilitas non-mastery posterior.</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-dim">Prosedural</span></td>
+          <td>Tidak lancar/keliru menjalankan algoritma: operasi bilangan bulat &amp; pecahan (Bilangan); menyederhanakan bentuk aljabar &amp; menyelesaikan PLSV (Aljabar); menghitung keliling, luas, konversi satuan (Geometri &amp; Pengukuran).</td>
+          <td>Skor diagnostik pada butir prosedural; kesulitan terdeteksi dari kesalahan langkah yang sistematis (bukan acak) pada atribut prosedural (A2, A4, A6, A8).</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-dim">Pemecahan Masalah</span></td>
+          <td>Gagal memodelkan &amp; menyelesaikan masalah kontekstual non-rutin yang mengintegrasikan beberapa atribut lintas materi (mis. pecahan + bilangan bulat; aljabar kontekstual; keliling/luas terapan).</td>
+          <td>Skor pada butir kontekstual multi-atribut; kesulitan terdeteksi bila siswa menguasai atribut tunggal namun gagal pada butir yang menuntut kombinasi atribut (indikator defisit integrasi/strategi).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="subnote">Pemetaan materi → atribut: Bilangan (A1–A4), Aljabar (A5–A6), Geometri &amp; Pengukuran (A7–A8). Rincian atribut pada Tugas 2.</p>
+
+  <h3>B. Variabel: Kecemasan Matematika (Kovariat Afektif)</h3>
+  <div class="callout def">
+    <span class="ct">Definisi konseptual</span>
+    respons emosional negatif berupa ketegangan, ketakutan, dan kekhawatiran yang muncul saat menghadapi tugas/penilaian matematika, yang mengganggu kinerja. Diadaptasi dari Mathematics Anxiety Rating Scale; diukur dengan skala Likert 1–5 (bukan biner). Skor komposit terstandar menjadi θ-afektif pada lapisan higher-order MCDM.
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:16%">Variabel</th><th style="width:14%">Dimensi</th><th style="width:34%">Indikator</th><th style="width:36%">Definisi Operasional (butir Likert)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td rowspan="4"><strong>Kecemasan Matematika</strong></td>
+          <td><span class="badge b-dim">Kognitif</span></td>
+          <td>Pikiran negatif, khawatir gagal, sulit berkonsentrasi, blank saat ujian matematika.</td>
+          <td>Skor rata-rata butir Likert kognitif (mis. “Saya khawatir tidak mampu menyelesaikan soal matematika”), rentang 1–5.</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-dim">Afektif</span></td>
+          <td>Perasaan takut, tegang, tidak nyaman, tidak menyukai matematika.</td>
+          <td>Skor rata-rata butir Likert afektif (mis. “Saya merasa tegang saat pelajaran matematika dimulai”).</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-dim">Fisiologis</span></td>
+          <td>Gejala fisik: jantung berdebar, berkeringat, mual, tangan gemetar saat tes/PR matematika.</td>
+          <td>Skor rata-rata butir Likert fisiologis (mis. “Jantung saya berdebar cepat ketika mengerjakan ulangan matematika”).</td>
+        </tr>
+        <tr>
+          <td><span class="badge b-dim">Perilaku</span></td>
+          <td>Menghindari/menunda tugas matematika, enggan bertanya, absen saat ulangan.</td>
+          <td>Skor rata-rata butir Likert perilaku (mis. “Saya menunda mengerjakan PR matematika hingga menit terakhir”).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout mcdm">
+    <span class="ct">Integrasi ke MCDM</span>
+    skor komposit empat dimensi distandarkan menjadi θ-afektif, yang menggeser prior probabilitas mastery pada HO-DINA. Siswa dengan kecemasan tinggi memperoleh estimasi posterior mastery lebih konservatif, sehingga dimensi afektif terintegrasi secara probabilistik tanpa mencemari struktur kognitif Q-matrix.
+  </div>
+</section>
+
+<!-- ===================== TUGAS 2 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 2</span></div>
+  <h2>Hierarki Atribut Kognitif</h2>
+
+  <h3>2.1 Daftar &amp; Deskripsi Atribut</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th class="center" style="width:8%">Kode</th><th style="width:24%">Nama Atribut</th><th>Deskripsi</th></tr></thead>
+      <tbody>
+        <tr><td class="center"><span class="badge b-attr">A1</span></td><td><strong>Konsep Bilangan Bulat</strong></td><td>Memahami makna, urutan, perbandingan, lawan, dan nilai mutlak bilangan bulat (termasuk negatif) pada garis bilangan.</td></tr>
+        <tr><td class="center"><span class="badge b-attr">A2</span></td><td><strong>Operasi Bilangan Bulat</strong></td><td>Melakukan penjumlahan, pengurangan, perkalian, pembagian, dan operasi campuran bilangan bulat dengan aturan tanda &amp; urutan operasi yang benar.</td></tr>
+        <tr><td class="center"><span class="badge b-attr">A3</span></td><td><strong>Konsep Pecahan</strong></td><td>Memahami makna pecahan (bagian–keseluruhan), pecahan senilai, perbandingan pecahan, serta hubungan pecahan–desimal dan posisinya pada garis bilangan.</td></tr>
+        <tr><td class="center"><span class="badge b-attr">A4</span></td><td><strong>Operasi Pecahan</strong></td><td>Melakukan penjumlahan, pengurangan, perkalian, dan pembagian pecahan (termasuk menyamakan penyebut dan membalik pembagi).</td></tr>
+        <tr><td class="center"><span class="badge b-attr">A5</span></td><td><strong>Aljabar Dasar</strong></td><td>Memahami &amp; mengoperasikan bentuk aljabar: variabel/koefisien/konstanta, suku sejenis, sifat distributif, substitusi nilai.</td></tr>
+        <tr><td class="center"><span class="badge b-attr">A6</span></td><td><strong>Persamaan Linear Satu Variabel</strong></td><td>Menyusun dan menyelesaikan PLSV menggunakan operasi invers (satu dan dua langkah), termasuk model dari masalah kontekstual.</td></tr>
+        <tr><td class="center"><span class="badge b-attr">A7</span></td><td><strong>Geometri Dasar</strong></td><td>Mengenali jenis sudut, sifat segitiga &amp; segiempat, serta konsep keliling sebagai dasar pengukuran bangun datar.</td></tr>
+        <tr><td class="center"><span class="badge b-attr">A8</span></td><td><strong>Pengukuran</strong></td><td>Menghitung keliling &amp; luas bangun datar, mengonversi satuan panjang/luas, dan menerapkan konsep skala.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.2 Hubungan Prasyarat Antar Atribut</h3>
+  <p>Struktur hierarki bertipe campuran (dua cabang konvergen): cabang Bilangan→Aljabar dan cabang Geometri→Pengukuran, terhubung melalui ketergantungan Pengukuran pada Operasi Bilangan Bulat. Panah → dibaca “prasyarat bagi”.</p>
+  <ul class="clean">
+    <li>A1 → A2 (konsep bilangan bulat menjadi prasyarat operasinya)</li>
+    <li>A1 → A3 (konsep bilangan mendasari konsep pecahan)</li>
+    <li>A2 → A4 dan A3 → A4 (operasi pecahan menuntut operasi bilangan &amp; konsep pecahan — konvergen)</li>
+    <li>A4 → A5 (kelancaran operasi bilangan rasional menjadi dasar aljabar)</li>
+    <li>A5 → A6 (penguasaan bentuk aljabar prasyarat menyelesaikan PLSV)</li>
+    <li>A7 → A8 (sifat &amp; konsep keliling menjadi dasar pengukuran luas/keliling)</li>
+    <li>A2 → A8 (pengukuran menuntut operasi bilangan untuk komputasinya)</li>
+  </ul>
+  <div class="callout">
+    <span class="ct">Diagram alur prasyarat</span>
+    <pre style="margin-top:4px;">A1 → A2 → A4 → A5 → A6
+A1 → A3 ↗ (A4)
+A2 ↘ (A8)
+A7 → A8</pre>
+  </div>
+
+  <h3>2.3 Attribute Hierarchy Matrix (Matriks Keterjangkauan / Reachability)</h3>
+  <p>Entri R[i,j] = 1 bila atribut baris (i) merupakan prasyarat bagi atribut kolom (j), termasuk diagonal (i=j). Matriks ini membatasi pola/kelas mastery yang sah: siswa tidak dapat dinyatakan menguasai atribut hilir tanpa menguasai seluruh prasyarat hulunya.</p>
+  <div class="table-scroll">
+    <table class="matrix compact">
+      <thead><tr><th class="center">R</th><th class="center">A1</th><th class="center">A2</th><th class="center">A3</th><th class="center">A4</th><th class="center">A5</th><th class="center">A6</th><th class="center">A7</th><th class="center">A8</th></tr></thead>
+      <tbody>
+        <tr><td class="rowhead">A1</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="zero">0</td><td class="one">1</td></tr>
+        <tr><td class="rowhead">A2</td><td class="zero">0</td><td class="one">1</td><td class="zero">0</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="zero">0</td><td class="one">1</td></tr>
+        <tr><td class="rowhead">A3</td><td class="zero">0</td><td class="zero">0</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td class="rowhead">A4</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="one">1</td><td class="one">1</td><td class="one">1</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td class="rowhead">A5</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="one">1</td><td class="one">1</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td class="rowhead">A6</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="one">1</td><td class="zero">0</td><td class="zero">0</td></tr>
+        <tr><td class="rowhead">A7</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="one">1</td><td class="one">1</td></tr>
+        <tr><td class="rowhead">A8</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="one">1</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="subnote">Baris = prasyarat (i); kolom = atribut yang bergantung (j). Contoh: baris A1 bernilai 1 pada A2,A3,A4,A5,A6,A8 — A1 adalah akar yang dibutuhkan hampir seluruh atribut numerik. A7 hanya menjangkau A8 (cabang geometri).</p>
+</section>
+
+<!-- ===================== TUGAS 3 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 3</span></div>
+  <h2>Q-Matrix Diagnostik (40 butir × 8 atribut)</h2>
+  <p class="lead">Q-matrix bertipe pure: setiap baris menandai hanya atribut yang langsung dituntut butir (1 = diperlukan). Hierarki prasyarat ditangani melalui AHM (Tugas 2), bukan dengan menandai seluruh leluhur. Terdapat 28 butir atribut-tunggal dan 12 butir atribut-kombinasi.</p>
+  <div class="table-scroll">
+    <table class="matrix compact">
+      <thead><tr><th class="center">Item</th><th class="center">A1</th><th class="center">A2</th><th class="center">A3</th><th class="center">A4</th><th class="center">A5</th><th class="center">A6</th><th class="center">A7</th><th class="center">A8</th></tr></thead>
+      <tbody>
+        <tr><td class="rowhead">1</td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">2</td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">3</td><td class="one">1</td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">4</td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">5</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">6</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">7</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">8</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">9</td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">10</td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">11</td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">12</td><td class="one">1</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">13</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">14</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">15</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">16</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">17</td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">18</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">19</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">20</td><td class="one">1</td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">21</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">22</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">23</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">24</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">25</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">26</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="one">1</td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">27</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">28</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">29</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">30</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="one">1</td><td class="zero"></td><td class="zero"></td></tr>
+        <tr><td class="rowhead">31</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td></tr>
+        <tr><td class="rowhead">32</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td></tr>
+        <tr><td class="rowhead">33</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td></tr>
+        <tr><td class="rowhead">34</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="zero"></td></tr>
+        <tr><td class="rowhead">35</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="one">1</td></tr>
+        <tr><td class="rowhead">36</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td></tr>
+        <tr><td class="rowhead">37</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td></tr>
+        <tr><td class="rowhead">38</td><td class="zero"></td><td class="one">1</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td></tr>
+        <tr><td class="rowhead">39</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td><td class="one">1</td></tr>
+        <tr><td class="rowhead">40</td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="zero"></td><td class="one">1</td></tr>
+        <tr class="sum-row"><td class="rowhead">Σ</td><td>6</td><td>9</td><td>5</td><td>8</td><td>7</td><td>5</td><td>6</td><td>6</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="subnote">Jumlah pengukuran tiap atribut: A1=6, A2=9, A3=5, A4=8, A5=7, A6=5, A7=6, A8=6 — seluruhnya ≥ 5 (syarat identifiabilitas terpenuhi).</p>
+
+  <h3>Alasan Pemetaan (Rasional Q-matrix per Kelompok)</h3>
+  <ul class="clean">
+    <li><strong>A1 (butir 1,2,3,4,12,20):</strong> butir konsep urutan/perbandingan/nilai mutlak bilangan bulat dan letak pecahan negatif menuntut pemahaman bilangan, bukan sekadar berhitung.</li>
+    <li><strong>A2 (butir 3,5,6,7,8,16,19,20,38):</strong> butir yang menuntut eksekusi operasi &amp; aturan tanda bilangan bulat; muncul tunggal (5,6,7,19) maupun sebagai komponen komputasi pada butir kombinasi (3,8,16,20,38).</li>
+    <li><strong>A3 (butir 9,10,11,12,17):</strong> butir makna pecahan, pecahan senilai/desimal, dan perbandingan — menguji konsep sebelum prosedur.</li>
+    <li><strong>A4 (butir 8,13,14,15,16,17,18,24):</strong> butir operasi pecahan (jumlah, kali, bagi, campuran) dan penerapannya; berkombinasi dengan A2/A3/A5 pada konteks.</li>
+    <li><strong>A5 (butir 21,22,23,24,25,26,30):</strong> butir bentuk aljabar, suku sejenis, distributif, substitusi, dan penyusunan model — fondasi sebelum PLSV.</li>
+    <li><strong>A6 (butir 26,27,28,29,30):</strong> butir penyelesaian PLSV satu/dua langkah dan model kontekstual; berkombinasi dengan A5 saat menuntut penyusunan sekaligus penyelesaian.</li>
+    <li><strong>A7 (butir 31,32,33,34,35,39):</strong> butir jenis sudut, sifat segitiga/segiempat, dan konsep keliling sebagai dasar pengukuran.</li>
+    <li><strong>A8 (butir 35,36,37,38,39,40):</strong> butir komputasi keliling/luas, konversi satuan, dan skala; berkombinasi dengan A2 (komputasi) dan A7 (sifat bangun).</li>
+    <li><strong>Butir kombinasi (3,8,12,16,17,20,24,26,30,35,38,39)</strong> sengaja ditempatkan pada pasangan atribut yang berhubungan prasyarat agar memberi sinyal diagnostik defisit integrasi, bukan kombinasi acak.</li>
+  </ul>
+</section>
+
+<!-- ===================== TUGAS 4 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 4</span></div>
+  <h2>Kisi-Kisi Tes Diagnostik</h2>
+  <p class="lead">Mengacu Kurikulum Merdeka SMP Kelas VII, kerangka literasi numerasi, dan prinsip Cognitive Diagnostic Assessment. Level kognitif: C2 Memahami (≈ konseptual), C3 Menerapkan (≈ prosedural), C4 Menganalisis (≈ pemecahan masalah). Semua butir berbentuk Pilihan Ganda (4 opsi).</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th class="center" style="width:5%">No</th><th style="width:14%">Materi</th><th style="width:36%">Indikator</th><th class="center" style="width:8%">Level</th><th style="width:14%">Atribut</th><th style="width:18%">Dimensi / Bentuk</th></tr></thead>
+      <tbody>
+        <tr><td class="center">1</td><td>Bilangan</td><td>Membandingkan bilangan bulat negatif dalam konteks suhu</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A1</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">2</td><td>Bilangan</td><td>Mengurutkan bilangan bulat pada garis bilangan</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A1</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">3</td><td>Bilangan</td><td>Menentukan posisi akhir dari rangkaian gerak naik-turun (bilangan bulat)</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A1</span> <span class="badge b-attr">A2</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">4</td><td>Bilangan</td><td>Membedakan nilai mutlak dan lawan bilangan</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A1</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">5</td><td>Bilangan</td><td>Menghitung penjumlahan bilangan berbeda tanda</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A2</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">6</td><td>Bilangan</td><td>Menghitung perkalian dua bilangan negatif</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A2</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">7</td><td>Bilangan</td><td>Menghitung operasi campuran dengan urutan operasi</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A2</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">8</td><td>Bilangan</td><td>Menyelesaikan perubahan suhu (bilangan bulat × pecahan)</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A2</span> <span class="badge b-attr">A4</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">9</td><td>Bilangan</td><td>Menentukan pecahan bagian tersisa dari keseluruhan</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A3</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">10</td><td>Bilangan</td><td>Menentukan pecahan senilai dengan desimal</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A3</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">11</td><td>Bilangan</td><td>Membandingkan dua pecahan beda penyebut</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A3</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">12</td><td>Bilangan</td><td>Menentukan letak pecahan negatif pada garis bilangan</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A1</span> <span class="badge b-attr">A3</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">13</td><td>Bilangan</td><td>Menjumlahkan pecahan beda penyebut</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A4</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">14</td><td>Bilangan</td><td>Mengalikan dua pecahan</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A4</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">15</td><td>Bilangan</td><td>Mengurangkan pecahan beda penyebut</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A4</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">16</td><td>Bilangan</td><td>Menyelesaikan masalah belanja (pecahan dari kuantitas + operasi)</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A2</span> <span class="badge b-attr">A4</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">17</td><td>Bilangan</td><td>Menentukan banyak potongan (pembagian pecahan kontekstual)</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A3</span> <span class="badge b-attr">A4</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">18</td><td>Bilangan</td><td>Membagi dua pecahan</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A4</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">19</td><td>Bilangan</td><td>Menghitung skor permainan dengan poin positif/negatif</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A2</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">20</td><td>Bilangan</td><td>Menentukan suhu akhir freezer (operasi bilangan bulat negatif)</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A1</span> <span class="badge b-attr">A2</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">21</td><td>Aljabar</td><td>Mengidentifikasi koefisien dan konstanta bentuk aljabar</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A5</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">22</td><td>Aljabar</td><td>Menyederhanakan dengan menggabung suku sejenis</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A5</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">23</td><td>Aljabar</td><td>Menerapkan sifat distributif pada bentuk aljabar</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A5</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">24</td><td>Aljabar</td><td>Menjumlahkan suku dengan koefisien pecahan</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A4</span> <span class="badge b-attr">A5</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">25</td><td>Aljabar</td><td>Menentukan nilai bentuk aljabar melalui substitusi</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A5</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">26</td><td>Aljabar</td><td>Menyusun persamaan dari kalimat verbal</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A5</span> <span class="badge b-attr">A6</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">27</td><td>Aljabar</td><td>Menyelesaikan PLSV satu langkah (penjumlahan)</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A6</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">28</td><td>Aljabar</td><td>Menyelesaikan PLSV satu langkah (perkalian)</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A6</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">29</td><td>Aljabar</td><td>Menyelesaikan PLSV dua langkah</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A6</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">30</td><td>Aljabar</td><td>Menyusun &amp; menyelesaikan PLSV dari masalah umur</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A5</span> <span class="badge b-attr">A6</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">31</td><td>Geometri &amp; Pengukuran</td><td>Mengklasifikasi sudut berdasarkan besarnya</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A7</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">32</td><td>Geometri &amp; Pengukuran</td><td>Mengklasifikasi segitiga berdasarkan panjang sisi</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A7</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">33</td><td>Geometri &amp; Pengukuran</td><td>Mengidentifikasi segiempat dari sifat-sifatnya</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A7</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">34</td><td>Geometri &amp; Pengukuran</td><td>Membedakan rumus keliling dan luas persegi panjang</td><td class="center"><span class="badge b-lvl">C2</span></td><td><span class="badge-row"><span class="badge b-attr">A7</span></span></td><td><span class="badge b-dim">Konseptual / PG</span></td></tr>
+        <tr><td class="center">35</td><td>Geometri &amp; Pengukuran</td><td>Menghitung panjang pagar (keliling terapan)</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A7</span> <span class="badge b-attr">A8</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">36</td><td>Geometri &amp; Pengukuran</td><td>Mengonversi satuan panjang (km → m)</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A8</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">37</td><td>Geometri &amp; Pengukuran</td><td>Menghitung luas persegi</td><td class="center"><span class="badge b-lvl">C3</span></td><td><span class="badge-row"><span class="badge b-attr">A8</span></span></td><td><span class="badge b-dim">Prosedural / PG</span></td></tr>
+        <tr><td class="center">38</td><td>Geometri &amp; Pengukuran</td><td>Menentukan sisa ubin (luas + operasi bilangan)</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A2</span> <span class="badge b-attr">A8</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">39</td><td>Geometri &amp; Pengukuran</td><td>Menghitung luas segitiga siku-siku</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A7</span> <span class="badge b-attr">A8</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+        <tr><td class="center">40</td><td>Geometri &amp; Pengukuran</td><td>Menentukan panjang sebenarnya dari skala denah</td><td class="center"><span class="badge b-lvl">C4</span></td><td><span class="badge-row"><span class="badge b-attr">A8</span></span></td><td><span class="badge b-dim">Pemecahan Masalah / PG</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="subnote">Sebaran level: C2 = 12 butir (konseptual), C3 = 16 butir (prosedural), C4 = 12 butir (pemecahan masalah). Sebaran materi: Bilangan 20, Aljabar 10, Geometri &amp; Pengukuran 10.</p>
+</section>
+
+<!-- ===================== TUGAS 5 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 5</span></div>
+  <h2>Butir Soal Diagnostik (40 Pilihan Ganda)</h2>
+  <p class="lead">Setiap butir memuat stimulus kontekstual, pertanyaan, empat opsi, kunci, atribut yang diukur, rasional tiap distraktor, dan jenis miskonsepsi yang dideteksi. Distraktor dirancang sebagai “distraktor diagnostik” — setiap pilihan salah mencerminkan satu kekeliruan kognitif spesifik, bukan sekadar pengecoh acak.</p>
+  <div class="qgrid">
+      <article class="qcard" id="soal-1">
+        <div class="qcard-head">
+          <span class="qno">Soal 1</span>
+          <span class="badge-row"><span class="badge b-attr">A1</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Suhu kota A tercatat −3°C, sedangkan kota B tercatat −8°C pada waktu yang sama.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Pernyataan yang benar tentang kedua suhu itu adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>Kota B lebih hangat karena 8 lebih besar dari 3.</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>Kota A lebih hangat karena −3 lebih besar dari −8.</span></li>
+          <li><span class="opt-k">C.</span><span>Kedua kota memiliki suhu yang sama.</span></li>
+          <li><span class="opt-k">D.</span><span>Suhu keduanya tidak dapat dibandingkan.</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengabaikan tanda negatif; membandingkan nilai mutlak (8>3).</li>
+            <li><b>B:</b> Kunci — benar; pada garis bilangan −3 di kanan −8.</li>
+            <li><b>C:</b> Menganggap bilangan negatif selalu setara.</li>
+            <li><b>D:</b> Mengira bilangan negatif tidak terurut.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Membandingkan bilangan negatif berdasar nilai mutlak (angka makin besar dianggap makin besar).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-2">
+        <div class="qcard-head">
+          <span class="qno">Soal 2</span>
+          <span class="badge-row"><span class="badge b-attr">A1</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Diberikan empat bilangan: −5, 2, −1, dan 0.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Urutan dari yang terkecil ke terbesar adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>0, −1, 2, −5</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>−5, −1, 0, 2</span></li>
+          <li><span class="opt-k">C.</span><span>2, 0, −1, −5</span></li>
+          <li><span class="opt-k">D.</span><span>−1, −5, 0, 2</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menganggap 0 sebagai bilangan terkecil.</li>
+            <li><b>B:</b> Kunci — benar.</li>
+            <li><b>C:</b> Mengurutkan dari terbesar ke terkecil (terbalik).</li>
+            <li><b>D:</b> Menganggap −1 lebih kecil dari −5 (nilai mutlak).</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah mengurutkan bilangan bulat (menganggap 0 terkecil atau membalik urutan).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-3">
+        <div class="qcard-head">
+          <span class="qno">Soal 3</span>
+          <span class="badge-row"><span class="badge b-attr">A1</span> <span class="badge b-attr">A2</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah lift berada di lantai −2 (basement). Lift naik 5 lantai, lalu turun 3 lantai.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Lift sekarang berada di lantai…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>0</span></li>
+          <li><span class="opt-k">B.</span><span>4</span></li>
+          <li><span class="opt-k">C.</span><span>10</span></li>
+          <li><span class="opt-k">D.</span><span>−10</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: −2 + 5 − 3 = 0.</li>
+            <li><b>B:</b> Mengabaikan tanda lantai awal: 2 + 5 − 3 = 4.</li>
+            <li><b>C:</b> Menjumlahkan semua besaran: 2 + 5 + 3 = 10.</li>
+            <li><b>D:</b> Memberi tanda negatif pada seluruh hasil.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Mengabaikan nilai/tanda titik awal dan menjumlahkan seluruh besaran tanpa memperhatikan arah.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-4">
+        <div class="qcard-head">
+          <span class="qno">Soal 4</span>
+          <span class="badge-row"><span class="badge b-attr">A1</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Perhatikan pernyataan tentang nilai mutlak dan lawan bilangan.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Pernyataan yang benar adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>|−7| = −7</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>Lawan dari 7 adalah −7, dan |−7| = 7</span></li>
+          <li><span class="opt-k">C.</span><span>|−7| = 0</span></li>
+          <li><span class="opt-k">D.</span><span>Lawan dari 7 adalah 7</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengira nilai mutlak mempertahankan tanda negatif.</li>
+            <li><b>B:</b> Kunci — benar.</li>
+            <li><b>C:</b> Mengira nilai mutlak selalu nol.</li>
+            <li><b>D:</b> Menyamakan lawan bilangan dengan bilangan itu sendiri.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Kekeliruan konsep nilai mutlak dan lawan bilangan.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-5">
+        <div class="qcard-head">
+          <span class="qno">Soal 5</span>
+          <span class="badge-row"><span class="badge b-attr">A2</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Seekor ikan berada 15 m di bawah permukaan laut, lalu naik 9 m.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Hasil dari −15 + 9 adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>−6</span></li>
+          <li><span class="opt-k">B.</span><span>6</span></li>
+          <li><span class="opt-k">C.</span><span>−24</span></li>
+          <li><span class="opt-k">D.</span><span>24</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar.</li>
+            <li><b>B:</b> Besar selisih benar, tetapi tanda salah.</li>
+            <li><b>C:</b> Menjumlahkan nilai mutlak lalu memberi tanda negatif.</li>
+            <li><b>D:</b> Menjumlahkan nilai mutlak tanpa memperhatikan tanda.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Aturan tanda penjumlahan bilangan berbeda tanda (salah menentukan tanda hasil).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-6">
+        <div class="qcard-head">
+          <span class="qno">Soal 6</span>
+          <span class="badge-row"><span class="badge b-attr">A2</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Hitunglah hasil perkalian berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>(−4) × (−6) = …</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>−24</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>24</span></li>
+          <li><span class="opt-k">C.</span><span>−10</span></li>
+          <li><span class="opt-k">D.</span><span>10</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengira negatif × negatif = negatif.</li>
+            <li><b>B:</b> Kunci — benar.</li>
+            <li><b>C:</b> Menjumlahkan (−4)+(−6) dengan tanda negatif.</li>
+            <li><b>D:</b> Menjumlahkan nilai mutlaknya.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Aturan tanda perkalian (negatif × negatif dianggap negatif) atau tertukar dengan penjumlahan.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-7">
+        <div class="qcard-head">
+          <span class="qno">Soal 7</span>
+          <span class="badge-row"><span class="badge b-attr">A2</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Hitunglah dengan memperhatikan urutan operasi.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>12 − 3 × (−2) = …</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>18</span></li>
+          <li><span class="opt-k">B.</span><span>−18</span></li>
+          <li><span class="opt-k">C.</span><span>6</span></li>
+          <li><span class="opt-k">D.</span><span>−6</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 12 − (−6) = 18.</li>
+            <li><b>B:</b> Mengerjakan kiri-ke-kanan: (12−3)×(−2) = −18.</li>
+            <li><b>C:</b> Mengabaikan tanda: 12 − 3×2 = 6.</li>
+            <li><b>D:</b> Mengabaikan tanda dan urutan operasi.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Mengabaikan urutan operasi (mengerjakan kiri-ke-kanan) dan/atau aturan tanda.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-8">
+        <div class="qcard-head">
+          <span class="qno">Soal 8</span>
+          <span class="badge-row"><span class="badge b-attr">A2</span> <span class="badge b-attr">A4</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Suhu sebuah ruang penyimpanan mula-mula 2°C. Setiap jam suhunya turun 1½°C selama 4 jam.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Suhu ruang setelah 4 jam adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>−4°C</span></li>
+          <li><span class="opt-k">B.</span><span>4°C</span></li>
+          <li><span class="opt-k">C.</span><span>8°C</span></li>
+          <li><span class="opt-k">D.</span><span>−10°C</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 2 − (3/2 × 4) = 2 − 6 = −4.</li>
+            <li><b>B:</b> Menghitung 2−6 tetapi mengabaikan tanda hasil.</li>
+            <li><b>C:</b> Menjumlahkan 2+6 (salah tanda penurunan).</li>
+            <li><b>D:</b> Salah menghitung 3/2 × 4 sebagai 12 lalu 2−12.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Gabungan kesalahan operasi pecahan (1½×4) dan aturan tanda bilangan bulat.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-9">
+        <div class="qcard-head">
+          <span class="qno">Soal 9</span>
+          <span class="badge-row"><span class="badge b-attr">A3</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah pizza dipotong menjadi 8 bagian sama besar. Sebanyak 3 bagian telah dimakan.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Pecahan yang menyatakan bagian pizza yang tersisa adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>3/8</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>5/8</span></li>
+          <li><span class="opt-k">C.</span><span>3/5</span></li>
+          <li><span class="opt-k">D.</span><span>8/3</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menyatakan bagian yang dimakan, bukan yang tersisa.</li>
+            <li><b>B:</b> Kunci — benar: 8−3 = 5 dari 8 bagian.</li>
+            <li><b>C:</b> Membandingkan sisa terhadap yang dimakan (3:5 terbalik).</li>
+            <li><b>D:</b> Membalik pembilang dan penyebut.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah memaknai pembilang/penyebut (bagian dimakan vs bagian tersisa).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-10">
+        <div class="qcard-head">
+          <span class="qno">Soal 10</span>
+          <span class="badge-row"><span class="badge b-attr">A3</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Seorang siswa diminta menuliskan 0,75 dalam bentuk pecahan paling sederhana.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Pecahan yang senilai dengan 0,75 adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>7/5</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>3/4</span></li>
+          <li><span class="opt-k">C.</span><span>75/10</span></li>
+          <li><span class="opt-k">D.</span><span>1/75</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Membaca angka tanpa memahami nilai tempat.</li>
+            <li><b>B:</b> Kunci — benar: 75/100 = 3/4.</li>
+            <li><b>C:</b> Salah nilai tempat: menganggap 0,75 = 75/10.</li>
+            <li><b>D:</b> Menukar posisi sehingga 0,75 → 1/75.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Kesalahan konversi desimal–pecahan dan nilai tempat.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-11">
+        <div class="qcard-head">
+          <span class="qno">Soal 11</span>
+          <span class="badge-row"><span class="badge b-attr">A3</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Bandingkan dua pecahan 2/3 dan 3/5.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Pernyataan yang benar adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>3/5 lebih besar karena penyebutnya lebih besar.</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>2/3 lebih besar daripada 3/5.</span></li>
+          <li><span class="opt-k">C.</span><span>Keduanya sama besar.</span></li>
+          <li><span class="opt-k">D.</span><span>3/5 lebih besar karena 3 > 2.</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengira penyebut lebih besar berarti pecahan lebih besar.</li>
+            <li><b>B:</b> Kunci — benar: 10/15 > 9/15.</li>
+            <li><b>C:</b> Mengira pecahan berbeda selalu sama besar.</li>
+            <li><b>D:</b> Membandingkan pembilang saja.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Membandingkan pecahan hanya dari penyebut atau pembilang saja.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-12">
+        <div class="qcard-head">
+          <span class="qno">Soal 12</span>
+          <span class="badge-row"><span class="badge b-attr">A1</span> <span class="badge b-attr">A3</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Perhatikan garis bilangan dengan titik 0 di tengah.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Letak bilangan −1/2 pada garis bilangan adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>di kanan 0, antara 0 dan 1</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>di kiri 0, antara 0 dan −1</span></li>
+          <li><span class="opt-k">C.</span><span>tepat di titik −2</span></li>
+          <li><span class="opt-k">D.</span><span>sama dengan letak 1/2</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengabaikan tanda negatif (menempatkan di sisi positif).</li>
+            <li><b>B:</b> Kunci — benar.</li>
+            <li><b>C:</b> Membaca −1/2 sebagai −2.</li>
+            <li><b>D:</b> Menganggap −1/2 dan 1/2 berimpit.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah menempatkan pecahan negatif pada garis bilangan (mengabaikan tanda).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-13">
+        <div class="qcard-head">
+          <span class="qno">Soal 13</span>
+          <span class="badge-row"><span class="badge b-attr">A4</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Seorang siswa menjumlahkan dua pecahan.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>1/2 + 1/3 = …</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>2/5</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>5/6</span></li>
+          <li><span class="opt-k">C.</span><span>2/6</span></li>
+          <li><span class="opt-k">D.</span><span>1/6</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menjumlahkan pembilang dan penyebut: (1+1)/(2+3).</li>
+            <li><b>B:</b> Kunci — benar: 3/6 + 2/6 = 5/6.</li>
+            <li><b>C:</b> Menjumlahkan pembilang, menjumlahkan penyebut sebagian.</li>
+            <li><b>D:</b> Mengalikan, bukan menjumlahkan.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Menjumlahkan pembilang dan penyebut secara langsung tanpa menyamakan penyebut.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-14">
+        <div class="qcard-head">
+          <span class="qno">Soal 14</span>
+          <span class="badge-row"><span class="badge b-attr">A4</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Hitunglah hasil perkalian pecahan berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>2/3 × 3/4 = …</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>1/2</span></li>
+          <li><span class="opt-k">B.</span><span>5/7</span></li>
+          <li><span class="opt-k">C.</span><span>6/7</span></li>
+          <li><span class="opt-k">D.</span><span>8/9</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 6/12 = 1/2.</li>
+            <li><b>B:</b> Menjumlahkan pembilang &amp; penyebut.</li>
+            <li><b>C:</b> Menjumlahkan pembilang, menyilangkan penyebut.</li>
+            <li><b>D:</b> Menjumlahkan secara silang.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Tertukar prosedur perkalian dengan penjumlahan pecahan.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-15">
+        <div class="qcard-head">
+          <span class="qno">Soal 15</span>
+          <span class="badge-row"><span class="badge b-attr">A4</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Hitunglah hasil pengurangan pecahan berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>3/4 − 1/2 = …</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>2/2</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>1/4</span></li>
+          <li><span class="opt-k">C.</span><span>1/2</span></li>
+          <li><span class="opt-k">D.</span><span>2/6</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengurangkan pembilang &amp; penyebut langsung: (3−1)/(4−2).</li>
+            <li><b>B:</b> Kunci — benar: 3/4 − 2/4 = 1/4.</li>
+            <li><b>C:</b> Mengira hasilnya sama dengan salah satu suku.</li>
+            <li><b>D:</b> Operasi penyebut keliru.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Tidak menyamakan penyebut saat mengurangkan pecahan.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-16">
+        <div class="qcard-head">
+          <span class="qno">Soal 16</span>
+          <span class="badge-row"><span class="badge b-attr">A2</span> <span class="badge b-attr">A4</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Andi memiliki uang Rp50.000. Ia membelanjakan 2/5 dari uangnya, kemudian menerima tambahan Rp8.000.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Uang Andi sekarang adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>Rp38.000</span></li>
+          <li><span class="opt-k">B.</span><span>Rp22.000</span></li>
+          <li><span class="opt-k">C.</span><span>Rp30.000</span></li>
+          <li><span class="opt-k">D.</span><span>Rp42.000</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 50.000 − 20.000 + 8.000.</li>
+            <li><b>B:</b> Mengurangkan, bukan menambahkan, Rp8.000.</li>
+            <li><b>C:</b> Lupa menambahkan Rp8.000.</li>
+            <li><b>D:</b> Menambahkan dua kali / salah hitung 2/5.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Kesalahan menghitung pecahan dari kuantitas digabung dengan urutan operasi.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-17">
+        <div class="qcard-head">
+          <span class="qno">Soal 17</span>
+          <span class="badge-row"><span class="badge b-attr">A3</span> <span class="badge b-attr">A4</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah pita sepanjang 3/4 meter dipotong menjadi potongan-potongan sepanjang 1/8 meter.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Banyak potongan yang dihasilkan adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>6</span></li>
+          <li><span class="opt-k">B.</span><span>3/32</span></li>
+          <li><span class="opt-k">C.</span><span>2</span></li>
+          <li><span class="opt-k">D.</span><span>8</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 3/4 ÷ 1/8 = 3/4 × 8 = 6.</li>
+            <li><b>B:</b> Mengalikan langsung 3/4 × 1/8.</li>
+            <li><b>C:</b> Membagi penyebut saja.</li>
+            <li><b>D:</b> Mengira jawaban = penyebut pemotong.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah prosedur pembagian pecahan (tidak membalik pembagi; mengalikan langsung).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-18">
+        <div class="qcard-head">
+          <span class="qno">Soal 18</span>
+          <span class="badge-row"><span class="badge b-attr">A4</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Hitunglah hasil pembagian pecahan berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>2/3 ÷ 4/5 = …</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>8/15</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>5/6</span></li>
+          <li><span class="opt-k">C.</span><span>6/5</span></li>
+          <li><span class="opt-k">D.</span><span>3/10</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengalikan langsung tanpa membalik: 2/3 × 4/5.</li>
+            <li><b>B:</b> Kunci — benar: 2/3 × 5/4 = 10/12 = 5/6.</li>
+            <li><b>C:</b> Membalik pecahan yang salah (yang dibagi).</li>
+            <li><b>D:</b> Operasi penyebut keliru.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah membalik bilangan saat membagi pecahan.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-19">
+        <div class="qcard-head">
+          <span class="qno">Soal 19</span>
+          <span class="badge-row"><span class="badge b-attr">A2</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Dalam sebuah kuis, jawaban benar bernilai +4 dan jawaban salah bernilai −2. Budi menjawab 7 soal benar dan 3 soal salah.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Skor total Budi adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>22</span></li>
+          <li><span class="opt-k">B.</span><span>34</span></li>
+          <li><span class="opt-k">C.</span><span>10</span></li>
+          <li><span class="opt-k">D.</span><span>26</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 28 − 6 = 22.</li>
+            <li><b>B:</b> Mengabaikan tanda negatif: 28 + 6.</li>
+            <li><b>C:</b> Salah mengalikan poin benar.</li>
+            <li><b>D:</b> Hanya mengurangi 2 satu kali.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Aturan tanda dalam konteks skor (mengabaikan poin negatif).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-20">
+        <div class="qcard-head">
+          <span class="qno">Soal 20</span>
+          <span class="badge-row"><span class="badge b-attr">A1</span> <span class="badge b-attr">A2</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah freezer bersuhu −18°C. Ketika listrik mati, suhunya naik 2°C setiap jam selama 5 jam.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Suhu freezer setelah 5 jam adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>−8°C</span></li>
+          <li><span class="opt-k">B.</span><span>−28°C</span></li>
+          <li><span class="opt-k">C.</span><span>8°C</span></li>
+          <li><span class="opt-k">D.</span><span>−16°C</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: −18 + (2×5) = −8.</li>
+            <li><b>B:</b> Mengurangi, bukan menambah, kenaikan suhu.</li>
+            <li><b>C:</b> Mengabaikan tanda awal: 18−10? menjadi positif.</li>
+            <li><b>D:</b> Hanya menambah satu jam: −18 + 2.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Operasi bilangan bulat negatif dalam konteks (arah perubahan dan tanda awal).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-21">
+        <div class="qcard-head">
+          <span class="qno">Soal 21</span>
+          <span class="badge-row"><span class="badge b-attr">A5</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Perhatikan bentuk aljabar 5x + 3.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Koefisien dan konstanta pada bentuk tersebut adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>koefisien 5, konstanta 3</span></li>
+          <li><span class="opt-k">B.</span><span>koefisien 3, konstanta 5</span></li>
+          <li><span class="opt-k">C.</span><span>koefisien x, konstanta 3</span></li>
+          <li><span class="opt-k">D.</span><span>variabel 5, konstanta x</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar.</li>
+            <li><b>B:</b> Menukar koefisien dengan konstanta.</li>
+            <li><b>C:</b> Mengira variabel adalah koefisien.</li>
+            <li><b>D:</b> Menukar peran variabel dan koefisien.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Keliru istilah koefisien, konstanta, dan variabel.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-22">
+        <div class="qcard-head">
+          <span class="qno">Soal 22</span>
+          <span class="badge-row"><span class="badge b-attr">A5</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sederhanakan bentuk aljabar berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>7a + 3b − 2a + b = …</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>9ab</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>5a + 4b</span></li>
+          <li><span class="opt-k">C.</span><span>5a + 2b</span></li>
+          <li><span class="opt-k">D.</span><span>9a + 4b</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menggabungkan semua suku &amp; mengalikan variabel.</li>
+            <li><b>B:</b> Kunci — benar: (7a−2a) + (3b+b).</li>
+            <li><b>C:</b> Salah menjumlah suku b.</li>
+            <li><b>D:</b> Salah menjumlah suku a (7a−2a dianggap 9a).</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Menggabungkan suku tak sejenis sebagai suku sejenis.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-23">
+        <div class="qcard-head">
+          <span class="qno">Soal 23</span>
+          <span class="badge-row"><span class="badge b-attr">A5</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Jabarkan bentuk aljabar berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>3(2x + 4) = …</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>6x + 4</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>6x + 12</span></li>
+          <li><span class="opt-k">C.</span><span>5x + 7</span></li>
+          <li><span class="opt-k">D.</span><span>2x + 12</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Hanya mengalikan suku pertama dengan 3.</li>
+            <li><b>B:</b> Kunci — benar.</li>
+            <li><b>C:</b> Menjumlahkan, bukan mengalikan.</li>
+            <li><b>D:</b> Hanya mengalikan konstanta dengan 3.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Penerapan sifat distributif tidak lengkap (hanya mengalikan suku pertama).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-24">
+        <div class="qcard-head">
+          <span class="qno">Soal 24</span>
+          <span class="badge-row"><span class="badge b-attr">A4</span> <span class="badge b-attr">A5</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sederhanakan bentuk aljabar berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>1/2 x + 1/4 x = …</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>2/6 x</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>3/4 x</span></li>
+          <li><span class="opt-k">C.</span><span>1/8 x</span></li>
+          <li><span class="opt-k">D.</span><span>2/4 x</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menjumlah pembilang &amp; penyebut koefisien.</li>
+            <li><b>B:</b> Kunci — benar: (2/4 + 1/4) x = 3/4 x.</li>
+            <li><b>C:</b> Mengalikan koefisien, bukan menjumlah.</li>
+            <li><b>D:</b> Tidak menyamakan penyebut.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Kesalahan operasi koefisien pecahan saat menggabung suku sejenis.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-25">
+        <div class="qcard-head">
+          <span class="qno">Soal 25</span>
+          <span class="badge-row"><span class="badge b-attr">A5</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Diketahui bentuk 2x² + 3.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Nilai bentuk tersebut untuk x = −2 adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>−5</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>11</span></li>
+          <li><span class="opt-k">C.</span><span>19</span></li>
+          <li><span class="opt-k">D.</span><span>−13</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menghitung (−2)² sebagai −4.</li>
+            <li><b>B:</b> Kunci — benar: 2×4 + 3 = 11.</li>
+            <li><b>C:</b> Mengkuadratkan 2x: (2×−2)² + 3 = 19.</li>
+            <li><b>D:</b> Salah tanda dan urutan operasi.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Kuadrat bilangan negatif &amp; urutan operasi pada substitusi.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-26">
+        <div class="qcard-head">
+          <span class="qno">Soal 26</span>
+          <span class="badge-row"><span class="badge b-attr">A5</span> <span class="badge b-attr">A6</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah bilangan dikurangi 7 menghasilkan 12.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Persamaan yang tepat untuk pernyataan tersebut adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>x + 7 = 12</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>x − 7 = 12</span></li>
+          <li><span class="opt-k">C.</span><span>7 − x = 12</span></li>
+          <li><span class="opt-k">D.</span><span>7x = 12</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menukar operasi pengurangan menjadi penjumlahan.</li>
+            <li><b>B:</b> Kunci — benar.</li>
+            <li><b>C:</b> Membalik urutan pengurangan.</li>
+            <li><b>D:</b> Mengira “dikurangi” berarti perkalian.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah menerjemahkan kalimat verbal menjadi model persamaan.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-27">
+        <div class="qcard-head">
+          <span class="qno">Soal 27</span>
+          <span class="badge-row"><span class="badge b-attr">A6</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Selesaikan persamaan linear berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>x + 5 = 12, maka x = …</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>7</span></li>
+          <li><span class="opt-k">B.</span><span>17</span></li>
+          <li><span class="opt-k">C.</span><span>5/12</span></li>
+          <li><span class="opt-k">D.</span><span>−7</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: x = 12 − 5.</li>
+            <li><b>B:</b> Menambah, bukan mengurangi: 12 + 5.</li>
+            <li><b>C:</b> Membagi, bukan mengurangi.</li>
+            <li><b>D:</b> Salah tanda hasil.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah menerapkan operasi invers saat memindah ruas.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-28">
+        <div class="qcard-head">
+          <span class="qno">Soal 28</span>
+          <span class="badge-row"><span class="badge b-attr">A6</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Selesaikan persamaan linear berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>3x = 18, maka x = …</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>6</span></li>
+          <li><span class="opt-k">B.</span><span>54</span></li>
+          <li><span class="opt-k">C.</span><span>15</span></li>
+          <li><span class="opt-k">D.</span><span>21</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: x = 18 ÷ 3.</li>
+            <li><b>B:</b> Mengalikan 18 × 3.</li>
+            <li><b>C:</b> Mengurangi 18 − 3.</li>
+            <li><b>D:</b> Menambah 18 + 3.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Tertukar invers perkalian dengan penjumlahan/pengurangan.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-29">
+        <div class="qcard-head">
+          <span class="qno">Soal 29</span>
+          <span class="badge-row"><span class="badge b-attr">A6</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Selesaikan persamaan linear berikut.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>2x − 3 = 7, maka x = …</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>5</span></li>
+          <li><span class="opt-k">B.</span><span>2</span></li>
+          <li><span class="opt-k">C.</span><span>8</span></li>
+          <li><span class="opt-k">D.</span><span>10</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 2x = 10, x = 5.</li>
+            <li><b>B:</b> Mengurangi dulu lalu salah: (7−3)÷2.</li>
+            <li><b>C:</b> Menambah lalu lupa membagi.</li>
+            <li><b>D:</b> Menambah 3 tetapi tidak membagi 2.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Urutan operasi invers pada PLSV dua langkah keliru.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-30">
+        <div class="qcard-head">
+          <span class="qno">Soal 30</span>
+          <span class="badge-row"><span class="badge b-attr">A5</span> <span class="badge b-attr">A6</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Umur Ani 3 tahun lebih tua daripada Budi. Jumlah umur mereka 27 tahun.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Umur Budi adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>12 tahun</span></li>
+          <li><span class="opt-k">B.</span><span>15 tahun</span></li>
+          <li><span class="opt-k">C.</span><span>13,5 tahun</span></li>
+          <li><span class="opt-k">D.</span><span>24 tahun</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 2x + 3 = 27 → x = 12.</li>
+            <li><b>B:</b> Memberikan umur Ani (x+3 = 15).</li>
+            <li><b>C:</b> Membagi dua tanpa memodelkan: 27÷2.</li>
+            <li><b>D:</b> Hanya mengurangi 27 − 3.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Kesulitan menyusun lalu menyelesaikan persamaan dari masalah kontekstual.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-31">
+        <div class="qcard-head">
+          <span class="qno">Soal 31</span>
+          <span class="badge-row"><span class="badge b-attr">A7</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah sudut memiliki besar 120°.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Sudut tersebut termasuk jenis sudut…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>lancip</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>tumpul</span></li>
+          <li><span class="opt-k">C.</span><span>siku-siku</span></li>
+          <li><span class="opt-k">D.</span><span>lurus</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengira &lt;90° (lancip).</li>
+            <li><b>B:</b> Kunci — benar: 90°&lt;120°&lt;180°.</li>
+            <li><b>C:</b> Mengira tepat 90°.</li>
+            <li><b>D:</b> Mengira tepat 180°.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah mengklasifikasi sudut berdasar besarnya.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-32">
+        <div class="qcard-head">
+          <span class="qno">Soal 32</span>
+          <span class="badge-row"><span class="badge b-attr">A7</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah segitiga memiliki panjang sisi 5 cm, 5 cm, dan 8 cm.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Segitiga tersebut termasuk…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>segitiga sama sisi</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>segitiga sama kaki</span></li>
+          <li><span class="opt-k">C.</span><span>segitiga siku-siku</span></li>
+          <li><span class="opt-k">D.</span><span>segitiga sembarang</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengira semua sisi sama (padahal hanya dua).</li>
+            <li><b>B:</b> Kunci — benar: dua sisi sama panjang.</li>
+            <li><b>C:</b> Mengira ada sudut siku-siku.</li>
+            <li><b>D:</b> Mengira ketiga sisi berbeda.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah mengklasifikasi segitiga dari panjang sisi.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-33">
+        <div class="qcard-head">
+          <span class="qno">Soal 33</span>
+          <span class="badge-row"><span class="badge b-attr">A7</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah bangun datar memiliki dua pasang sisi sejajar dan keempat sudutnya 90°.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Bangun tersebut adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>jajargenjang</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>persegi panjang</span></li>
+          <li><span class="opt-k">C.</span><span>trapesium</span></li>
+          <li><span class="opt-k">D.</span><span>belah ketupat</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Sudutnya tidak semua 90°.</li>
+            <li><b>B:</b> Kunci — benar.</li>
+            <li><b>C:</b> Hanya satu pasang sisi sejajar.</li>
+            <li><b>D:</b> Sudutnya tidak harus 90°.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Belum menguasai sifat-sifat segiempat.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-34">
+        <div class="qcard-head">
+          <span class="qno">Soal 34</span>
+          <span class="badge-row"><span class="badge b-attr">A7</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah persegi panjang memiliki panjang 8 cm dan lebar 5 cm.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Keliling persegi panjang dihitung dengan…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>8 × 5</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>2 × (8 + 5)</span></li>
+          <li><span class="opt-k">C.</span><span>8 + 5</span></li>
+          <li><span class="opt-k">D.</span><span>2 × 8 × 5</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menggunakan rumus luas.</li>
+            <li><b>B:</b> Kunci — benar.</li>
+            <li><b>C:</b> Hanya menjumlah panjang dan lebar sekali.</li>
+            <li><b>D:</b> Mengalikan dua kali (salah konsep).</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Tertukar rumus keliling dan luas persegi panjang.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-35">
+        <div class="qcard-head">
+          <span class="qno">Soal 35</span>
+          <span class="badge-row"><span class="badge b-attr">A7</span> <span class="badge b-attr">A8</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah taman berbentuk persegi panjang berukuran 12 m × 7 m akan dipasangi pagar mengelilingi tepinya.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Panjang pagar yang dibutuhkan adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>38 m</span></li>
+          <li><span class="opt-k">B.</span><span>84 m</span></li>
+          <li><span class="opt-k">C.</span><span>19 m</span></li>
+          <li><span class="opt-k">D.</span><span>76 m</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 2(12+7) = 38.</li>
+            <li><b>B:</b> Menghitung luas: 12 × 7.</li>
+            <li><b>C:</b> Menjumlah panjang &amp; lebar sekali: 12+7.</li>
+            <li><b>D:</b> Mengalikan keliling dua kali.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Tertukar keliling dan luas dalam konteks terapan.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-36">
+        <div class="qcard-head">
+          <span class="qno">Soal 36</span>
+          <span class="badge-row"><span class="badge b-attr">A8</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Jarak rumah ke sekolah adalah 2,5 km.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Jarak tersebut sama dengan… meter.</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>250</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>2.500</span></li>
+          <li><span class="opt-k">C.</span><span>25</span></li>
+          <li><span class="opt-k">D.</span><span>25.000</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Mengalikan dengan 100, bukan 1.000.</li>
+            <li><b>B:</b> Kunci — benar: 2,5 × 1.000.</li>
+            <li><b>C:</b> Mengalikan dengan 10.</li>
+            <li><b>D:</b> Mengalikan dengan 10.000.</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Kesalahan tangga konversi satuan panjang.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-37">
+        <div class="qcard-head">
+          <span class="qno">Soal 37</span>
+          <span class="badge-row"><span class="badge b-attr">A8</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah ubin berbentuk persegi dengan panjang sisi 9 cm.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Luas ubin tersebut adalah…</div>
+          <ul class="q-opts">
+          <li><span class="opt-k">A.</span><span>36 cm²</span></li>
+          <li class="correct"><span class="opt-k">B.</span><span>81 cm²</span></li>
+          <li><span class="opt-k">C.</span><span>18 cm²</span></li>
+          <li><span class="opt-k">D.</span><span>324 cm²</span></li>
+          </ul>
+          <div class="q-key">Kunci: B</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Menggunakan rumus keliling: 4 × 9.</li>
+            <li><b>B:</b> Kunci — benar: 9² = 81.</li>
+            <li><b>C:</b> Mengalikan sisi dengan 2.</li>
+            <li><b>D:</b> Salah hitung 9² (mengira 9×36).</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Tertukar rumus luas persegi (s²) dengan keliling (4s).</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-38">
+        <div class="qcard-head">
+          <span class="qno">Soal 38</span>
+          <span class="badge-row"><span class="badge b-attr">A2</span> <span class="badge b-attr">A8</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Lantai berukuran 6 m × 4 m akan ditutup ubin berukuran 1 m × 1 m. Tersedia 30 ubin.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Banyak ubin yang tersisa setelah lantai tertutup penuh adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>6</span></li>
+          <li><span class="opt-k">B.</span><span>24</span></li>
+          <li><span class="opt-k">C.</span><span>0</span></li>
+          <li><span class="opt-k">D.</span><span>16</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 30 − (6×4) = 6.</li>
+            <li><b>B:</b> Memberikan banyak ubin terpakai, bukan sisa.</li>
+            <li><b>C:</b> Mengira ubin habis tepat.</li>
+            <li><b>D:</b> Salah menghitung luas (6+4+6 dll).</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Kesalahan menghitung luas digabung operasi bilangan bulat.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-39">
+        <div class="qcard-head">
+          <span class="qno">Soal 39</span>
+          <span class="badge-row"><span class="badge b-attr">A7</span> <span class="badge b-attr">A8</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Sebuah segitiga siku-siku memiliki panjang alas 6 cm dan tinggi 8 cm.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Luas segitiga tersebut adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>24 cm²</span></li>
+          <li><span class="opt-k">B.</span><span>48 cm²</span></li>
+          <li><span class="opt-k">C.</span><span>14 cm²</span></li>
+          <li><span class="opt-k">D.</span><span>28 cm²</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: ½ × 6 × 8 = 24.</li>
+            <li><b>B:</b> Lupa mengalikan ½: 6 × 8.</li>
+            <li><b>C:</b> Menjumlah alas &amp; tinggi: 6 + 8.</li>
+            <li><b>D:</b> Salah operasi (6×8÷2 → 28).</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Lupa faktor ½ pada rumus luas segitiga.</div>
+        </div>
+      </article>
+      <article class="qcard" id="soal-40">
+        <div class="qcard-head">
+          <span class="qno">Soal 40</span>
+          <span class="badge-row"><span class="badge b-attr">A8</span></span>
+        </div>
+        <div class="qcard-body">
+          <div class="q-stim"><span class="lbl">Stimulus</span>Pada denah berskala 1 : 200, panjang sebuah ruang tergambar 4 cm.</div>
+          <div class="q-ask"><span class="lbl">Pertanyaan</span>Panjang ruang sebenarnya adalah…</div>
+          <ul class="q-opts">
+          <li class="correct"><span class="opt-k">A.</span><span>8 m</span></li>
+          <li><span class="opt-k">B.</span><span>800 m</span></li>
+          <li><span class="opt-k">C.</span><span>0,02 m</span></li>
+          <li><span class="opt-k">D.</span><span>50 m</span></li>
+          </ul>
+          <div class="q-key">Kunci: A</div>
+          <div class="q-rationale">
+            <span class="lbl">Rasional distraktor</span>
+            <ul>
+            <li><b>A:</b> Kunci — benar: 4 × 200 = 800 cm = 8 m.</li>
+            <li><b>B:</b> Lupa mengubah cm ke m.</li>
+            <li><b>C:</b> Membagi, bukan mengali, lalu salah satuan.</li>
+            <li><b>D:</b> Membagi skala dengan panjang denah (200÷4).</li>
+            </ul>
+          </div>
+          <div class="callout misk"><span class="ct">Miskonsepsi terdeteksi</span>Salah konsep skala dan konversi satuan.</div>
+        </div>
+      </article>
+  </div>
+</section>
+
+<!-- ===================== TUGAS 6 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 6</span></div>
+  <h2>Instrumen Kecemasan Matematika</h2>
+  <p class="lead">Skala Likert lima titik: SS (Sangat Setuju), S (Setuju), N (Netral), TS (Tidak Setuju), STS (Sangat Tidak Setuju). Konstruk yang diukur adalah kecemasan. Pernyataan Favorable (F) searah dengan kecemasan (skor SS=5 … STS=1); pernyataan Unfavorable (UF) berlawanan (skor dibalik: SS=1 … STS=5). Total 28 butir, 7 butir per dimensi. Skor komposit terstandar menjadi θ-afektif (kovariat HO-DINA).</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th class="center" style="width:6%">No</th><th>Pernyataan</th><th style="width:16%">Dimensi</th><th class="center" style="width:10%">F / UF</th></tr></thead>
+      <tbody>
+        <tr><td class="center">1</td><td>Saya khawatir tidak mampu menyelesaikan soal matematika.</td><td><span class="badge b-dim">Kognitif</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">2</td><td>Pikiran saya kosong ketika menghadapi soal matematika yang sulit.</td><td><span class="badge b-dim">Kognitif</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">3</td><td>Saya yakin dapat memahami materi matematika yang diajarkan.</td><td><span class="badge b-dim">Kognitif</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">4</td><td>Saya sulit berkonsentrasi saat mengerjakan tugas matematika.</td><td><span class="badge b-dim">Kognitif</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">5</td><td>Saya merasa optimis setiap kali memulai ulangan matematika.</td><td><span class="badge b-dim">Kognitif</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">6</td><td>Saya terus memikirkan kemungkinan gagal saat belajar matematika.</td><td><span class="badge b-dim">Kognitif</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">7</td><td>Saya mampu memusatkan perhatian selama pelajaran matematika berlangsung.</td><td><span class="badge b-dim">Kognitif</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">8</td><td>Saya merasa takut ketika guru menunjuk saya mengerjakan soal di papan tulis.</td><td><span class="badge b-dim">Afektif</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">9</td><td>Saya menyukai tantangan dalam pelajaran matematika.</td><td><span class="badge b-dim">Afektif</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">10</td><td>Saya merasa tegang saat pelajaran matematika akan dimulai.</td><td><span class="badge b-dim">Afektif</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">11</td><td>Saya merasa tenang ketika mengerjakan soal matematika.</td><td><span class="badge b-dim">Afektif</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">12</td><td>Saya merasa cemas ketika hari ulangan matematika semakin dekat.</td><td><span class="badge b-dim">Afektif</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">13</td><td>Matematika membuat saya merasa tidak nyaman.</td><td><span class="badge b-dim">Afektif</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">14</td><td>Saya merasa senang ketika berhasil memecahkan soal matematika.</td><td><span class="badge b-dim">Afektif</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">15</td><td>Jantung saya berdebar lebih cepat saat mengerjakan ulangan matematika.</td><td><span class="badge b-dim">Fisiologis</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">16</td><td>Telapak tangan saya berkeringat ketika menghadapi soal matematika yang sulit.</td><td><span class="badge b-dim">Fisiologis</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">17</td><td>Tubuh saya terasa rileks saat mengerjakan tugas matematika.</td><td><span class="badge b-dim">Fisiologis</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">18</td><td>Saya merasa mual atau pusing menjelang ujian matematika.</td><td><span class="badge b-dim">Fisiologis</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">19</td><td>Pernapasan saya tetap normal saat mengerjakan soal matematika di depan kelas.</td><td><span class="badge b-dim">Fisiologis</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">20</td><td>Otot tubuh saya menegang saat guru membagikan lembar soal matematika.</td><td><span class="badge b-dim">Fisiologis</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">21</td><td>Tangan saya gemetar ketika harus mengerjakan soal matematika yang sulit.</td><td><span class="badge b-dim">Fisiologis</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">22</td><td>Saya menunda mengerjakan PR matematika hingga menit terakhir.</td><td><span class="badge b-dim">Perilaku</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">23</td><td>Saya aktif bertanya kepada guru ketika tidak memahami materi matematika.</td><td><span class="badge b-dim">Perilaku</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">24</td><td>Saya berusaha menghindari kegiatan yang melibatkan perhitungan matematika.</td><td><span class="badge b-dim">Perilaku</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">25</td><td>Saya mengerjakan latihan soal matematika tambahan atas kemauan sendiri.</td><td><span class="badge b-dim">Perilaku</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">26</td><td>Saya memilih diam daripada bertanya saat kesulitan memahami matematika.</td><td><span class="badge b-dim">Perilaku</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+        <tr><td class="center">27</td><td>Saya mengumpulkan tugas matematika tepat waktu.</td><td><span class="badge b-dim">Perilaku</span></td><td class="center"><span class="badge b-uf">UF</span></td></tr>
+        <tr><td class="center">28</td><td>Saya mencari alasan untuk tidak masuk kelas ketika ada ulangan matematika.</td><td><span class="badge b-dim">Perilaku</span></td><td class="center"><span class="badge b-f">F</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="subnote">Sebaran: 7 butir tiap dimensi; 17 butir F dan 11 butir UF. Validitas konstruk diuji dengan analisis faktor konfirmatori (CFA) empat faktor; reliabilitas dengan Cronbach’s α dan composite reliability (≥ 0,70).</p>
+</section>
+
+<!-- ===================== TUGAS 7 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 7</span></div>
+  <h2>Lembar Validasi Ahli</h2>
+  <p class="lead">Setiap lembar menggunakan skala penilaian 1–5 dengan anchor: 1 = sangat tidak baik/sangat tidak sesuai; 2 = kurang baik/kurang sesuai; 3 = cukup; 4 = baik/sesuai; 5 = sangat baik/sangat sesuai. Kolom “E” (Esensial?) berisi Ya/Tidak untuk perhitungan CVR Lawshe. Diakhiri rekomendasi: Layak / Layak dengan revisi / Tidak layak.</p>
+  <h3>7.1 Lembar Validasi Ahli Materi (Matematika)</h3>
+  <p>Menilai instrumen tes diagnostik (40 butir) dari sisi keilmuan matematika dan kelayakan butir.</p>
+  <div class="val-meta">
+    <div><span>Nama Validator</span><span>&nbsp;</span></div>
+    <div><span>Bidang Keahlian / Instansi</span><span>&nbsp;</span></div>
+    <div><span>Tanggal Penilaian</span><span>&nbsp;</span></div>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th class="center" style="width:5%">No</th><th style="width:18%">Aspek</th><th>Indikator Penilaian</th><th class="center" style="width:11%">Skor (1–5)</th><th class="center" style="width:11%">Esensial? (Y/T)</th></tr></thead>
+      <tbody>
+        <tr><td class="center">1</td><td rowspan="1"><strong>Kesesuaian kurikulum</strong></td><td>Butir sesuai Capaian Pembelajaran (CP) dan tujuan pembelajaran Kurikulum Merdeka Fase D (Kelas VII).</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">2</td><td rowspan="2"><strong>Cakupan materi</strong></td><td>Bilangan, Aljabar, serta Geometri &amp; Pengukuran proporsional.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">3</td><td>Tingkat keluasan dan kedalaman materi sesuai jenjang Kelas VII.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">4</td><td rowspan="3"><strong>Ketepatan konsep</strong></td><td>Konsep matematis pada stimulus dan batang soal benar secara keilmuan.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">5</td><td>Kunci jawaban tepat, tunggal, dan tidak bermakna ganda.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">6</td><td>Tidak terdapat miskonsepsi yang tidak disengaja pada pokok soal.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">7</td><td rowspan="3"><strong>Kualitas distraktor</strong></td><td>Setiap distraktor merepresentasikan miskonsepsi/kesalahan prosedural yang masuk akal.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">8</td><td>Distraktor berfungsi (tidak ada pilihan yang jelas keliru atau tidak relevan).</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">9</td><td>Distraktor homogen serta sebanding panjang dan kompleksitasnya dengan kunci.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">10</td><td rowspan="3"><strong>Kejelasan bahasa</strong></td><td>Kalimat soal jelas, tidak ambigu, dan sesuai kaidah Bahasa Indonesia.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">11</td><td>Tingkat keterbacaan sesuai dengan kemampuan siswa SMP.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">12</td><td>Stimulus kontekstual relevan, wajar, dan bebas bias budaya/gender.</td><td class="center">—</td><td class="center">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout note"><span class="ct">Catatan / Saran Perbaikan</span>&nbsp;</div>
+  <div class="reco"><strong>Rekomendasi:</strong> <span class="opt">☐ Layak digunakan</span><span class="opt">☐ Layak dengan revisi</span><span class="opt">☐ Tidak layak</span><br><br><strong>Tanda Tangan</strong></div>
+
+  <h3>7.2 Lembar Validasi Ahli Evaluasi/Psikometri</h3>
+  <p>Menilai kualitas konstruk diagnostik, struktur atribut, dan Q-matrix.</p>
+  <div class="val-meta">
+    <div><span>Nama Validator</span><span>&nbsp;</span></div>
+    <div><span>Bidang Keahlian / Instansi</span><span>&nbsp;</span></div>
+    <div><span>Tanggal Penilaian</span><span>&nbsp;</span></div>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th class="center" style="width:5%">No</th><th style="width:18%">Aspek</th><th>Indikator Penilaian</th><th class="center" style="width:11%">Skor (1–5)</th><th class="center" style="width:11%">Esensial? (Y/T)</th></tr></thead>
+      <tbody>
+        <tr><td class="center">1</td><td rowspan="3"><strong>Representasi atribut</strong></td><td>Setiap atribut kognitif A1–A8 terdefinisi jelas, spesifik, dan terukur.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">2</td><td>Hierarki prasyarat antar atribut logis dan berlandaskan teori belajar matematika.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">3</td><td>Kecemasan matematika diperlakukan tepat sebagai kovariat afektif, bukan atribut Q-matrix.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">4</td><td rowspan="3"><strong>Kesesuaian Q-Matrix</strong></td><td>Pemetaan butir–atribut (q-vector) mencerminkan tuntutan kognitif sebenarnya tiap butir.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">5</td><td>Setiap atribut diukur memadai (≥ 5 butir) untuk memenuhi identifiabilitas model.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">6</td><td>Proporsi butir atribut-tunggal dan atribut-kombinasi seimbang dan beralasan.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">7</td><td rowspan="3"><strong>Potensi diagnosis</strong></td><td>Pola distraktor memungkinkan inferensi miskonsepsi spesifik (bukan sekadar benar/salah).</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">8</td><td>Instrumen mampu membedakan profil mastery multidimensional antar siswa.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">9</td><td>Hasil diagnosis bersifat actionable untuk merancang intervensi pedagogis.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">10</td><td rowspan="3"><strong>Kualitas konstruk</strong></td><td>Definisi operasional konsisten dengan teori kesulitan belajar matematika.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">11</td><td>Dimensi konseptual, prosedural, dan pemecahan masalah terwakili secara seimbang.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">12</td><td>Instrumen secara keseluruhan koheren dengan tujuan dan pertanyaan penelitian.</td><td class="center">—</td><td class="center">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout note"><span class="ct">Catatan / Saran Perbaikan</span>&nbsp;</div>
+  <div class="reco"><strong>Rekomendasi:</strong> <span class="opt">☐ Layak digunakan</span><span class="opt">☐ Layak dengan revisi</span><span class="opt">☐ Tidak layak</span><br><br><strong>Tanda Tangan</strong></div>
+
+  <h3>7.3 Lembar Validasi Ahli Artificial Intelligence / Data Mining</h3>
+  <p>Menilai kelayakan instrumen sebagai sumber data untuk pemodelan MCDM berbasis AI.</p>
+  <div class="val-meta">
+    <div><span>Nama Validator</span><span>&nbsp;</span></div>
+    <div><span>Bidang Keahlian / Instansi</span><span>&nbsp;</span></div>
+    <div><span>Tanggal Penilaian</span><span>&nbsp;</span></div>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th class="center" style="width:5%">No</th><th style="width:18%">Aspek</th><th>Indikator Penilaian</th><th class="center" style="width:11%">Skor (1–5)</th><th class="center" style="width:11%">Esensial? (Y/T)</th></tr></thead>
+      <tbody>
+        <tr><td class="center">1</td><td rowspan="3"><strong>Kelayakan data mining</strong></td><td>Struktur data respons (format, label, skala) sesuai untuk pelatihan model klasifikasi.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">2</td><td>Volume dan kualitas data yang dihasilkan memadai untuk supervised learning.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">3</td><td>Strategi penanganan data hilang (missing) dan ketidakseimbangan kelas dipertimbangkan.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">4</td><td rowspan="3"><strong>Kualitas fitur</strong></td><td>Fitur (respons butir, skor atribut, kovariat afektif) informatif dan relevan untuk diagnosis.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">5</td><td>Tidak terdapat kebocoran informasi (data leakage) antara fitur dan label target.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">6</td><td>Fitur dapat diekstraksi secara reliabel dan konsisten dari instrumen.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">7</td><td rowspan="3"><strong>Integrasi MCDM–AI</strong></td><td>Q-matrix dapat diintegrasikan sebagai struktur prior/penyekat pada arsitektur NCDM/HO-DINA.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">8</td><td>Arsitektur model mempertahankan interpretabilitas khas Cognitive Diagnostic Model.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">9</td><td>Kovariat afektif terintegrasi pada lapisan higher-order secara metodologis tepat.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">10</td><td rowspan="3"><strong>Interpretabilitas model</strong></td><td>Keluaran model dapat dijelaskan (mis. SHAP/LIME) kepada guru non-teknis.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">11</td><td>Profil mastery dipetakan kembali ke atribut kognitif yang bermakna pedagogis.</td><td class="center">—</td><td class="center">—</td></tr>
+        <tr><td class="center">12</td><td>Rekomendasi intervensi dapat dipertanggungjawabkan dan akuntabel (prinsip FITAP).</td><td class="center">—</td><td class="center">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout note"><span class="ct">Catatan / Saran Perbaikan</span>&nbsp;</div>
+  <div class="reco"><strong>Rekomendasi:</strong> <span class="opt">☐ Layak digunakan</span><span class="opt">☐ Layak dengan revisi</span><span class="opt">☐ Tidak layak</span><br><br><strong>Tanda Tangan</strong></div>
+
+</section>
+
+<!-- ===================== TUGAS 8 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 8</span></div>
+  <h2>Perhitungan Validitas Isi (CVR &amp; CVI)</h2>
+
+  <h3>8.1 Content Validity Ratio (CVR — Lawshe, 1975)</h3>
+  <div class="formula">CVR = (n<sub>e</sub> − N/2) / (N/2)</div>
+  <ul class="clean">
+    <li>nₑ = jumlah pakar yang menilai butir “Esensial”; N = jumlah seluruh pakar.</li>
+    <li>Rentang nilai: −1 (semua menolak) hingga +1 (semua menyatakan esensial); 0 bila separuh menyatakan esensial.</li>
+    <li>CVI versi Lawshe (CVI tes) = rata-rata CVR seluruh butir yang dipertahankan.</li>
+  </ul>
+
+  <h3>8.2 Content Validity Index (CVI — relevansi)</h3>
+  <ul class="clean">
+    <li>Relevansi dinilai pada skala 4 titik (1 = tidak relevan … 4 = sangat relevan); dikotomisasi: skor 3–4 = relevan.</li>
+    <li>I-CVI = (jumlah pakar yang memberi relevansi 3–4) / N</li>
+    <li>S-CVI/Ave = rata-rata seluruh I-CVI</li>
+    <li>S-CVI/UA = (jumlah butir dengan I-CVI = 1) / jumlah butir</li>
+  </ul>
+
+  <h3>8.3 Tabel Keputusan</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:34%">Indeks</th><th style="width:28%">Kriteria</th><th>Keputusan</th></tr></thead>
+      <tbody>
+        <tr><td>CVR (N=7, Lawshe)</td><td>≥ 0,99</td><td>Butir esensial — dipertahankan</td></tr>
+        <tr><td>CVR (ambang praktis disertasi)</td><td>≥ 0,80</td><td>Diterima</td></tr>
+        <tr><td>CVR</td><td>&lt; ambang</td><td>Direvisi / dibuang</td></tr>
+        <tr><td>I-CVI</td><td>≥ 0,78</td><td>Butir relevan — diterima</td></tr>
+        <tr><td>I-CVI</td><td>0,70–0,77</td><td>Direvisi</td></tr>
+        <tr><td>I-CVI</td><td>&lt; 0,70</td><td>Dibuang</td></tr>
+        <tr><td>S-CVI/Ave</td><td>≥ 0,90 (baik sekali); ≥ 0,80 (baik)</td><td>Instrumen valid secara isi</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>8.4 Contoh Perhitungan</h3>
+  <p>Misalkan N = 7 pakar menilai Butir 14.</p>
+  <ul class="clean">
+    <li><strong>CVR:</strong> jika 7 pakar menyatakan “Esensial” → CVR = (7 − 3,5)/3,5 = 1,00 (diterima). Jika 5 dari 7 → CVR = (5 − 3,5)/3,5 = 0,43 (di bawah ambang 0,80 → direvisi).</li>
+    <li><strong>I-CVI:</strong> jika 6 dari 7 pakar memberi relevansi 3–4 → I-CVI = 6/7 = 0,857 (≥ 0,78 → diterima).</li>
+    <li><strong>S-CVI/Ave:</strong> bila rata-rata I-CVI seluruh 40 butir = 0,89 → instrumen tergolong valid (baik).</li>
+  </ul>
+
+  <h3>8.5 Template Excel Analisis CVR–CVI</h3>
+  <div class="callout note">Template berformula lengkap tersedia pada berkas Excel terlampir: sheet CVR_Lawshe (penghitungan CVR &amp; keputusan otomatis dari masukan E/U/N), sheet CVI (I-CVI, S-CVI/Ave, S-CVI/UA), dan sheet Lawshe_Critical (tabel nilai kritis). Sel input ditandai warna biru; seluruh indeks dihitung otomatis.</div>
+</section>
+
+
+<!-- ===================== TUGAS 9 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 9</span></div>
+  <h2>Prosedur Uji Coba &amp; Analisis Psikometri</h2>
+  <p class="lead">Uji coba dilakukan dua tahap: uji keterbacaan (small group, 15–30 siswa) lalu uji lapangan (field test) pada sampel besar terstratifikasi akreditasi sekolah. Analisis menempuh tiga lapis: teori klasik, IRT, dan Cognitive Diagnostic Model.</p>
+
+  <h3>9.1 Analisis Teori Tes Klasik (CTT)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:20%">Indikator</th><th style="width:34%">Rumus / Prosedur</th><th>Kriteria Interpretasi</th></tr></thead>
+      <tbody>
+        <tr><td>Tingkat kesukaran (P)</td><td>P = B / J (B = jumlah benar, J = jumlah peserta)</td><td>P &lt; 0,30 sukar; 0,30–0,70 sedang (ideal); &gt; 0,70 mudah</td></tr>
+        <tr><td>Daya pembeda (D)</td><td>D = Pₐ − P_b (kelompok atas 27% vs bawah 27%); atau korelasi point-biserial r_pbis</td><td>D ≥ 0,40 sangat baik; 0,30–0,39 baik; 0,20–0,29 cukup (revisi); &lt; 0,20 buruk (buang). r_pbis ≥ 0,30 baik</td></tr>
+        <tr><td>Efektivitas distraktor</td><td>Proporsi pemilih tiap opsi per kelompok atas/bawah</td><td>Distraktor berfungsi bila dipilih ≥ 5% peserta dan lebih banyak dipilih kelompok bawah</td></tr>
+        <tr><td>Reliabilitas</td><td>KR-20 (dikotomi) / Cronbach’s α</td><td>≥ 0,70 memadai; ≥ 0,80 baik</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>9.2 Analisis Item Response Theory (IRT)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:16%">Model</th><th>Parameter &amp; Karakteristik</th><th style="width:30%">Kriteria</th></tr></thead>
+      <tbody>
+        <tr><td>1PL (Rasch)</td><td>Hanya parameter kesukaran b; daya beda diasumsikan setara antar butir.</td><td>Infit/Outfit MNSQ 0,5–1,5 (fit); person/item separation reliability ≥ 0,80</td></tr>
+        <tr><td>2PL</td><td>Menambahkan daya beda a (diskriminasi) selain b.</td><td>a ≈ 0,8–2,5 (baik); b ∈ [−3, +3]</td></tr>
+        <tr><td>3PL</td><td>Menambahkan parameter tebakan semu c (pseudo-guessing).</td><td>c ≤ 0,30 (idealnya ≈ 1/jumlah opsi = 0,25)</td></tr>
+        <tr><td>Pemilihan model</td><td>Uji rasio likelihood; informasi relatif (AIC/BIC).</td><td>Model dengan AIC/BIC terendah &amp; fit memadai; periksa unidimensionalitas/lokal independen</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="subnote">Catatan: IRT mengasumsikan trait kontinu unidimensional; di sini IRT berperan sebagai pembanding/penyaring butir, sedangkan diagnosis multidimensional ditangani CDM.</p>
+
+  <h3>9.3 Cognitive Diagnostic Model (CDM)</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:14%">Model</th><th>Karakteristik &amp; Parameter</th><th style="width:32%">Kriteria / Catatan</th></tr></thead>
+      <tbody>
+        <tr><td>DINA</td><td>Nonkompensatori: butir benar hanya bila SEMUA atribut yang dituntut dikuasai. Parameter slip (s) &amp; guess (g).</td><td>s, g &lt; 0,30 (idealnya &lt; 0,20); butir dengan s/g tinggi direvisi</td></tr>
+        <tr><td>DINO</td><td>Kompensatori: cukup menguasai SALAH SATU atribut yang dituntut. Parameter s &amp; g.</td><td>Dipakai bila atribut bersifat saling menggantikan</td></tr>
+        <tr><td>G-DINA</td><td>Tersaturasi: mengizinkan beragam bentuk interaksi atribut (superset DINA &amp; DINO).</td><td>Untuk uji bentuk kondensasi tiap butir; dapat direduksi ke DINA/DINO via uji Wald</td></tr>
+        <tr><td>HO-DINA</td><td>DINA dengan faktor laten higher-order (θ) yang menstrukturkan korelasi &amp; hierarki atribut; titik masuk kovariat afektif.</td><td>Model utama penelitian; θ-afektif menggeser prior mastery</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h4>Kriteria kecocokan &amp; klasifikasi CDM</h4>
+  <ul class="clean">
+    <li>Kecocokan absolut: M2; RMSEA2 &lt; 0,06 (baik); SRMSR &lt; 0,05 (baik).</li>
+    <li>Kecocokan relatif: −2LL, AIC, BIC (terendah) untuk membandingkan DINA/DINO/G-DINA/HO-DINA.</li>
+    <li>Akurasi klasifikasi atribut: pattern-level &amp; marginal attribute classification accuracy ≥ 0,80.</li>
+    <li>Validasi Q-matrix empiris: metode de la Torre &amp; Chiu (PVAF / stepwise) untuk menyarankan revisi q-vector.</li>
+    <li>Reliabilitas atribut: indeks reliabilitas klasifikasi tiap atribut ≥ 0,70.</li>
+  </ul>
+</section>
+
+<!-- ===================== TUGAS 10 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 10</span></div>
+  <h2>Instrumen Usability Guru</h2>
+  <p class="lead">Kuesioner adaptasi USE Questionnaire (Lund, 2001) dan System Usability Scale (Brooke, 1996), 24 butir, Likert 1–5 (1 = sangat tidak setuju … 5 = sangat setuju). Seluruh butir favorable. Empat dimensi: Usefulness, Ease of Use, Ease of Learning, Satisfaction.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th class="center" style="width:6%">No</th><th>Pernyataan</th><th style="width:22%">Dimensi</th></tr></thead>
+      <tbody>
+        <tr><td class="center">1</td><td>Sistem diagnostik ini membantu saya mengidentifikasi kesulitan belajar siswa dengan lebih cepat.</td><td><span class="badge b-dim">Usefulness</span></td></tr>
+        <tr><td class="center">2</td><td>Sistem ini meningkatkan efektivitas saya dalam merancang pembelajaran.</td><td><span class="badge b-dim">Usefulness</span></td></tr>
+        <tr><td class="center">3</td><td>Profil kesulitan siswa yang dihasilkan bermanfaat bagi pengajaran saya.</td><td><span class="badge b-dim">Usefulness</span></td></tr>
+        <tr><td class="center">4</td><td>Sistem ini membantu saya mengambil keputusan intervensi yang lebih tepat.</td><td><span class="badge b-dim">Usefulness</span></td></tr>
+        <tr><td class="center">5</td><td>Dengan sistem ini saya dapat memantau perkembangan siswa secara lebih menyeluruh.</td><td><span class="badge b-dim">Usefulness</span></td></tr>
+        <tr><td class="center">6</td><td>Sistem ini menghemat waktu saya dalam melakukan asesmen diagnostik.</td><td><span class="badge b-dim">Usefulness</span></td></tr>
+        <tr><td class="center">7</td><td>Sistem ini memenuhi kebutuhan saya dalam mendiagnosis kesulitan belajar matematika.</td><td><span class="badge b-dim">Usefulness</span></td></tr>
+        <tr><td class="center">8</td><td>Sistem ini mudah digunakan.</td><td><span class="badge b-dim">Ease of Use</span></td></tr>
+        <tr><td class="center">9</td><td>Saya dapat menggunakan sistem ini tanpa instruksi tertulis yang rumit.</td><td><span class="badge b-dim">Ease of Use</span></td></tr>
+        <tr><td class="center">10</td><td>Langkah-langkah pengoperasian sistem ini sederhana.</td><td><span class="badge b-dim">Ease of Use</span></td></tr>
+        <tr><td class="center">11</td><td>Saya jarang membuat kesalahan saat menggunakan sistem ini.</td><td><span class="badge b-dim">Ease of Use</span></td></tr>
+        <tr><td class="center">12</td><td>Tampilan dashboard sistem ini jelas dan mudah dipahami.</td><td><span class="badge b-dim">Ease of Use</span></td></tr>
+        <tr><td class="center">13</td><td>Saya dapat memperbaiki kesalahan dengan mudah saat menggunakan sistem.</td><td><span class="badge b-dim">Ease of Use</span></td></tr>
+        <tr><td class="center">14</td><td>Perpindahan antar fitur dalam sistem ini lancar.</td><td><span class="badge b-dim">Ease of Use</span></td></tr>
+        <tr><td class="center">15</td><td>Saya dapat mempelajari cara menggunakan sistem ini dengan cepat.</td><td><span class="badge b-dim">Ease of Learning</span></td></tr>
+        <tr><td class="center">16</td><td>Saya mudah mengingat cara mengoperasikan sistem ini.</td><td><span class="badge b-dim">Ease of Learning</span></td></tr>
+        <tr><td class="center">17</td><td>Saya cepat menjadi terampil menggunakan sistem ini.</td><td><span class="badge b-dim">Ease of Learning</span></td></tr>
+        <tr><td class="center">18</td><td>Istilah dan ikon dalam sistem mudah dipelajari.</td><td><span class="badge b-dim">Ease of Learning</span></td></tr>
+        <tr><td class="center">19</td><td>Saya puas terhadap kinerja sistem diagnostik ini.</td><td><span class="badge b-dim">Satisfaction</span></td></tr>
+        <tr><td class="center">20</td><td>Saya akan merekomendasikan sistem ini kepada rekan guru lain.</td><td><span class="badge b-dim">Satisfaction</span></td></tr>
+        <tr><td class="center">21</td><td>Sistem ini menyenangkan untuk digunakan.</td><td><span class="badge b-dim">Satisfaction</span></td></tr>
+        <tr><td class="center">22</td><td>Sistem ini bekerja sesuai harapan saya.</td><td><span class="badge b-dim">Satisfaction</span></td></tr>
+        <tr><td class="center">23</td><td>Saya merasa sistem ini layak digunakan di kelas saya.</td><td><span class="badge b-dim">Satisfaction</span></td></tr>
+        <tr><td class="center">24</td><td>Secara keseluruhan, saya puas menggunakan sistem diagnostik ini.</td><td><span class="badge b-dim">Satisfaction</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="subnote">Penskoran: skor dimensi = rata-rata butir dimensi; Indeks Usability (0–100) = (rata-rata seluruh butir − 1) / 4 × 100. Acuan SUS: skor ≥ 68 tergolong di atas rata-rata (acceptable). Template penskoran otomatis tersedia pada sheet Usability_Template di berkas Excel.</p>
+</section>
+
+<!-- ===================== TUGAS 11 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 11</span></div>
+  <h2>Pemetaan Instrumen terhadap Pertanyaan Penelitian</h2>
+  <p class="lead">Pertanyaan penelitian (PP) diturunkan dari tujuan pengembangan model diagnostik berbasis AI.</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:30%">Pertanyaan Penelitian</th><th style="width:22%">Data yang Dibutuhkan</th><th style="width:22%">Instrumen</th><th>Analisis</th></tr></thead>
+      <tbody>
+        <tr><td><strong>PP1. Bagaimana karakteristik kesulitan belajar matematika siswa SMP (konseptual, prosedural, pemecahan masalah lintas materi)?</strong></td><td>Pola respons &amp; miskonsepsi per atribut</td><td>Tes diagnostik (40 butir) + analisis distraktor</td><td>Statistik deskriptif; analisis miskonsepsi; CTT</td></tr>
+        <tr><td><strong>PP2. Bagaimana struktur atribut dan Q-matrix yang valid untuk diagnosis multidimensional?</strong></td><td>Definisi atribut, hierarki, q-vector</td><td>Q-matrix, AHM, lembar validasi ahli</td><td>Validasi Q-matrix (de la Torre); telaah ahli</td></tr>
+        <tr><td><strong>PP3. Apakah instrumen memenuhi syarat validitas dan reliabilitas?</strong></td><td>Penilaian ahli; data respons uji coba</td><td>Lembar validasi; tes diagnostik; skala kecemasan</td><td>CVR/CVI; CTT; IRT; CFA; α/CR</td></tr>
+        <tr><td><strong>PP4. Bagaimana model MCDM (HO-DINA) mengestimasi profil mastery multidimensional?</strong></td><td>Matriks respons + Q-matrix + kovariat θ</td><td>Tes diagnostik; skala kecemasan</td><td>HO-DINA (MCMC/EM); akurasi klasifikasi; fit (M2, RMSEA2)</td></tr>
+        <tr><td><strong>PP5. Bagaimana kinerja model AI (NCDM/Deep-IRT) dibanding baseline (RF, XGBoost)?</strong></td><td>Matriks respons berlabel</td><td>Dataset respons (Excel/CSV)</td><td>NCDM vs baseline: accuracy, F1, kalibrasi, SHAP/LIME</td></tr>
+        <tr><td><strong>PP6. Bagaimana peran kecemasan matematika sebagai kovariat terhadap estimasi mastery?</strong></td><td>Skor kecemasan terstandar (θ-afektif)</td><td>Skala kecemasan (28 butir)</td><td>Higher-order structural model; analisis sensitivitas prior</td></tr>
+        <tr><td><strong>PP7. Bagaimana kepraktisan (usability) sistem bagi guru?</strong></td><td>Persepsi guru pengguna</td><td>Kuesioner usability (24 butir)</td><td>Skor USE per dimensi; indeks SUS-adapted</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===================== TUGAS 12 ===================== -->
+<section class="card">
+  <div class="tugas-head"><span class="tugas-num">Tugas 12</span></div>
+  <h2>Output Akhir &amp; Panduan Operasional</h2>
+
+  <h3>12.1 Blueprint Instrumen Lengkap</h3>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th>Komponen</th><th>Tujuan Pengukuran</th><th>Butir</th><th>Skala</th><th>Analisis</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tes Diagnostik Kognitif</strong></td><td>Mengukur 8 atribut (A1–A8)</td><td>40 PG 4 opsi</td><td>(0/1)</td><td>HO-DINA, NCDM, CTT, IRT</td></tr>
+        <tr><td><strong>Q-Matrix</strong></td><td>Pemetaan butir–atribut</td><td>40×8</td><td>Biner</td><td>Input model CDM</td></tr>
+        <tr><td><strong>Attribute Hierarchy Matrix</strong></td><td>Struktur prasyarat atribut</td><td>8×8</td><td>Biner (reachability)</td><td>Batasan kelas laten</td></tr>
+        <tr><td><strong>Skala Kecemasan Matematika</strong></td><td>Kovariat afektif (θ)</td><td>28</td><td>Likert 1–5</td><td>Komposit terstandar; CFA</td></tr>
+        <tr><td><strong>Lembar Validasi Ahli (3)</strong></td><td>Validitas isi &amp; konstruk</td><td>—</td><td>Rating 1–5 + E</td><td>CVR/CVI</td></tr>
+        <tr><td><strong>Kuesioner Usability Guru</strong></td><td>Kepraktisan sistem</td><td>24</td><td>Likert 1–5</td><td>USE/SUS</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout note">Kisi-kisi, Q-Matrix, AHM, tes diagnostik (40 butir lengkap dengan stimulus, kunci, rasional distraktor, dan miskonsepsi) tersaji pada dokumen Bagian I (Tugas 1–5). Versi machine-readable Q-Matrix dan AHM, beserta template dataset, tersedia pada berkas Excel terlampir.</div>
+
+  <h3>12.2 Panduan Penskoran</h3>
+  <h4>Tes diagnostik</h4>
+  <ul>
+    <li>Dikotomi: jawaban benar = 1, salah/kosong = 0. Tidak ada penalti tebakan (dikotomi murni untuk DINA).</li>
+    <li>Selain skor 0/1, simpan opsi yang dipilih (A–D) untuk analisis miskonsepsi distraktor.</li>
+    <li>Skor atribut bukan dijumlah manual, melainkan diestimasi sebagai probabilitas mastery posterior oleh model CDM.</li>
+  </ul>
+  <h4>Skala kecemasan</h4>
+  <ul>
+    <li>Butir F: SS=5, S=4, N=3, TS=2, STS=1. Butir UF dibalik: SS=1, S=2, N=3, TS=4, STS=5. Arah: skor tinggi = kecemasan tinggi.</li>
+    <li>Skor dimensi = jumlah/rata-rata butir terbobot dimensi; skor total = jumlah seluruh butir terbobot.</li>
+    <li>Standardisasi: θ-afektif = z-score skor total (z = (X − rata-rata)/SD) — menjadi kovariat HO-DINA.</li>
+  </ul>
+  <h4>Usability</h4>
+  <ul>
+    <li>Skor dimensi = rata-rata butir; Indeks usability (0–100) = (rata-rata seluruh butir − 1)/4 × 100; ambang acceptable ≥ 68.</li>
+  </ul>
+
+  <h3>12.3 Panduan Input Data untuk HO-DINA dan NCDM</h3>
+  <p class="lead">Tiga berkas inti (ekspor dari Excel ke CSV, encoding UTF-8, pemisah koma):</p>
+  <div class="table-scroll">
+    <table>
+      <thead><tr><th style="width:22%">Berkas</th><th>Struktur</th></tr></thead>
+      <tbody>
+        <tr><td><strong>tes_respons.csv</strong></td><td>Baris = siswa. Kolom: student_id, I1…I40 (0/1), theta_afektif (desimal). Tanpa sel kosong; data hilang dikodekan eksplisit (mis. NA) lalu ditangani saat pemodelan.</td></tr>
+        <tr><td><strong>q_matrix.csv</strong></td><td>Baris = butir I1…I40 (urutan sama dengan kolom respons). Kolom: A1…A8 (0/1).</td></tr>
+        <tr><td><strong>kecemasan.csv</strong></td><td>Baris = siswa. Kolom: student_id, K1…K28 (1–5). θ-afektif diturunkan dari berkas ini (lihat 12.2).</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>12.3.1 Estimasi HO-DINA di R — paket GDINA</h4>
+  <pre>library(GDINA)
+resp &lt;- read.csv("tes_respons.csv", row.names = 1)
+Q &lt;- read.csv("q_matrix.csv", row.names = 1)
+<span class="cmt"># HO-DINA: DINA + faktor laten higher-order (Rasch)</span>
+fit &lt;- GDINA(dat = resp[, paste0("I", 1:40)],
+ Q = Q,
+ model = "DINA",
+ att.dist = "higher.order",
+ higher.order = list(model = "Rasch"))
+summary(fit)
+mp &lt;- personparm(fit, what = "mp") <span class="cmt"># prob. mastery tiap atribut</span>
+gs &lt;- coef(fit, what = "gs") <span class="cmt"># guess &amp; slip per butir</span>
+mf &lt;- modelfit(fit) <span class="cmt"># M2, RMSEA2, SRMSR</span></pre>
+
+  <h4>12.3.2 Alternatif — paket CDM (higher-order GDINA)</h4>
+  <pre>library(CDM)
+mod &lt;- gdina(data = resp[, paste0("I", 1:40)],
+ q.matrix = Q, rule = "DINA", HOGDINA = 1)
+summary(mod)
+mod$pattern <span class="cmt"># distribusi kelas laten</span>
+mod$pjk <span class="cmt"># prob. respons benar per kelas</span></pre>
+
+  <h4>12.3.3 NCDM (Neural Cognitive Diagnosis) di Python — spesifikasi &amp; kerangka</h4>
+  <p>Format triplet (student, item, response) dengan Q-matrix sebagai penyekat interaksi siswa–atribut. Kerangka ilustratif (PyTorch):</p>
+  <pre>import pandas as pd, numpy as np, torch, torch.nn as nn
+resp = pd.read_csv("tes_respons.csv", index_col=0)
+Q = torch.tensor(pd.read_csv("q_matrix.csv", index_col=0).values,
+ dtype=torch.float) <span class="cmt"># 40 x 8</span>
+theta_aff = torch.tensor(resp.pop("theta_afektif").values,
+ dtype=torch.float)
+class NCDM(nn.Module):
+ def __init__(self, n_stu, n_item, n_attr, Q):
+ super().__init__()
+ self.Q = Q
+ self.stu = nn.Embedding(n_stu, n_attr) <span class="cmt"># proficiency</span>
+ self.diff = nn.Embedding(n_item, n_attr) <span class="cmt"># difficulty</span>
+ self.disc = nn.Embedding(n_item, 1) <span class="cmt"># discrimination</span>
+ self.net = nn.Sequential(nn.Linear(n_attr,16), nn.Sigmoid(),
+ nn.Linear(16,1), nn.Sigmoid())
+ def forward(self, s, it):
+ prof = torch.sigmoid(self.stu(s))
+ diff = torch.sigmoid(self.diff(it))
+ disc = torch.sigmoid(self.disc(it))
+ x = disc * (prof - diff) * self.Q[it] <span class="cmt"># Q sebagai mask</span>
+ return self.net(x).squeeze()
+<span class="cmt"># theta_aff dipakai sebagai fitur higher-order / regularisasi prior.</span>
+<span class="cmt"># Bandingkan terhadap baseline RandomForest/XGBoost: accuracy, F1,</span>
+<span class="cmt"># kalibrasi (Brier/ECE), dan interpretabilitas (SHAP/LIME).</span></pre>
+  <div class="callout note">Constraint monotonisitas (proficiency naik ⇒ peluang benar tak menurun) dapat ditegakkan dengan membatasi bobot lapisan interaksi bernilai positif, menjaga interpretabilitas khas CDM.</div>
+
+  <h3>12.4 Format Dataset Siap Analisis</h3>
+  <ul>
+    <li>R (GDINA &amp; CDM): data.frame respons (kolom I1…I40) + matriks Q (baris butir, kolom A1–A8) dengan urutan butir identik.</li>
+    <li>Python NCDM: CSV respons (indeks student_id) + CSV Q-matrix; diubah ke triplet (student_idx, item_idx, response); Q sebagai tensor mask.</li>
+    <li>Kovariat afektif (theta_afektif) disertakan sebagai kolom pada respons (R: argumen structural higher-order; Python: fitur/regularizer).</li>
+    <li>Seluruh template berformula tersedia pada berkas Excel terlampir, tinggal ekspor ke CSV (UTF-8).</li>
+  </ul>
+
+  <h3>12.5 Kepatuhan Standar</h3>
+  <p>Pengembangan mengikuti AERA, APA, &amp; NCME — Standards for Educational and Psychological Testing (2014): bukti validitas berbasis isi (CVR/CVI, telaah ahli), struktur internal (CFA, IRT, fit CDM), dan konsekuensi penggunaan (usability, prinsip etika FITAP). Pelaporan statistik dan tabel mengikuti APA Publication Manual (edisi ke-7).</p>
+</section>
+
+</div>
+</body>
+</html>

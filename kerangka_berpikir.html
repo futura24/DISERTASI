@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kerangka Berpikir & Flowchart Disertasi – Khusnul Marom</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&display=swap');
+
+  :root {
+    --navy:    #0D1B2A;
+    --ink:     #1A2A3A;
+    --teal:    #1B7A6E;
+    --teal-lt: #2BA89A;
+    --gold:    #C9993A;
+    --gold-lt: #E8C06A;
+    --cream:   #F5F0E8;
+    --sand:    #EAE3D3;
+    --rust:    #B84A2E;
+    --violet:  #4A3B72;
+    --white:   #FEFCF8;
+    --shadow:  0 4px 24px rgba(13,27,42,0.13);
+    --shadow-lg: 0 8px 40px rgba(13,27,42,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* ─── TABS ─────────────────────────────────────── */
+  .tab-wrapper {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--navy);
+    display: flex; gap: 0;
+    border-bottom: 3px solid var(--gold);
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 14px 20px;
+    background: transparent;
+    border: none;
+    color: rgba(245,240,232,.6);
+    font-family: 'Playfair Display', serif;
+    font-size: .95rem;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: all .25s;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -3px;
+  }
+  .tab-btn:hover { color: var(--gold-lt); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── HERO ──────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3450 60%, var(--teal) 100%);
+    color: var(--cream);
+    padding: 56px 5vw 48px;
+    position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .hero-label {
+    font-family: 'Source Serif 4', serif;
+    font-size: .78rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold-lt);
+    margin-bottom: 10px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 900;
+    line-height: 1.25;
+    max-width: 800px;
+    margin-bottom: 16px;
+  }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 24px;
+    font-size: .85rem; color: rgba(245,240,232,.7);
+    border-top: 1px solid rgba(255,255,255,.15);
+    padding-top: 16px; margin-top: 16px;
+  }
+  .hero-meta span strong { color: var(--gold-lt); }
+
+  /* ─── SECTION CONTAINER ─────────────────────────── */
+  .section-container {
+    max-width: 1100px; margin: 0 auto;
+    padding: 40px 5vw 60px;
+  }
+
+  /* ─── SECTION HEADING ───────────────────────────── */
+  .sec-head {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 28px;
+  }
+  .sec-num {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700; font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .sec-head h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700;
+    color: var(--navy);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 4px;
+  }
+
+  /* ─── CARDS ──────────────────────────────────────── */
+  .card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 24px 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    border-left: 4px solid var(--teal);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .card.gold-accent { border-left-color: var(--gold); }
+  .card.rust-accent { border-left-color: var(--rust); }
+  .card.violet-accent { border-left-color: var(--violet); }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700;
+    color: var(--navy); margin-bottom: 10px;
+  }
+  .card p { font-size: .92rem; color: #3a4a5a; }
+  .card ul { padding-left: 18px; margin-top: 8px; }
+  .card ul li { font-size: .88rem; color: #3a4a5a; margin-bottom: 4px; }
+
+  .tag {
+    display: inline-block;
+    background: var(--teal);
+    color: #fff;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 6px; margin-bottom: 4px;
+  }
+  .tag.gold { background: var(--gold); }
+  .tag.rust  { background: var(--rust); }
+  .tag.violet{ background: var(--violet); }
+
+  /* ─── GRID ───────────────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media(max-width:700px){
+    .grid-2,.grid-3{ grid-template-columns:1fr; }
+  }
+
+  /* ─── FRAMEWORK DIAGRAM ─────────────────────────── */
+  .fw-diagram {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 32px 28px;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 32px;
+  }
+  .fw-box {
+    border: 2px solid;
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+  }
+  .fw-box.navy { border-color: var(--navy); background: var(--navy); color: var(--cream); }
+  .fw-box.teal { border-color: var(--teal); background: rgba(27,122,110,.1); }
+  .fw-box.gold { border-color: var(--gold); background: rgba(201,153,58,.1); }
+  .fw-box.rust { border-color: var(--rust); background: rgba(184,74,46,.1); }
+  .fw-box.violet { border-color: var(--violet); background: rgba(74,59,114,.1); }
+  .fw-box.green  { border-color: #2d7a2d; background: rgba(45,122,45,.1); }
+
+  .fw-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: .95rem; font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .fw-box.navy h4 { color: var(--gold-lt); }
+  .fw-box p { font-size: .8rem; line-height: 1.5; }
+
+  .arrow-down {
+    text-align: center;
+    color: var(--teal);
+    font-size: 1.6rem;
+    line-height: 1;
+    margin: 8px 0;
+  }
+  .arrow-right {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    font-size: 1.4rem;
+  }
+
+  .fw-cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 12px 0;
+  }
+  @media(max-width:750px){ .fw-cols{ grid-template-columns: 1fr 1fr; } }
+
+  /* ─── FLOWCHART ──────────────────────────────────── */
+  .flow-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 16px 0;
+  }
+  .flow-node {
+    width: 100%; max-width: 560px;
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-size: .88rem;
+    line-height: 1.5;
+    position: relative;
+    text-align: center;
+    font-family: 'Source Serif 4', serif;
+  }
+  .flow-terminator {
+    background: var(--navy);
+    color: var(--cream);
+    border-radius: 40px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    letter-spacing: .06em;
+  }
+  .flow-process {
+    background: var(--white);
+    border: 2px solid var(--teal);
+    color: var(--ink);
+  }
+  .flow-process.gold-b { border-color: var(--gold); }
+  .flow-process.violet-b { border-color: var(--violet); }
+  .flow-process.rust-b { border-color: var(--rust); }
+  .flow-process.green-b { border-color: #2d7a2d; }
+
+  .flow-phase-label {
+    font-family: 'Playfair Display', serif;
+    font-size: .72rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 2px;
+  }
+  .flow-decision {
+    background: rgba(201,153,58,.15);
+    border: 2px solid var(--gold);
+    color: var(--ink);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    padding: 28px 40px;
+    font-size: .82rem;
+    font-weight: 600;
+  }
+  /* fallback for clip-path */
+  .flow-decision-wrapper {
+    width: 100%; max-width: 340px;
+    display: flex; justify-content: center;
+  }
+  .flow-diamond {
+    background: rgba(201,153,58,.15);
+    border: 2px solid var(--gold);
+    width: 220px; height: 80px;
+    transform: rotate(0deg);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 4px;
+    font-size: .82rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--ink);
+    position: relative;
+  }
+  .flow-diamond::before {
+    content: '';
+    position: absolute; inset: -2px;
+    background: transparent;
+    border: 2px dashed var(--gold-lt);
+    border-radius: 4px;
+    transform: rotate(3deg);
+    pointer-events: none;
+  }
+
+  .flow-arrow {
+    width: 2px; height: 28px;
+    background: linear-gradient(to bottom, var(--teal), var(--teal-lt));
+    margin: 0 auto;
+    position: relative;
+  }
+  .flow-arrow::after {
+    content: '▼';
+    position: absolute; bottom: -14px; left: 50%;
+    transform: translateX(-50%);
+    color: var(--teal-lt); font-size: .7rem;
+  }
+  .flow-arrow.gold-a {
+    background: linear-gradient(to bottom, var(--gold), var(--gold-lt));
+  }
+  .flow-arrow.gold-a::after { color: var(--gold); }
+
+  .flow-sub-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    width: 100%; max-width: 700px;
+    margin: 0 auto;
+  }
+  @media(max-width:650px){ .flow-sub-grid{ grid-template-columns:1fr; } }
+
+  .flow-sub-node {
+    background: var(--white);
+    border: 1.5px solid var(--teal);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: .78rem;
+    text-align: center;
+    color: var(--ink);
+  }
+  .flow-sub-node.gold { border-color: var(--gold); }
+  .flow-sub-node.violet { border-color: var(--violet); }
+
+  .flow-metrics {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+    max-width: 600px; margin: 0 auto;
+  }
+  .metric-pill {
+    background: var(--navy);
+    color: var(--cream);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: .75rem;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .phase-divider {
+    width: 100%; max-width: 560px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: 20px auto 4px;
+  }
+  .phase-label {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: .75rem;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  /* ─── SYNTHESIS ──────────────────────────────────── */
+  .synthesis {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3450 100%);
+    color: var(--cream);
+    border-radius: 12px;
+    padding: 36px 40px;
+    margin: 32px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .synthesis::before {
+    content: '\201C';
+    position: absolute; top: -10px; left: 20px;
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem; color: rgba(201,153,58,.15);
+    line-height: 1; pointer-events: none;
+  }
+  .synthesis h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; color: var(--gold-lt);
+    margin-bottom: 20px;
+  }
+  .synthesis p {
+    font-size: .9rem; line-height: 1.8;
+    color: rgba(245,240,232,.88);
+    margin-bottom: 14px;
+  }
+  .synthesis p:last-child { margin-bottom: 0; }
+
+  /* ─── ASCII BOX ──────────────────────────────────── */
+  .ascii-box {
+    background: var(--navy);
+    color: #a8e6df;
+    font-family: 'Courier New', monospace;
+    font-size: .78rem;
+    line-height: 1.5;
+    padding: 24px 28px;
+    border-radius: 10px;
+    overflow-x: auto;
+    white-space: pre;
+    border: 1px solid rgba(201,153,58,.3);
+    margin-bottom: 20px;
+  }
+  .ascii-box .gold  { color: #E8C06A; }
+  .ascii-box .teal  { color: #2BA89A; }
+  .ascii-box .rust  { color: #e87a5c; }
+  .ascii-box .white { color: #f5f0e8; }
+
+  /* ─── MERMAID ─────────────────────────────────────── */
+  .mermaid-box {
+    background: #1e1e2e;
+    color: #cdd6f4;
+    font-family: 'Courier New', monospace;
+    font-size: .75rem;
+    line-height: 1.6;
+    padding: 24px 28px;
+    border-radius: 10px;
+    overflow-x: auto;
+    white-space: pre;
+    border: 1px solid rgba(137,180,250,.2);
+    margin-bottom: 20px;
+  }
+  .copy-btn {
+    background: var(--teal);
+    color: #fff; border: none;
+    padding: 8px 18px; border-radius: 5px;
+    cursor: pointer; font-size: .82rem;
+    font-family: 'Source Serif 4', serif;
+    transition: background .2s;
+    margin-bottom: 16px;
+  }
+  .copy-btn:hover { background: var(--teal-lt); }
+
+  /* ─── CALL-OUT BOX ───────────────────────────────── */
+  .callout {
+    background: rgba(201,153,58,.12);
+    border: 1px solid rgba(201,153,58,.45);
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: .82rem;
+    line-height: 1.55;
+    color: #4a4030;
+  }
+  .callout strong { color: var(--rust); }
+  .callout.neutral {
+    background: rgba(26,42,58,.05);
+    border-color: rgba(26,42,58,.2);
+    border-left-color: var(--ink);
+    color: #3a4a5a;
+  }
+  .callout.neutral strong { color: var(--navy); }
+  .callout-label {
+    display: inline-block;
+    font-family: 'Playfair Display', serif;
+    font-size: .68rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  /* ─── GLOSARIUM ──────────────────────────────────── */
+  .glossary {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 24px 28px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--violet);
+  }
+  .glossary dl { margin: 0; }
+  .glossary dt {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: .92rem;
+    color: var(--navy);
+    margin-top: 12px;
+  }
+  .glossary dt:first-child { margin-top: 0; }
+  .glossary dd {
+    margin: 2px 0 0 0;
+    font-size: .85rem;
+    color: #3a4a5a;
+    line-height: 1.6;
+  }
+
+  /* ─── DATA-FLOW (REAL-TIME) ──────────────────────── */
+  .dataflow {
+    width: 100%; max-width: 720px;
+    margin: 4px auto 0;
+    background: rgba(43,168,154,.07);
+    border: 1.5px dashed var(--teal);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .dataflow-title {
+    font-family: 'Playfair Display', serif;
+    font-size: .82rem; font-weight: 700;
+    color: var(--teal);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .dataflow-chain {
+    display: flex; flex-wrap: wrap;
+    align-items: stretch; justify-content: center;
+    gap: 8px;
+  }
+  .dataflow-step {
+    flex: 1 1 120px;
+    background: var(--white);
+    border: 1.5px solid var(--teal-lt);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: .74rem;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--ink);
+  }
+  .dataflow-step small { color: #6a7a8a; }
+  .dataflow-sep {
+    display: flex; align-items: center;
+    color: var(--teal); font-size: 1.1rem; font-weight: 700;
+  }
+  @media(max-width:650px){
+    .dataflow-chain { flex-direction: column; }
+    .dataflow-sep { transform: rotate(90deg); align-self: center; }
+  }
+  .dataflow-latency {
+    text-align: center; margin-top: 10px;
+    font-size: .76rem; color: var(--rust); font-weight: 600;
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--sand); }
+  ::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 3px; }
+
+.hero-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  align-items:flex-start;
+}
+
+.crumbs{
+  width:100%;
+  margin-top:8px;
+}
+
+.crumbs a{
+  color:#ffffff;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.crumbs a:hover{
+  text-decoration:underline;
+  opacity:0.9;
+}
+
+</style>
+</head>
+<body>
+
+<!-- TAB NAV -->
+<nav class="tab-wrapper">
+  <button class="tab-btn active" onclick="showTab('kb')">① Kerangka Berpikir</button>
+  <button class="tab-btn" onclick="showTab('fc')">② Flowchart Penelitian</button>
+  <button class="tab-btn" onclick="showTab('syn')">③ Narasi Sintesis</button>
+  <button class="tab-btn" onclick="showTab('code')">④ Kode Diagram</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">Proposal Disertasi Doktoral · PEP · Universitas Negeri Jakarta · 2026</div>
+  <h1>Pengembangan Model Diagnostik Awal Kesulitan Belajar Matematika Siswa SMP Berbasis Artificial Intelligence</h1>
+  <div class="hero-meta">
+    <span><strong>Peneliti:</strong> Khusnul Marom (9913925008)</span>
+    <span><strong>Program Studi:</strong> Penelitian &amp; Evaluasi Pendidikan</span>
+    <span><strong>Konteks:</strong> SMP Kelas VII · Kurikulum Merdeka · Provinsi Jakarta</span>
+    <div class="crumbs"><a href="index.html">← Portal Asesmen</a></div>
+  </div>
+</div>
+
+<!-- ══════════════ TAB 1: KERANGKA BERPIKIR ══════════════ -->
+<div id="tab-kb" class="tab-panel active">
+<div class="section-container">
+
+  <!-- 1. KONDISI IDEAL -->
+  <div class="sec-head"><div class="sec-num">1</div><h2>Kondisi Ideal Pembelajaran Matematika SMP</h2></div>
+  <div class="grid-3">
+    <div class="card">
+      <h3>🎯 Penguasaan Konseptual</h3>
+      <p>Siswa memahami struktur abstrak matematika secara mendalam: bilangan, aljabar, dan geometri sebagai sistem yang saling berkaitan.</p>
+    </div>
+    <div class="card">
+      <h3>⚙️ Kompetensi Prosedural</h3>
+      <p>Siswa mampu melaksanakan algoritma matematis secara akurat, fleksibel, dan efisien sesuai tuntutan Kurikulum Merdeka.</p>
+    </div>
+    <div class="card">
+      <h3>🧩 Kemampuan Pemecahan Masalah</h3>
+      <p>Siswa mengintegrasikan pengetahuan konseptual dan prosedural untuk menyelesaikan masalah kontekstual non-rutin.</p>
+    </div>
+  </div>
+  <div class="card gold-accent" style="margin-top:8px;">
+    <h3>📐 Profil Lulusan SMP Ideal (Kurikulum Merdeka)</h3>
+    <p>Peserta didik berkarakter Profil Pelajar Pancasila dengan literasi numerasi di atas Level 2 PISA, mampu bernalar kritis, berkomunikasi matematis, dan beradaptasi dengan perubahan teknologi.</p>
+    <div style="margin-top:10px;">
+      <span class="tag">Literasi Numerasi</span>
+      <span class="tag">Penalaran Deduktif</span>
+      <span class="tag">Abstraksi Formal</span>
+      <span class="tag gold">Profil Pelajar Pancasila</span>
+    </div>
+  </div>
+
+  <!-- 2. PERMASALAHAN EMPIRIS -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">2</div><h2>Permasalahan Empiris</h2></div>
+  <div class="grid-2">
+    <div class="card rust-accent">
+      <h3>📉 Rendahnya Literasi Matematika</h3>
+      <ul>
+        <li>PISA 2022: Indonesia peringkat ke-70 dari 81 negara, skor 366 (OECD avg: 472)</li>
+        <li>82% siswa Indonesia di bawah Level 2 kompetensi minimum</li>
+        <li>AKM 2023: &lt;30% siswa SMP mencapai kompetensi numerasi minimum</li>
+        <li>Hasil rata-rata TKA Matematika SMP rendah, skor 40,86</li>
+        <li>Diperburuk oleh <em>learning loss</em> pasca pandemi COVID-19</li>
+      </ul>
+    </div>
+    <div class="card rust-accent">
+      <h3>⏰ Keterlambatan Diagnosis</h3>
+      <ul>
+        <li>Diagnosis bersifat reaktif – baru dilakukan setelah nilai berulang kali rendah</li>
+        <li>Akumulasi miskonsepsi membentuk pola kesulitan permanen</li>
+        <li>Guru mengkategorikan siswa hanya berdasarkan skor tunggal (agregat)</li>
+        <li>Tidak mampu mengurai akar kesulitan: konseptual, prosedural, atau metakognitif</li>
+      </ul>
+    </div>
+    <div class="card rust-accent">
+      <h3>🗂️ Keterbatasan Asesmen Konvensional</h3>
+      <ul>
+        <li>Bersifat statis, <em>paper-based</em>, tidak real-time</li>
+        <li>Tidak memiliki kapasitas diagnosis multidimensional dan hierarkis</li>
+        <li>Membutuhkan keahlian statistika lanjut (MCDM/Bayesian) yang tidak tersedia di sekolah</li>
+        <li>Tidak memberikan umpan balik diagnostik yang actionable bagi guru</li>
+      </ul>
+    </div>
+    <div class="card rust-accent">
+      <h3>🔬 Kompleksitas Kesulitan Belajar</h3>
+      <ul>
+        <li><strong>Kognitif:</strong> miskonsepsi aljabar/geometri, defisit <em>working memory</em></li>
+        <li><strong>Afektif:</strong> kecemasan matematika ↑ pada masa transisi SD→SMP</li>
+        <li><strong>Prosedural:</strong> fluensi prosedural luput dari asesmen konvensional</li>
+        <li>Prevalensi kesulitan belajar: 15–20% populasi usia sekolah (Geary, 2013)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. LANDASAN TEORI -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">3</div><h2>Landasan Teori</h2></div>
+  <div class="grid-2">
+    <div class="card violet-accent">
+      <h3>📚 Teori Kesulitan Belajar Matematika</h3>
+      <p><strong>Dimensi Kognitif:</strong> Miskonsepsi, <em>working memory deficit</em>, kontrol inhibisi (Bull &amp; Espy, 2006)</p>
+      <p style="margin-top:8px;"><strong>Dimensi Afektif:</strong> <em>Mathematics anxiety</em>, <em>self-efficacy</em> (Klee &amp; Miller, 2019)</p>
+      <p style="margin-top:8px;"><strong>Dimensi Prosedural:</strong> Fluensi prosedural, kompetensi strategis (Schulz, 2024)</p>
+      <p style="margin-top:8px;"><strong>Persistensi:</strong> Tanpa intervensi dini, kesulitan bersifat permanen (Mazzocco &amp; Räsänen, 2013)</p>
+      <div class="callout neutral">
+        <span class="callout-label">Operasionalisasi Dimensi Afektif</span>
+        Kecemasan matematika diukur menggunakan <strong>skala Likert lima butir</strong> (rentang 1–5) yang diadaptasi dari <em>Mathematics Anxiety Rating Scale</em>, menghasilkan skor komposit terstandar. Skor ini <strong>tidak</strong> diperlakukan sebagai atribut biner dalam Q-matrix (yang berisi atribut kognitif diskret), melainkan sebagai <strong>variabel kovariat (covariate)</strong> pada lapisan <em>higher-order</em> MCDM: kecemasan memengaruhi <em>prior</em> probabilitas mastery melalui parameter struktural <span style="white-space:nowrap;">θ<sub>afektif</sub></span>, sehingga siswa dengan kecemasan tinggi memperoleh estimasi posterior mastery yang lebih konservatif. Dengan demikian dimensi afektif terintegrasi secara probabilistik tanpa mengaburkan struktur kognitif Q-matrix.
+      </div>
+    </div>
+    <div class="card violet-accent">
+      <h3>🧠 Multidimensional Cognitive Diagnostic Model (MCDM)</h3>
+      <p><strong>Dasar Teoretis:</strong> de la Torre &amp; Douglas (2004), Templin &amp; Bradshaw (2014), Zhan et al. (2019)</p>
+      <p style="margin-top:8px;"><strong>Model Spesifik:</strong> <em>Higher-Order DINA</em> (HO-DINA), <em>Hierarchical CDM</em> (HCDM), <em>Multidimensional DINA</em> (MDINA), <em>Multidimensional G-DINA</em> (MD-GDINA)</p>
+      <p style="margin-top:8px;"><strong>Komponen Kunci:</strong> <em>Structured Q-matrix</em> + <em>Attribute Hierarchy Matrix</em>, dimensi kognitif berhierarki, pola mastery multidimensional + matriks dependensi atribut</p>
+      <p style="margin-top:8px;"><strong>Keunggulan atas CDM klasik:</strong> Memodelkan hubungan antar atribut (hierarki &amp; <em>higher-order factor</em>), mengizinkan efek kompensatori, serta menghasilkan probabilitas mastery bersyarat (<em>conditional mastery probability</em>)</p>
+      <p style="margin-top:8px;"><strong>Estimasi:</strong> Bayesian MCMC / <em>variational inference</em> untuk distribusi posterior parameter dependensi &amp; mastery</p>
+      <p style="margin-top:8px;"><strong>Keterbatasan:</strong> Komputasi intensif &amp; membutuhkan keahlian psikometri lanjut; tidak praktis untuk guru tanpa dukungan AI</p>
+    </div>
+    <div class="card violet-accent">
+      <h3>🤖 AI in Education (AIED)</h3>
+      <p><strong>Kontribusi Utama (Luckin et al., 2016):</strong> Intelligent tutoring, learning analytics, adaptive assessment</p>
+      <p style="margin-top:8px;"><strong>Algoritma ML:</strong> Decision Tree, Random Forest, SVM, Gradient Boosting (XGBoost), Deep Neural Network</p>
+      <p style="margin-top:8px;"><strong>Model Diagnostik Neural:</strong> <em>Neural Cognitive Diagnosis Model</em> (NCDM) dan <em>Deep-IRT</em> — arsitektur yang secara eksplisit merancang fungsi interaksi siswa–atribut melalui <em>neural network</em>, sehingga CDM (Q-matrix) dan kemampuan representasi nonlinier <em>deep learning</em> menyatu dalam satu kerangka (Wang et al., 2020; Yeung, 2019)</p>
+      <p style="margin-top:8px;"><strong>Keunggulan:</strong> Prediksi akurat, personalisasi tinggi, komputasi efisien</p>
+      <p style="margin-top:8px;"><strong>XAI:</strong> SHAP, LIME – interpretabilitas untuk pengguna non-teknis</p>
+      <div class="callout neutral">
+        <span class="callout-label">Desain Eksperimen Pemodelan</span>
+        Pada tahap pelatihan model, <strong>NCDM/Deep-IRT</strong> (yang mempertahankan struktur Q-matrix) akan <strong>dibandingkan secara empiris terhadap model <em>baseline</em></strong> seperti <em>Random Forest</em> dan <em>XGBoost</em>. Perbandingan menilai akurasi klasifikasi, F1-score, kalibrasi probabilitas mastery, serta interpretabilitas, untuk membuktikan nilai tambah pendekatan diagnostik neural atas pengklasifikasi konvensional.
+      </div>
+    </div>
+    <div class="card violet-accent">
+      <h3>⛏️ Educational Data Mining</h3>
+      <p><strong>Dasar:</strong> Baker &amp; Inventado (2014) – akurasi setara statistik tradisional</p>
+      <p style="margin-top:8px;"><strong>Tren Mutakhir:</strong> Model hibrida CNN-LSTM + Bayesian network (akurasi &gt;93%)</p>
+      <p style="margin-top:8px;"><strong>Emerging Techniques:</strong> Federated learning, contrastive learning, digital twin, NeuralNCD (Li et al., 2022)</p>
+      <p style="margin-top:8px;"><strong>Prinsip Etika:</strong> FITAP – Fairness, Inclusivity, Transparency, Accountability, Privacy</p>
+      <div class="callout neutral">
+        <span class="callout-label">Federated Learning — Nilai Tambah Etis (Opsional)</span>
+        Sebagai implementasi konkret prinsip <strong>Privacy</strong> dalam FITAP, arsitektur <strong>federated learning</strong> diusulkan agar model dilatih secara terdistribusi di perangkat/server sekolah: hanya pembaruan parameter model yang dipertukarkan, sedangkan <strong>data respons mentah siswa tidak pernah dikirim ke server pusat</strong>. Pendekatan ini menjaga kerahasiaan data peserta didik sekaligus mematuhi regulasi perlindungan data pendidikan.
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. RESEARCH GAP -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">4</div><h2>Research Gap dari Penelitian Terdahulu</h2></div>
+  <div style="display:grid;gap:12px;">
+    <div class="card gold-accent"><h3>Gap 1 – Instrumen Statis</h3><p>Instrumen diagnostik yang ada masih bersifat <em>paper-based</em> dan statis; tidak mampu memberikan umpan balik <em>real-time</em> pada skala kelas besar.</p><div class="callout"><span class="callout-label">Strategi Mitigasi Gap 1</span><strong>Membangun asesmen berbasis komputer (CBT)</strong> yang terhubung ke <em>pipeline</em> inferensi daring sehingga profil mastery diperbarui secara <em>real-time</em> (latensi &lt; 3 detik) tanpa intervensi manual guru.</div></div>
+    <div class="card gold-accent"><h3>Gap 2 – Model Nonkompensatori Satu Dimensi tanpa MCDM</h3><p>Penelitian CDM di Indonesia masih bertumpu pada model <em>nonkompensatori</em> satu dimensi (DINA/DINO/G-DINA) yang memperlakukan atribut kognitif sebagai entitas independen. Belum ada model diagnostik yang memperlakukan atribut matematika sebagai <strong>sistem hierarkis dan saling bergantung</strong> melalui <em>Multidimensional Cognitive Diagnostic Model</em> (MCDM) yang lebih realistis secara kognitif. Irisan MCDM ↔ AI masih merupakan "zona dingin" dalam peta bibliometrik VOSviewer.</p><div class="callout"><span class="callout-label">Strategi Mitigasi Gap 2</span>Menggunakan pendekatan <strong><em>Higher-Order DINA</em> (HO-DINA) dengan <em>prior</em> Bayesian</strong> untuk mengatasi kompleksitas dependensi atribut, dipadukan dengan <em>attribute hierarchy matrix</em> yang mengkodekan relasi prasyarat antar konsep — sehingga atribut diperlakukan sebagai sistem hierarkis, bukan entitas independen.</div></div>
+    <div class="card gold-accent"><h3>Gap 3 – Generalisasi Konteks</h3><p>Model AI yang ada dilatih menggunakan dataset berbahasa Inggris dan kurikulum negara maju; validasi pada konteks Kurikulum Merdeka Indonesia belum tersedia secara empirik.</p><div class="callout"><span class="callout-label">Strategi Mitigasi Gap 3</span><strong>Membangun korpus diagnostik berbahasa Indonesia</strong> yang selaras Kurikulum Merdeka dan melatih ulang (<em>retraining/fine-tuning</em>) model pada data lokal, disertai validasi silang antar-sekolah dengan stratifikasi akreditasi A/B/C.</div></div>
+    <div class="card gold-accent"><h3>Gap 4 – Dimensi Afektif &amp; Prosedural Terabaikan</h3><p>Integrasi kecemasan matematika dan kompetensi prosedural ke dalam model AI masih sangat terbatas, padahal keduanya terbukti berkontribusi besar terhadap kesulitan belajar.</p><div class="callout"><span class="callout-label">Strategi Mitigasi Gap 4</span><strong>Mengintegrasikan kecemasan matematika sebagai variabel kovariat <em>higher-order</em></strong> (skala Likert lima butir) pada estimasi MCDM, serta menambahkan atribut prosedural eksplisit dalam Q-matrix, sehingga dimensi afektif dan prosedural turut membentuk profil diagnostik.</div></div>
+    <div class="card gold-accent"><h3>Gap 5 – Usability &amp; Etika AI</h3><p>Aspek <em>explainable AI teacher-friendly</em>, kerangka etika data yang dapat ditegakkan, dan <em>usability</em> bagi guru hampir tidak pernah menjadi fokus utama pengembangan model diagnostik berbasis AI di Indonesia.</p><div class="callout"><span class="callout-label">Strategi Mitigasi Gap 5</span><strong>Menerjemahkan nilai SHAP/LIME ke dalam bahasa pedagogis</strong> yang mudah dipahami guru, mengukur kepraktisan melalui skala SUS/USE (ambang ≥ 68), serta menerapkan kerangka FITAP — termasuk <em>federated learning</em> untuk menegakkan prinsip <em>Privacy</em>.</div></div>
+  </div>
+
+  <!-- 5. SOLUSI INTEGRASI -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">5</div><h2>Integrasi MCDM dan AI sebagai Solusi Inovatif</h2></div>
+  <div class="fw-diagram">
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;">
+      <div class="fw-box teal">
+        <h4 style="color:var(--teal);">Multidimensional Cognitive Diagnostic Model (MCDM)</h4>
+        <p>✔ Structured &amp; Hierarchical Q-matrix<br>✔ Hierarki &amp; dependensi atribut<br>✔ Efek kompensatori (HO-DINA)<br>✔ Mastery bersyarat (MCMC Bayesian)</p>
+      </div>
+      <div class="arrow-right" style="font-size:2rem;">⊕</div>
+      <div class="fw-box violet">
+        <h4 style="color:var(--violet);">Machine Learning (AIED)</h4>
+        <p>✔ NCDM / Deep-IRT (CDM + neural net)<br>✔ Estimasi parameter multidimensional<br>✔ Real-time processing<br>✔ XAI: jalur kognitif (SHAP/LIME)</p>
+      </div>
+    </div>
+    <div class="arrow-down" style="margin:16px 0;">↓</div>
+    <div class="fw-box navy" style="max-width:600px;margin:0 auto;">
+      <h4>Model Diagnostik Awal Berbasis AI</h4>
+      <p style="color:rgba(245,240,232,.8);">Akurat · Interpretable · Real-time · Teacher-friendly · Etis · Kontekstual</p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card violet-accent">
+      <h3>🔗 Arsitektur Penyatu: NCDM / Deep-IRT</h3>
+      <p>Jembatan teknis antara MCDM dan <em>neural network</em> diwujudkan melalui <strong><em>Neural Cognitive Diagnosis Model</em> (NCDM)</strong> dan <strong><em>Deep-IRT</em></strong>. Kedua arsitektur ini mempertahankan <em>Q-matrix</em> sebagai lapisan interaksi siswa–atribut yang terinterpretasi, namun menggantikan fungsi interaksi linier klasik dengan lapisan <em>neural</em> nonlinier yang mampu menangkap dependensi atribut secara fleksibel.</p>
+      <p style="margin-top:8px;">Dalam eksperimen, NCDM/Deep-IRT akan <strong>dibandingkan dengan <em>baseline</em> Random Forest dan XGBoost</strong> guna mengukur peningkatan akurasi, kalibrasi, dan interpretabilitas yang ditawarkan pendekatan diagnostik neural.</p>
+    </div>
+    <div class="card gold-accent">
+      <h3>🗣️ XAI → Terjemahan Pedagogis</h3>
+      <p>Agar bermakna bagi guru, kontribusi fitur dari <strong>SHAP/LIME diterjemahkan ke dalam bahasa pedagogis</strong>, bukan angka teknis mentah. Contoh terjemahan otomatis pada dashboard:</p>
+      <div class="callout"><span class="callout-label">Contoh Terjemahan SHAP</span>"Siswa A lemah di <strong>Aljabar</strong> karena penguasaan <strong>Bilangan</strong> (prasyarat) masih kurang, dengan kontribusi <strong>70%</strong> terhadap prediksi kesulitan."</div>
+    </div>
+  </div>
+
+  <!-- 6. PROSES PENGEMBANGAN -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">6</div><h2>Proses Pengembangan Model Diagnostik</h2></div>
+  <p style="margin:-12px 0 16px;font-size:.85rem;color:#3a4a5a;"><em>Delapan tahap konseptual berikut dioperasionalkan menjadi tujuh fase prosedural (Fase A–G) pada flowchart penelitian (Tab ②).</em></p>
+  <div class="fw-cols">
+    <div class="fw-box teal"><h4>Tahap 1</h4><p>Studi Pendahuluan<br><small>Analisis literatur, bibliometrik, observasi lapangan, identifikasi kebutuhan</small></p></div>
+    <div class="fw-box gold"><h4>Tahap 2</h4><p>Rancangan Atribut<br><small>Penyusunan Structured/Hierarchical Q-matrix &amp; attribute hierarchy matrix per topik</small></p></div>
+    <div class="fw-box teal"><h4>Tahap 3</h4><p>Pengembangan Instrumen<br><small>Butir asesmen diagnostik, validasi ahli, kalibrasi psikometri</small></p></div>
+    <div class="fw-box gold"><h4>Tahap 4</h4><p>Pengumpulan Data<br><small>Uji coba lapangan, preprocessing, feature engineering</small></p></div>
+    <div class="fw-box teal"><h4>Tahap 5</h4><p>Training Model AI<br><small>Supervised ML + estimasi MCDM (HO-DINA) via MCMC, tuning, validasi lintas lipat</small></p></div>
+    <div class="fw-box gold"><h4>Tahap 6</h4><p>Evaluasi &amp; Revisi<br><small>Accuracy, precision, recall, F1, validitas, reliabilitas, usability</small></p></div>
+    <div class="fw-box teal"><h4>Tahap 7</h4><p>Pengembangan Sistem<br><small>Dashboard diagnostik, antarmuka guru, laporan profil siswa</small></p></div>
+    <div class="fw-box gold"><h4>Tahap 8</h4><p>Diseminasi<br><small>Publikasi ilmiah, rekomendasi kebijakan, open-source prototype</small></p></div>
+  </div>
+
+  <!-- 7. OUTPUT MODEL -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">7</div><h2>Output Model Diagnostik</h2></div>
+  <div class="grid-3">
+    <div class="card">
+      <h3>👤 Profil Kesulitan Siswa</h3>
+      <ul>
+        <li>Pola mastery multidimensional per topik (Bilangan, Aljabar, Geometri) beserta hierarkinya</li>
+        <li>Probabilitas mastery bersyarat (<em>conditional mastery</em>) per dimensi: konseptual, prosedural, pemecahan masalah</li>
+        <li><strong>Matriks ketergantungan atribut:</strong> mis. jika atribut Bilangan lemah, probabilitas mastery Aljabar turun X%</li>
+        <li>Indikator kecemasan matematika (skala Likert lima butir) sebagai <strong>kovariat afektif</strong> yang memengaruhi <em>prior</em> probabilitas mastery — bukan atribut Q-matrix — sehingga estimasi posterior memperhitungkan beban afektif siswa</li>
+        <li>Perbandingan lintas waktu (<em>longitudinal tracking</em>)</li>
+      </ul>
+    </div>
+    <div class="card gold-accent">
+      <h3>🎓 Rekomendasi Intervensi</h3>
+      <ul>
+        <li>Intervensi terdiferensiasi berbasis profil multidimensional masing-masing siswa</li>
+        <li><strong>Prioritas pada atribut akar (<em>root attributes</em>)</strong> dalam hierarki — remediasi prasyarat terlebih dahulu</li>
+        <li>Strategi pedagogis yang disarankan (scaffolding, drill, inquiry)</li>
+        <li>Pemantauan kemajuan pasca intervensi sepanjang jalur kognitif</li>
+      </ul>
+    </div>
+    <div class="card violet-accent">
+      <h3>📊 Dashboard Diagnostik Guru</h3>
+      <ul>
+        <li>Visualisasi profil kelas secara agregat dan individual</li>
+        <li>Heatmap atribut kognitif + graf hierarki/dependensi antar atribut</li>
+        <li><strong>Penjelasan SHAP/LIME dalam bahasa pedagogis</strong> (bukan angka teknis), mis.: <em>"Siswa A lemah di Aljabar karena penguasaan Bilangan masih kurang (kontribusi 70%)"</em></li>
+        <li>Notifikasi otomatis siswa berisiko tinggi</li>
+        <li>Laporan eksportable (PDF/CSV) untuk kebutuhan administratif</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 8. DAMPAK -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">8</div><h2>Dampak Teoretis dan Praktis</h2></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>🏛️ Kontribusi Teoretis</h3>
+      <ul>
+        <li>Memperkaya literatur integrasi MCDM dan machine learning dalam konteks AIED</li>
+        <li>Mengisi <em>research gap</em> pada irisan MCDM ↔ AI ↔ SMP Indonesia</li>
+        <li>Mengembangkan kerangka metodologis baru: psikometri modern + educational data mining</li>
+        <li>Membangun korpus data diagnostik matematis berbahasa Indonesia</li>
+      </ul>
+    </div>
+    <div class="card gold-accent">
+      <h3>🏫 Kontribusi Praktis</h3>
+      <ul>
+        <li><strong>Guru:</strong> Instrumen diagnostik yang cepat, akurat, dan mudah diinterpretasi</li>
+        <li><strong>Siswa:</strong> Umpan balik personal, intervensi tepat waktu, peningkatan motivasi</li>
+        <li><strong>Sekolah:</strong> Sistem pemantauan pembelajaran berbasis bukti</li>
+        <li><strong>Kebijakan:</strong> Basis empirik untuk perbaikan implementasi Kurikulum Merdeka</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- BAGAN ASCII -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">★</div><h2>Bagan Kerangka Berpikir (ASCII Diagram)</h2></div>
+  <div class="ascii-box">
+<span class="gold">╔══════════════════════════════════════════════════════════════════════════════╗
+║          KERANGKA BERPIKIR DISERTASI DOKTORAL — KHUSNUL MAROM              ║
+║   Pengembangan Model Diagnostik Awal Kesulitan Belajar Matematika SMP      ║
+║                     Berbasis Artificial Intelligence                        ║
+╚══════════════════════════════════════════════════════════════════════════════╝</span>
+
+<span class="teal">┌─────────────────────────────────────────────────────────────────────────┐
+│  [1] KONDISI IDEAL                                                      │
+│      • Penguasaan konseptual, prosedural, & pemecahan masalah           │
+│      • Literasi numerasi ≥ Level 2 PISA                                 │
+│      • Profil Pelajar Pancasila (Kurikulum Merdeka)                     │
+└────────────────────────┬────────────────────────────────────────────────┘</span>
+                         │ KESENJANGAN REALITAS
+                         ▼
+<span class="rust">┌─────────────────────────────────────────────────────────────────────────┐
+│  [2] PERMASALAHAN EMPIRIS                                               │
+│  ┌──────────────────┐ ┌─────────────────┐ ┌────────────────────────┐   │
+│  │ Rendahnya        │ │ Keterlambatan   │ │ Keterbatasan Asesmen   │   │
+│  │ Literasi Mat.    │ │ Diagnosis       │ │ Konvensional           │   │
+│  │ PISA: 366/472    │ │ (Reaktif)       │ │ (Statis, Agregat)      │   │
+│  │ AKM: <30%        │ │                 │ │                        │   │
+│  └──────────────────┘ └─────────────────┘ └────────────────────────┘   │
+└────────────────────────┬────────────────────────────────────────────────┘</span>
+                         │
+                         ▼
+<span class="gold">┌─────────────────────────────────────────────────────────────────────────┐
+│  [3] LANDASAN TEORI                                                     │
+│  ┌──────────────┐ ┌──────────────┐ ┌───────────────┐ ┌──────────────┐  │
+│  │ Teori        │ │ Multidimens. │ │ AI in         │ │ Educational  │  │
+│  │ Kesulitan    │ │ Cognitive    │ │ Education     │ │ Data Mining  │  │
+│  │ Belajar Mat. │ │ Diagnostic   │ │ (AIED)        │ │              │  │
+│  │ (Kognitif,   │ │ Model (MCDM) │ │ ML Algorithms │ │ Baker &      │  │
+│  │ Afektif,     │ │ HO-DINA/HCDM │ │ XAI: SHAP/    │ │ Inventado    │  │
+│  │ Prosedural)  │ │ Hier.Q+MCMC  │ │ LIME          │ │ (2014)       │  │
+│  └──────────────┘ └──────────────┘ └───────────────┘ └──────────────┘  │
+└────────────────────────┬────────────────────────────────────────────────┘</span>
+                         │
+                         ▼
+<span class="white">┌─────────────────────────────────────────────────────────────────────────┐
+│  [4] RESEARCH GAP                                                       │
+│      Gap 1: Instrumen diagnostik masih statis, tidak real-time          │
+│      Gap 2: CDM 1-dimensi nonkompensatori, belum MCDM hierarkis         │
+│      Gap 3: Model belum tervalidasi pada konteks Indonesia              │
+│      Gap 4: Dimensi afektif & prosedural terabaikan                     │
+│      Gap 5: Usability guru & etika AI belum diperhatikan                │
+└────────────────────────┬────────────────────────────────────────────────┘</span>
+                         │ → MENDORONG
+                         ▼
+<span class="teal">┌─────────────────────────────────────────────────────────────────────────┐
+│  [5] SOLUSI INOVATIF: INTEGRASI MCDM ⊕ MACHINE LEARNING                 │
+│      Hierarki Atribut · Efek Kompensatori · MCMC Bayesian               │
+│   MCDM (Hierarchical Q-matrix, HO-DINA)  +  ML (Adaptif, Scalable)      │
+│                                                                         │
+│   ──────────────────────────────────────────────────────────           │
+│   Model Diagnostik Awal Matematika SMP Berbasis AI                     │
+│   • Akurat  • Interpretable  • Real-time  • Teacher-friendly  • Etis   │
+└────────────────────────┬────────────────────────────────────────────────┘</span>
+                         │ MELALUI
+                         ▼
+<span class="gold">┌─────────────────────────────────────────────────────────────────────────┐
+│  [6] PROSES PENGEMBANGAN (R&D – Mixed Methods)                          │
+│      Studi Pendahuluan → Hierarchical Q-matrix → Instrumen → Data       │
+│      → Training ML → Estimasi MCDM (MCMC) → Evaluasi → Sistem           │
+└────────────────────────┬────────────────────────────────────────────────┘</span>
+                         │ MENGHASILKAN
+                         ▼
+<span class="teal">┌─────────────────────────────────────────────────────────────────────────┐
+│  [7] OUTPUT MODEL                                                       │
+│  ┌────────────────────┐ ┌──────────────────┐ ┌────────────────────┐    │
+│  │ Profil Kesulitan   │ │ Rekomendasi      │ │ Dashboard          │    │
+│  │ Siswa              │ │ Intervensi       │ │ Diagnostik Guru    │    │
+│  │ (Multidimensional) │ │ (Personal)       │ │ (Real-time)        │    │
+│  └────────────────────┘ └──────────────────┘ └────────────────────┘    │
+└────────────────────────┬────────────────────────────────────────────────┘</span>
+                         │ BERKONTRIBUSI PADA
+                         ▼
+<span class="gold">╔══════════════════════════════════════════════════════════════════════════╗
+║  [8] DAMPAK                                                            ║
+║   TEORETIS: Pengembangan ilmu evaluasi & asesmen pendidikan mat. AI   ║
+║   PRAKTIS:  Peningkatan kualitas diagnosis & pembelajaran mat. SMP    ║
+╚══════════════════════════════════════════════════════════════════════════╝</span>
+  </div>
+
+  <!-- GLOSARIUM -->
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">📖</div><h2>Glosarium Istilah Kunci</h2></div>
+  <div class="glossary">
+    <dl>
+      <dt>MCDM — <em>Multidimensional Cognitive Diagnostic Model</em></dt>
+      <dd>Model diagnostik kognitif yang memodelkan beberapa atribut kognitif sekaligus beserta hubungan hierarkis dan dependensinya, melampaui CDM klasik yang memperlakukan atribut sebagai entitas independen.</dd>
+
+      <dt>HO-DINA — <em>Higher-Order Deterministic Inputs, Noisy "And" gate</em></dt>
+      <dd>Varian model DINA yang menambahkan faktor laten tingkat tinggi (<em>higher-order</em>) untuk menjelaskan korelasi antar atribut, memungkinkan estimasi mastery yang saling bergantung secara hierarkis.</dd>
+
+      <dt>Q-matrix</dt>
+      <dd>Matriks butir × atribut yang memetakan atribut kognitif mana yang dibutuhkan untuk menjawab setiap butir dengan benar; menjadi tulang punggung interpretabilitas CDM dan NCDM.</dd>
+
+      <dt><em>Attribute hierarchy</em> (Hierarki Atribut)</dt>
+      <dd>Struktur prasyarat antar atribut (mis. penguasaan Bilangan menjadi prasyarat Aljabar) yang dikodekan dalam <em>attribute hierarchy matrix</em>.</dd>
+
+      <dt><em>Compensatory effect</em> (Efek Kompensatori)</dt>
+      <dd>Kondisi ketika kekuatan pada satu atribut dapat sebagian mengompensasi kelemahan pada atribut lain dalam memprediksi keberhasilan respons; lawan dari model nonkompensatori.</dd>
+
+      <dt>NCDM / Deep-IRT</dt>
+      <dd>Arsitektur diagnostik berbasis <em>neural network</em> yang mempertahankan Q-matrix namun menggunakan lapisan <em>neural</em> nonlinier sebagai fungsi interaksi siswa–atribut.</dd>
+
+      <dt>SHAP — <em>SHapley Additive exPlanations</em></dt>
+      <dd>Metode <em>Explainable AI</em> yang mengukur kontribusi setiap fitur terhadap prediksi model berbasis teori permainan (nilai Shapley).</dd>
+
+      <dt>LIME — <em>Local Interpretable Model-agnostic Explanations</em></dt>
+      <dd>Metode <em>Explainable AI</em> yang menjelaskan prediksi individual dengan membangun model sederhana yang mendekati perilaku model kompleks di sekitar satu kasus.</dd>
+
+      <dt>FITAP</dt>
+      <dd>Kerangka prinsip etika AI pendidikan: <em>Fairness</em> (keadilan), <em>Inclusivity</em> (inklusivitas), <em>Transparency</em> (transparansi), <em>Accountability</em> (akuntabilitas), dan <em>Privacy</em> (privasi).</dd>
+    </dl>
+  </div>
+
+</div><!-- /section-container -->
+</div><!-- /tab-kb -->
+
+<!-- ══════════════ TAB 2: FLOWCHART ══════════════ -->
+<div id="tab-fc" class="tab-panel">
+<div class="section-container">
+
+  <div class="sec-head"><div class="sec-num">✦</div><h2>Flowchart Penelitian Disertasi Doktoral</h2></div>
+  <p style="margin-bottom:28px;color:#3a4a5a;font-size:.9rem;"><em>Research &amp; Development (R&amp;D) · Mixed Methods · Integrasi MCDM (Multidimensional Cognitive Diagnostic Model) &amp; Machine Learning</em></p>
+
+  <div class="flow-wrap">
+
+    <!-- START -->
+    <div class="flow-node flow-terminator" style="max-width:300px;">MULAI</div>
+    <div class="flow-arrow"></div>
+
+    <!-- FASE A -->
+    <div class="phase-divider"></div>
+    <div class="phase-label">FASE A — Studi Pendahuluan</div>
+    <div class="flow-node flow-process">
+      <div class="flow-phase-label">Langkah 1</div>
+      <strong>Studi Pendahuluan &amp; Analisis Kebutuhan</strong><br>
+      Analisis literatur sistematik · Studi bibliometrik (VOSviewer, 100 dokumen Scopus) · Observasi kelas · Wawancara guru · Identifikasi <em>research gap</em>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-process">
+      <div class="flow-phase-label">Langkah 2</div>
+      <strong>Analisis Karakteristik Kesulitan Belajar Matematika Siswa SMP</strong><br>
+      Topik: Bilangan · Aljabar · Geometri Pengukuran<br>
+      Dimensi: Konseptual · Prosedural · Pemecahan Masalah
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- FASE B -->
+    <div class="phase-divider"></div>
+    <div class="phase-label">FASE B — Perancangan Instrumen &amp; Model</div>
+    <div class="flow-node flow-process gold-b">
+      <div class="flow-phase-label">Langkah 3</div>
+      <strong>Penyusunan Struktur Multidimensional Atribut &amp; Hierarchical Q-matrix</strong><br>
+      Identifikasi hierarki atribut (mis. Bilangan → Aljabar → Geometri) · Penyusunan <em>attribute hierarchy matrix</em> · Spesifikasi dependensi &amp; efek kompensatori antar atribut
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-process gold-b">
+      <div class="flow-phase-label">Langkah 4</div>
+      <strong>Pengembangan Instrumen Asesmen Diagnostik</strong><br>
+      Penulisan butir soal · Kalibrasi untuk mengukur interdependensi atribut · Penyusunan kisi-kisi · Telaah konten
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- FASE C: VALIDASI -->
+    <div class="phase-divider"></div>
+    <div class="phase-label">FASE C — Validasi Ahli</div>
+    <div class="flow-node flow-process violet-b">
+      <div class="flow-phase-label">Langkah 5</div>
+      <strong>Validasi Ahli (Expert Review)</strong>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-sub-grid" style="margin-bottom:12px;">
+      <div class="flow-sub-node violet">👨‍🏫 Ahli Evaluasi Pendidikan<br><small>Validitas isi, konstruk, kesesuaian struktur MCDM &amp; hierarki atribut</small></div>
+      <div class="flow-sub-node violet">📐 Ahli Matematika<br><small>Kebenaran konten, kesesuaian kurikulum Merdeka</small></div>
+      <div class="flow-sub-node violet">💻 Ahli AI / Machine Learning<br><small>Arsitektur model, feature selection, XAI</small></div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- DECISION 1 -->
+    <div class="flow-node flow-process gold-b" style="max-width:400px;background:rgba(201,153,58,.1);">
+      <div class="flow-phase-label">Titik Keputusan ①</div>
+      <strong>Apakah hasil validasi ahli memenuhi standar ≥ 80% indeks CVR?</strong>
+    </div>
+    <div style="display:flex;gap:20px;align-items:flex-start;max-width:560px;width:100%;margin:0 auto;">
+      <div style="flex:1;text-align:center;">
+        <div class="flow-arrow" style="height:18px;"></div>
+        <div style="font-size:.75rem;color:var(--rust);font-weight:600;">TIDAK ↺ Revisi Instrumen</div>
+        <div style="font-size:.72rem;color:#888;margin-top:4px;">kembali ke Langkah 3/4</div>
+      </div>
+      <div style="flex:1;text-align:center;">
+        <div class="flow-arrow" style="height:18px;"></div>
+        <div style="font-size:.75rem;color:var(--teal);font-weight:600;">YA ↓ Lanjut</div>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- FASE D -->
+    <div class="phase-divider"></div>
+    <div class="phase-label">FASE D — Uji Coba &amp; Pengumpulan Data</div>
+    <div class="flow-node flow-process">
+      <div class="flow-phase-label">Langkah 6</div>
+      <strong>Uji Coba Instrumen (Pilot Study)</strong><br>
+      Uji keterbacaan · Analisis butir (difficulty, discrimination) · Revisi butir
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-process">
+      <div class="flow-phase-label">Langkah 7</div>
+      <strong>Pengumpulan Data Siswa (Lapangan)</strong><br>
+      Sampel: SMP Negeri &amp; Swasta, Provinsi Jakarta · Stratifikasi akreditasi A, B, C · Cluster random sampling
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-process">
+      <div class="flow-phase-label">Langkah 8</div>
+      <strong>Preprocessing Data</strong><br>
+      Data cleaning · Normalisasi · Feature engineering · Encoding atribut MCDM · Pembentukan matriks dependensi antar atribut · Handling missing values
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- FASE E: AI -->
+    <div class="phase-divider"></div>
+    <div class="phase-label">FASE E — Pengembangan Model AI</div>
+    <div class="flow-node flow-process violet-b">
+      <div class="flow-phase-label">Langkah 9</div>
+      <strong>Pengembangan Model Machine Learning</strong>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-sub-grid" style="margin-bottom:12px;">
+      <div class="flow-sub-node">🔧 Training<br><small>Supervised ML, cross-validation, hyperparameter tuning</small></div>
+      <div class="flow-sub-node">🧪 Testing<br><small>Hold-out set, confusion matrix, ROC-AUC</small></div>
+      <div class="flow-sub-node">🏷️ Klasifikasi<br><small>Profil kesulitan multidimensional per siswa</small></div>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-process violet-b">
+      <div class="flow-phase-label">Langkah 10</div>
+      <strong>Estimasi MCDM (Higher-Order / Hierarchical DINA) dengan MCMC</strong><br>
+      Pendekatan Bayesian untuk posterior mastery probability &amp; parameter dependensi · Structured Q-matrix alignment · HO-DINA calibration · SHAP/LIME untuk visualisasi jalur kognitif
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-process violet-b">
+      <div class="flow-phase-label">Langkah 11</div>
+      <strong>Pengembangan Sistem &amp; Dashboard Diagnostik</strong><br>
+      Antarmuka guru (real-time dashboard) · Laporan profil siswa · Rekomendasi intervensi otomatis · Notifikasi berisiko
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- ALUR DATA REAL-TIME -->
+    <div class="dataflow">
+      <div class="dataflow-title">⚡ Alur Data Real-time (Inferensi Daring)</div>
+      <div class="dataflow-chain">
+        <div class="dataflow-step">Siswa mengerjakan soal<br><small>di perangkat (CBT)</small></div>
+        <div class="dataflow-sep">→</div>
+        <div class="dataflow-step">Respons dikirim ke server<br><small>API inferensi</small></div>
+        <div class="dataflow-sep">→</div>
+        <div class="dataflow-step">Model NCDM/ML memprediksi profil<br><small>klasifikasi kesulitan</small></div>
+        <div class="dataflow-sep">→</div>
+        <div class="dataflow-step">MCDM hitung mastery bersyarat<br><small>posterior HO-DINA</small></div>
+        <div class="dataflow-sep">→</div>
+        <div class="dataflow-step">Dashboard guru diperbarui<br><small>SHAP → bahasa pedagogis</small></div>
+      </div>
+      <div class="dataflow-latency">Target latensi &lt; 3 detik setelah respons siswa</div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- FASE F: EVALUASI MODEL -->
+    <div class="phase-divider"></div>
+    <div class="phase-label">FASE F — Pengujian Model</div>
+    <div class="flow-node flow-process rust-b">
+      <div class="flow-phase-label">Langkah 12</div>
+      <strong>Pengujian Kualitas Model</strong>
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-metrics" style="margin-bottom:12px;">
+      <div class="metric-pill">Validitas Isi</div>
+      <div class="metric-pill">Validitas Konstruk</div>
+      <div class="metric-pill">Reliabilitas</div>
+      <div class="metric-pill">Accuracy</div>
+      <div class="metric-pill">Precision</div>
+      <div class="metric-pill">Recall</div>
+      <div class="metric-pill">F1-Score</div>
+      <div class="metric-pill">Interpretabilitas</div>
+      <div class="metric-pill">Attribute Hierarchy Consistency</div>
+      <div class="metric-pill">Compensatory Effect Size</div>
+      <div class="metric-pill">Model Fit (DIC)</div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- DECISION 2 -->
+    <div class="flow-node flow-process gold-b" style="max-width:420px;background:rgba(201,153,58,.1);">
+      <div class="flow-phase-label">Titik Keputusan ②</div>
+      <strong>Apakah akurasi model ≥ 85% &amp; F1-Score ≥ 0,80?</strong>
+    </div>
+    <div style="display:flex;gap:20px;align-items:flex-start;max-width:560px;width:100%;margin:0 auto;">
+      <div style="flex:1;text-align:center;">
+        <div class="flow-arrow" style="height:18px;"></div>
+        <div style="font-size:.75rem;color:var(--rust);font-weight:600;">TIDAK ↺ Revisi Model</div>
+        <div style="font-size:.72rem;color:#888;margin-top:4px;">kembali ke Langkah 9/10</div>
+      </div>
+      <div style="flex:1;text-align:center;">
+        <div class="flow-arrow" style="height:18px;"></div>
+        <div style="font-size:.75rem;color:var(--teal);font-weight:600;">YA ↓ Lanjut</div>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- LANGKAH 13-14 -->
+    <div class="flow-node flow-process">
+      <div class="flow-phase-label">Langkah 13</div>
+      <strong>Uji Kepraktisan (Usability Test)</strong><br>
+      Respon guru terhadap kemudahan penggunaan · Respon siswa terhadap proses asesmen · Skala USE &amp; SUS
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- DECISION 3 -->
+    <div class="flow-node flow-process gold-b" style="max-width:420px;background:rgba(201,153,58,.1);">
+      <div class="flow-phase-label">Titik Keputusan ③</div>
+      <strong>Apakah tingkat kepraktisan (SUS score) ≥ 68 (acceptable)?</strong>
+    </div>
+    <div style="display:flex;gap:20px;align-items:flex-start;max-width:560px;width:100%;margin:0 auto;">
+      <div style="flex:1;text-align:center;">
+        <div class="flow-arrow" style="height:18px;"></div>
+        <div style="font-size:.75rem;color:var(--rust);font-weight:600;">TIDAK ↺ Revisi Sistem</div>
+      </div>
+      <div style="flex:1;text-align:center;">
+        <div class="flow-arrow" style="height:18px;"></div>
+        <div style="font-size:.75rem;color:var(--teal);font-weight:600;">YA ↓ Lanjut</div>
+      </div>
+    </div>
+    <div class="flow-arrow"></div>
+
+    <div class="flow-node flow-process rust-b">
+      <div class="flow-phase-label">Langkah 14</div>
+      <strong>Uji Efektivitas: MCDM vs. CDM Konvensional (Nonkompensatori)</strong><br>
+      Perbandingan akurasi prediksi jalur kognitif · Cohen's Kappa agreement · Waktu diagnosis · Kualitas rekomendasi intervensi berbasis atribut akar
+    </div>
+    <div class="flow-arrow"></div>
+
+    <!-- FASE G: FINALISASI -->
+    <div class="phase-divider"></div>
+    <div class="phase-label">FASE G — Produk &amp; Diseminasi</div>
+    <div class="flow-node flow-process" style="border-color:#2d7a2d;background:rgba(45,122,45,.1);">
+      <div class="flow-phase-label">Langkah 15</div>
+      <strong>Revisi Final &amp; Finalisasi Model</strong><br>
+      Integrasi seluruh masukan · Dokumentasi model · Finalisasi prototipe sistem
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-process" style="border-color:#2d7a2d;background:rgba(45,122,45,.1);">
+      <div class="flow-phase-label">Langkah 16</div>
+      <strong>Produk Akhir: Sistem Diagnostik Berbasis AI</strong><br>
+      Dashboard guru · Profil diagnostik siswa · Rekomendasi intervensi otomatis · Dokumentasi teknis
+    </div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node flow-process" style="border-color:#2d7a2d;background:rgba(45,122,45,.1);">
+      <div class="flow-phase-label">Langkah 17</div>
+      <strong>Diseminasi Hasil Penelitian</strong><br>
+      Publikasi jurnal internasional terindeks Scopus · Konferensi nasional/internasional · Diseminasi ke Dinas Pendidikan · Repositori open-source
+    </div>
+    <div class="flow-arrow gold-a"></div>
+    <div class="flow-node flow-terminator" style="max-width:300px;">SELESAI</div>
+
+  </div><!-- /flow-wrap -->
+</div>
+</div><!-- /tab-fc -->
+
+<!-- ══════════════ TAB 3: NARASI SINTESIS ══════════════ -->
+<div id="tab-syn" class="tab-panel">
+<div class="section-container">
+  <div class="sec-head"><div class="sec-num">∑</div><h2>Narasi Sintesis Kerangka Berpikir</h2></div>
+
+  <div class="synthesis">
+    <h3>Sintesis Kerangka Berpikir Disertasi Doktoral</h3>
+
+    <p>Kerangka berpikir penelitian ini dibangun di atas premis fundamental bahwa kesenjangan antara kondisi ideal pembelajaran matematika dan realitas empiris yang dihadapi siswa SMP di Indonesia tidak dapat diatasi secara memadai melalui pendekatan diagnosis konvensional yang bersifat reaktif, statis, dan berbasis skor agregat. Kondisi ideal yang dirumuskan dalam Kurikulum Merdeka menuntut penguasaan matematis yang mencakup tiga dimensi yang saling mengandaikan satu sama lain: penguasaan konseptual sebagai fondasi pemahaman struktur matematis, kecakapan prosedural sebagai kemampuan mengeksekusi algoritma secara akurat, serta kompetensi pemecahan masalah sebagai integrasi keduanya dalam konteks nyata. Namun, data empiris dari PISA 2022 (skor 366 dari rata-rata OECD 472), AKM 2023 (kurang dari 30% siswa mencapai kompetensi numerasi minimum), dan studi lapangan menunjukkan bahwa sebagian besar siswa SMP Indonesia terjebak dalam pola kesulitan belajar matematika yang tidak terdeteksi secara dini dan tidak diintervensi secara tepat sasaran.</p>
+
+    <p>Telaah teoretis terhadap literatur mutakhir mengungkap bahwa kesulitan belajar matematika merupakan konstruk multidimensional yang melibatkan interaksi simultan antara faktor kognitif (miskonsepsi, defisit <em>working memory</em>), afektif (<em>mathematics anxiety</em>, <em>self-efficacy</em> rendah), dan prosedural (lemahnya fluensi algoritma). Landasan teoretis utama penelitian ini bertumpu pada tiga pilar yang saling melengkapi: (1) teori kesulitan belajar matematika yang menegaskan sifat multidimensional dan persisten dari kesulitan tersebut apabila tidak diintervensi sejak dini; (2) <em>Multidimensional Cognitive Diagnostic Model</em> (MCDM) yang memperluas CDM konvensional dengan secara eksplisit memodelkan hubungan antar atribut kognitif. Menggunakan pendekatan seperti <em>Higher-Order DINA</em> (HO-DINA), <em>Hierarchical CDM</em> (HCDM), dan <em>Multidimensional G-DINA</em> (MD-GDINA), MCDM mampu menangkap hierarki konsep matematika (misalnya Bilangan sebagai prasyarat Aljabar) serta efek kompensatori, dengan estimasi dilakukan melalui MCMC Bayesian untuk memperoleh distribusi posterior probabilitas mastery bersyarat (de la Torre &amp; Douglas, 2004; Templin &amp; Bradshaw, 2014; Zhan et al., 2019); serta (3) Artificial Intelligence in Education (AIED) yang menyediakan kapasitas komputasi untuk memprediksi, mengklasifikasikan, dan memvisualisasikan pola kesulitan secara otomatis, adaptif, dan real-time. Ketiga pilar ini—bersama dengan metodologi <em>educational data mining</em>—membentuk fondasi epistemologis yang koheren bagi penelitian ini.</p>
+
+    <p>Tidak seperti CDM klasik yang memperlakukan atribut sebagai entitas independen, MCDM mengakui bahwa dalam matematika, penguasaan konsep tingkat tinggi (misalnya aljabar) secara fundamental bergantung pada penguasaan konsep prasyarat (bilangan). Oleh karena itu, MCDM membangun model hierarkis atau <em>higher-order</em> yang mampu menangkap efek kompensatori dan ketergantungan struktural antar atribut. Implikasinya pada diagnosis bersifat substantif: dengan MCDM, seorang siswa yang lemah di bilangan tetapi kuat di prosedur dapat tetap didiagnosis sebagai "perlu remediasi bilangan terlebih dahulu"—mengikuti prioritas pada atribut akar (<em>root attributes</em>) dalam hierarki—bukan sekadar diklasifikasikan secara mandiri per atribut sebagaimana lazim pada model nonkompensatori satu dimensi. Inilah keunggulan realisme kognitif MCDM yang menjadi inti kebaruan teoretis penelitian ini.</p>
+
+    <p>Studi bibliometrik pendahuluan terhadap 100 dokumen terindeks Scopus mengonfirmasi bahwa meskipun masing-masing dari ketiga arus penelitian tersebut telah berkembang secara intensif, integrasi simultan antara MCDM, algoritma machine learning, dan konteks pendidikan menengah pertama di Indonesia masih merupakan "zona dingin" yang belum tergarap secara komprehensif. Lima <em>research gap</em> teridentifikasi dengan jelas: (1) instrumen diagnostik yang ada masih statis dan tidak real-time; (2) penelitian CDM di Indonesia masih bertumpu pada model nonkompensatori satu dimensi tanpa memanfaatkan MCDM yang memperlakukan atribut matematika sebagai sistem hierarkis dan saling bergantung; (3) model yang tersedia belum divalidasi pada konteks Kurikulum Merdeka Indonesia; (4) dimensi afektif dan prosedural hampir tidak terintegrasi dalam model diagnostik berbasis AI; serta (5) aspek <em>usability</em> guru dan etika AI diabaikan. Kelima kesenjangan ini secara simultan memvalidasi kebutuhan mendesak sekaligus menegaskan kebaruan dan relevansi strategis penelitian yang diusulkan.</p>
+
+    <p>Solusi yang diajukan dalam penelitian ini adalah pengembangan model diagnostik awal berbasis AI yang secara terpadu mengintegrasikan kekuatan interpretabilitas MCDM dengan kekuatan prediktif machine learning. Secara konseptual, integrasi ini bekerja dalam dua lapis: pada lapisan <em>psychometric</em>, MCDM menyediakan <em>structured Q-matrix</em> beserta <em>attribute hierarchy matrix</em> yang mengkodekan tidak hanya hubungan butir–atribut tetapi juga ketergantungan hierarkis dan efek kompensatori antar atribut, sehingga respons siswa ditafsirkan dalam kerangka pola mastery multidimensional bersyarat; pada lapisan komputasi, algoritma supervised machine learning—dengan dukungan estimasi MCMC Bayesian serta teknik Explainable AI seperti SHAP dan LIME—digunakan untuk memprediksi parameter multidimensional (matriks transisi antar atribut, bobot hierarki) dan memvisualisasikan jalur kognitif siswa secara otomatis dan real-time. Model hibrida ini dirancang untuk melampaui keterbatasan MCDM konvensional yang komputasinya intensif dan menuntut keahlian psikometri lanjut, sekaligus melampaui keterbatasan pendekatan AI murni yang menghasilkan "kotak hitam" tanpa interpretabilitas pedagogis.</p>
+
+    <p>Proses pengembangan model mengikuti desain <em>Research and Development</em> (R&amp;D) dengan pendekatan <em>mixed methods</em> yang dipetakan ke dalam <strong>tujuh fase sistematis sebagaimana tergambar pada flowchart penelitian (Fase A–G)</strong>: Fase A (Studi Pendahuluan), Fase B (Perancangan Instrumen &amp; Model), Fase C (Validasi Ahli), Fase D (Uji Coba &amp; Pengumpulan Data), Fase E (Pengembangan Model AI), Fase F (Pengujian Model), serta Fase G (Produk &amp; Diseminasi). Titik-titik keputusan berulang yang dirancang dalam alur penelitian—validasi ahli dengan indeks CVR ≥ 80%, akurasi model ≥ 85% dengan F1-score ≥ 0,80, dan skor kepraktisan SUS ≥ 68—memastikan bahwa produk yang dihasilkan memenuhi standar kualitas akademik yang ketat sebelum dinyatakan layak untuk diimplementasikan. Indikator keberhasilan model mencakup empat dimensi yang saling melengkapi: dimensi psikometri (validitas dan reliabilitas), dimensi komputasi (akurasi, presisi, <em>recall</em>, F1-score), dimensi pedagogis (interpretabilitas dan kepraktisan bagi guru), serta dimensi etis (kepatuhan terhadap prinsip FITAP: <em>Fairness, Inclusivity, Transparency, Accountability, Privacy</em>).</p>
+
+    <p>Output utama penelitian ini berupa tiga komponen yang terintegrasi secara fungsional: (1) profil kesulitan belajar multidimensional per siswa yang mencakup peta mastery atribut kognitif pada topik Bilangan, Aljabar, dan Geometri Pengukuran; (2) rekomendasi intervensi pedagogis yang dipersonalisasi berdasarkan profil kesulitan masing-masing siswa; serta (3) dashboard diagnostik guru yang menyajikan visualisasi profil kelas secara real-time beserta notifikasi otomatis untuk siswa berisiko tinggi. Integrasi ketiga komponen ini dalam satu sistem yang dapat diakses melalui platform digital merupakan kontribusi produk yang substantif dan belum pernah dikembangkan secara terintegrasi dalam konteks pendidikan matematika SMP di Indonesia.</p>
+
+    <p>Secara keseluruhan, kerangka berpikir penelitian ini membentuk sebuah rantai argumentasi yang koheren dan kausal: dimulai dari identifikasi kesenjangan antara kondisi ideal dan realitas empiris, diperkuat oleh landasan teoretis dari tiga arus keilmuan yang relevan, dipertajam oleh identifikasi celah penelitian yang konkret dan terverifikasi secara bibliometrik, kemudian dioperasionalisasikan melalui solusi integratif yang inovatif, dan akhirnya dinilai berdasarkan dampak teoretis maupun praktisnya. Kontribusi teoretis penelitian ini terletak pada penguatan kajian ilmu evaluasi dan asesmen pendidikan matematika berbasis AI yang etis dan kontekstual, sementara kontribusi praktisnya mencakup penyediaan instrumen diagnostik yang fungsional bagi guru, sekolah, dan pengambil kebijakan dalam upaya peningkatan kualitas pembelajaran matematika pada jenjang SMP dalam kerangka implementasi Kurikulum Merdeka.</p>
+  </div>
+
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">⚠</div><h2>Keterbatasan Penelitian</h2></div>
+  <div class="card rust-accent">
+    <p>Sebagai upaya menjaga kejujuran ilmiah dan kalibrasi klaim, penelitian ini mengakui sejumlah keterbatasan yang melingkupi cakupan, sifat inferensi, prasyarat metodologis, dan definisi teknisnya:</p>
+    <ul style="margin-top:10px;">
+      <li><strong>Generalisasi terbatas secara geografis.</strong> Pengumpulan data dilakukan pada SMP di Provinsi Jakarta sehingga generalisasi hasil terbatas pada konteks tersebut; diperlukan uji coba yang lebih luas lintas provinsi dan tipologi sekolah sebelum klaim generalisasi nasional dapat ditegakkan.</li>
+      <li><strong>Bersifat prediktif/diagnostik, bukan kausal.</strong> Model dirancang untuk memprediksi dan mendiagnosis profil kesulitan, bukan untuk menetapkan hubungan sebab-akibat. Penelitian ini tidak mengklaim bahwa satu atribut <em>menyebabkan</em> kesulitan pada atribut lain, melainkan memodelkan asosiasi dan dependensi probabilistik antar atribut.</li>
+      <li><strong>Prasyarat ukuran sampel.</strong> Estimasi MCDM melalui MCMC menuntut ukuran sampel yang memadai untuk konvergensi posterior yang stabil; disarankan &gt; 500–1000 siswa. Ukuran sampel di bawah ambang ini dapat menurunkan presisi estimasi parameter dependensi dan mastery.</li>
+      <li><strong>Definisi operasional <em>real-time</em>.</strong> Istilah <em>real-time</em> dalam penelitian ini didefinisikan secara terukur sebagai <strong>latensi &lt; 3 detik</strong> antara respons siswa dan pembaruan profil pada dashboard guru, bukan sebagai pemrosesan seketika tanpa jeda.</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ TAB 4: KODE DIAGRAM ══════════════ -->
+<div id="tab-code" class="tab-panel">
+<div class="section-container">
+  <div class="sec-head"><div class="sec-num">⌨</div><h2>Kode Mermaid Flowchart (Siap Render)</h2></div>
+  <p style="margin-bottom:16px;font-size:.88rem;color:#3a4a5a;">Salin kode berikut dan tempelkan di <strong>mermaid.live</strong>, Obsidian, Notion, atau editor Markdown yang mendukung Mermaid untuk menghasilkan diagram interaktif.</p>
+  <button class="copy-btn" onclick="copyMermaid()">📋 Salin Kode Mermaid</button>
+
+  <div class="mermaid-box" id="mermaid-code">flowchart TD
+    START([🔷 MULAI]) --> A1
+
+    subgraph FASE_A["📋 FASE A — Studi Pendahuluan"]
+        A1["1️⃣ Studi Pendahuluan & Analisis Kebutuhan\nAnalisis literatur · Bibliometrik VOSviewer\nObservasi sekolah · Wawancara guru"]
+        A2["2️⃣ Analisis Karakteristik Kesulitan Belajar\nTopik: Bilangan · Aljabar · Geometri\nDimensi: Konseptual · Prosedural · Pemecahan Masalah"]
+        A1 --> A2
+    end
+
+    subgraph FASE_B["✏️ FASE B — Perancangan"]
+        B1["3️⃣ Penyusunan Struktur Multidimensional Atribut & Hierarchical Q-matrix\nAttribute Hierarchy Matrix · Dependensi & Efek Kompensatori antar Atribut"]
+        B2["4️⃣ Pengembangan Instrumen Asesmen Diagnostik\nPenulisan butir · Kisi-kisi · Analisis awal"]
+        B1 --> B2
+    end
+
+    subgraph FASE_C["✅ FASE C — Validasi Ahli"]
+        C1["5️⃣ Expert Review\nAhli Evaluasi · Ahli Matematika · Ahli AI/ML"]
+        D1{{"⚖️ CVR ≥ 80%?"}}
+        C1 --> D1
+        D1 -- TIDAK --> REV1["🔁 Revisi Instrumen"] --> B1
+        D1 -- YA --> C2
+        C2["6️⃣ Uji Coba Instrumen (Pilot Study)\nKeterbacaan · Analisis butir · Revisi"]
+    end
+
+    subgraph FASE_D["📊 FASE D — Pengumpulan & Preprocessing"]
+        E1["7️⃣ Pengumpulan Data Lapangan\nSMP Jakarta · Stratifikasi Akreditasi A/B/C\nCluster Random Sampling"]
+        E2["8️⃣ Preprocessing Data\nCleaning · Normalisasi · Feature Engineering\nEncoding Atribut MCDM · Pembentukan Matriks Dependensi"]
+        E1 --> E2
+    end
+
+    subgraph FASE_E["🤖 FASE E — Pengembangan Model AI"]
+        F1["9️⃣ Training & Testing Model Machine Learning\nSupervised ML · Cross-Validation · Hyperparameter Tuning"]
+        F2["🔟 Estimasi MCDM (HO-DINA / Hierarchical DINA) dengan MCMC\nHierarchical Q-matrix Alignment · Bayesian Posterior Mastery · Parameter Dependensi · SHAP/LIME Jalur Kognitif"]
+        F3["1️⃣1️⃣ Pengembangan Sistem & Dashboard\nDashboard Guru · Laporan Siswa · Notifikasi Otomatis"]
+        F1 --> F2 --> F3
+    end
+
+    subgraph FASE_F["🧪 FASE F — Pengujian Model"]
+        G1["1️⃣2️⃣ Pengujian Kualitas Model\nValiditas · Reliabilitas · Accuracy\nPrecision · Recall · F1-Score · Interpretabilitas"]
+        D2{{"⚖️ Accuracy ≥ 85% & F1 ≥ 0.80?"}}
+        G1 --> D2
+        D2 -- TIDAK --> REV2["🔁 Revisi Model"] --> F1
+        D2 -- YA --> G2
+        G2["1️⃣3️⃣ Uji Kepraktisan (Usability)\nRespon Guru · Respon Siswa · Skala SUS & USE"]
+        D3{{"⚖️ SUS Score ≥ 68?"}}
+        G2 --> D3
+        D3 -- TIDAK --> REV3["🔁 Revisi Sistem"] --> F3
+        D3 -- YA --> G3
+        G3["1️⃣4️⃣ Uji Efektivitas: MCDM vs. CDM Konvensional (Nonkompensatori)\nAkurasi Prediksi Jalur Kognitif · Cohen's Kappa · Waktu Diagnosis · Kualitas Rekomendasi"]
+    end
+
+    subgraph FASE_G["🏆 FASE G — Produk & Diseminasi"]
+        H1["1️⃣5️⃣ Revisi Final & Finalisasi Model\nIntegrasi Masukan · Dokumentasi Teknis"]
+        H2[/"1️⃣6️⃣ PRODUK AKHIR: Sistem Diagnostik Berbasis AI\n• Dashboard Guru Real-time\n• Profil Kesulitan Multidimensional Siswa\n• Rekomendasi Intervensi Otomatis"/]
+        H3["1️⃣7️⃣ Diseminasi Hasil Penelitian\nPublikasi Scopus · Konferensi · Dinas Pendidikan"]
+        H1 --> H2 --> H3
+    end
+
+    A2 --> B1
+    B2 --> C1
+    C2 --> E1
+    E2 --> F1
+    G3 --> H1
+    H3 --> END([🔷 SELESAI])
+
+    style START fill:#0D1B2A,color:#F5F0E8,stroke:#C9993A
+    style END fill:#0D1B2A,color:#F5F0E8,stroke:#C9993A
+    style FASE_A fill:#f0f8f6,stroke:#1B7A6E
+    style FASE_B fill:#fdf6e8,stroke:#C9993A
+    style FASE_C fill:#f5f0fa,stroke:#4A3B72
+    style FASE_D fill:#f0f8f6,stroke:#1B7A6E
+    style FASE_E fill:#f5f0fa,stroke:#4A3B72
+    style FASE_F fill:#fdf6e8,stroke:#C9993A
+    style FASE_G fill:#f0faf0,stroke:#2d7a2d
+    style D1 fill:#fdf6e8,stroke:#C9993A
+    style D2 fill:#fdf6e8,stroke:#C9993A
+    style D3 fill:#fdf6e8,stroke:#C9993A
+    style H2 fill:#e8f5e8,stroke:#2d7a2d
+  </div>
+
+  <div class="sec-head" style="margin-top:36px;"><div class="sec-num">✦</div><h2>Bagan ASCII — Flowchart Penelitian</h2></div>
+  <div class="ascii-box">
+<span class="gold">╔══════════════════════════════════════════════════════════════════════════════╗
+║          FLOWCHART PENELITIAN DISERTASI — KHUSNUL MAROM (9913925008)       ║
+║   "Pengembangan Model Diagnostik Awal Kesulitan Belajar Matematika SMP     ║
+║                     Berbasis Artificial Intelligence"                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝</span>
+
+                          ╔══════════════╗
+                          ║    MULAI     ║
+                          ╚══════╤═══════╝
+                                 │
+<span class="teal">┌──────────────────────────────────────────────────────────────────────────┐
+│   FASE A – STUDI PENDAHULUAN                                             │
+│                                                                          │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [1] Studi Pendahuluan & Analisis Kebutuhan                      │    │
+│  │     Analisis literatur · Bibliometrik · Observasi · Wawancara   │    │
+│  └──────────────────────┬──────────────────────────────────────────┘    │
+│                          ↓                                               │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [2] Analisis Karakteristik Kesulitan Belajar Matematika         │    │
+│  │     Bilangan · Aljabar · Geometri | Konseptual · Prosedural     │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────┬───────────────────────────────────────┘</span>
+                                   │
+<span class="gold">┌──────────────────────────────────────────────────────────────────────────┐
+│   FASE B – PERANCANGAN                                                   │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [3] Struktur Multidim. Atribut & Hierarchical Q-matrix          │    │
+│  └──────────────────────┬──────────────────────────────────────────┘    │
+│                          ↓                                               │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [4] Pengembangan Instrumen Asesmen Diagnostik                   │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────┬───────────────────────────────────────┘</span>
+                                   │
+<span class="white">┌──────────────────────────────────────────────────────────────────────────┐
+│   FASE C – VALIDASI AHLI                                                 │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [5] Expert Review: Evaluasi Pendidikan · Matematika · AI/ML     │    │
+│  └──────────────────────┬──────────────────────────────────────────┘    │
+│                          ↓                                               │
+│                 ◇ CVR ≥ 80%? ◇                                          │
+│                  /          \                                            │
+│              TIDAK            YA                                         │
+│           ↙                    ↘                                        │
+│  [Revisi Instrumen]        [6] Uji Coba Instrumen (Pilot Study)         │
+│   ↺ kembali [3/4]               Keterbacaan · Analisis Butir             │
+└──────────────────────────────────┬───────────────────────────────────────┘</span>
+                                   │
+<span class="teal">┌──────────────────────────────────────────────────────────────────────────┐
+│   FASE D – PENGUMPULAN & PREPROCESSING DATA                              │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [7] Pengumpulan Data Lapangan                                   │    │
+│  │     SMP Jakarta · Stratifikasi Akreditasi A/B/C                 │    │
+│  └──────────────────────┬──────────────────────────────────────────┘    │
+│                          ↓                                               │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [8] Preprocessing: Cleaning · Normalisasi · Feature Engineering │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────┬───────────────────────────────────────┘</span>
+                                   │
+<span class="white">┌──────────────────────────────────────────────────────────────────────────┐
+│   FASE E – PENGEMBANGAN MODEL AI                                         │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [9] Training & Testing Model ML                                 │    │
+│  │     Supervised ML · Cross-Validation · Hyperparameter Tuning    │    │
+│  └──────────────────────┬──────────────────────────────────────────┘    │
+│                          ↓                                               │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [10] Estimasi MCDM: HO-DINA · MCMC Bayesian · SHAP/LIME         │    │
+│  └──────────────────────┬──────────────────────────────────────────┘    │
+│                          ↓                                               │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [11] Pengembangan Sistem & Dashboard Diagnostik Guru            │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────┬───────────────────────────────────────┘</span>
+                                   │
+<span class="gold">┌──────────────────────────────────────────────────────────────────────────┐
+│   FASE F – PENGUJIAN MODEL                                               │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [12] Pengujian: Validitas · Reliabilitas · Accuracy · F1-Score  │    │
+│  └──────────────────────┬──────────────────────────────────────────┘    │
+│                          ↓                                               │
+│             ◇ Accuracy ≥ 85% & F1 ≥ 0.80? ◇                            │
+│                  /          \                                            │
+│              TIDAK            YA                                         │
+│      [Revisi Model]         [13] Uji Kepraktisan (SUS)                   │
+│      ↺ kembali [9]                ↓                                      │
+│                          ◇ SUS ≥ 68? ◇                                  │
+│                           /        \                                     │
+│                       TIDAK          YA                                  │
+│               [Revisi Sistem]    [14] Uji Efektivitas vs. Konvensional   │
+│               ↺ kembali [11]         Cohen's Kappa · Waktu Diagnosis     │
+└──────────────────────────────────┬───────────────────────────────────────┘</span>
+                                   │
+<span class="teal">┌──────────────────────────────────────────────────────────────────────────┐
+│   FASE G – PRODUK & DISEMINASI                                           │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [15] Revisi Final & Finalisasi Model                            │    │
+│  └──────────────────────┬──────────────────────────────────────────┘    │
+│                          ↓                                               │
+│  ┌══════════════════════════════════════════════════════════════╗       │
+│  ║ [16] PRODUK AKHIR: Sistem Diagnostik Berbasis AI             ║       │
+│  ║  • Dashboard Guru Real-time                                  ║       │
+│  ║  • Profil Kesulitan Multidimensional Siswa                   ║       │
+│  ║  • Rekomendasi Intervensi Pedagogis Otomatis                 ║       │
+│  ╚══════════════════════╤═══════════════════════════════════════╝       │
+│                          ↓                                               │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ [17] Diseminasi: Jurnal Scopus · Konferensi · Dinas Pendidikan  │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────┬───────────────────────────────────────┘</span>
+                                   │
+                          ╔════════╧════════╗
+                          ║     SELESAI     ║
+                          ╚═════════════════╝
+  </div>
+</div>
+</div>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function copyMermaid() {
+    const code = document.getElementById('mermaid-code').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✅ Berhasil Disalin!';
+      setTimeout(() => btn.textContent = '📋 Salin Kode Mermaid', 2000);
+    });
+  }
+</script>
+</body>
+</html>
