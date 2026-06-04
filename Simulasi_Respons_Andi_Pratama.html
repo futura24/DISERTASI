@@ -68,14 +68,77 @@ tbody tr:nth-child(even){background:#F8FAFC}
 footer{color:var(--muted);font-size:.8rem;text-align:center;padding:28px 18px 46px}
 @media(max-width:760px){.idgrid,.stat-grid{grid-template-columns:repeat(2,1fr)}.chart-grid{grid-template-columns:1fr}}
 @media print{.crumbs{display:none}.card,.chart-box{box-shadow:none;break-inside:avoid}body{background:#fff}}
+.header-tabs{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.header-tab{
+  display:inline-flex;
+  align-items:center;
+  padding:10px 16px;
+  border-radius:999px;
+  text-decoration:none;
+  font-size:.82rem;
+  font-weight:600;
+  font-family:'Poppins',sans-serif;
+  transition:.2s;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(255,255,255,.10);
+  color:#fff;
+}
+.header-tab:hover{
+  background:rgba(255,255,255,.18);
+}
+.header-tab.active{
+  background:#fff;
+  color:var(--secondary);
+  border-color:#fff;
+}
 </style></head>
+
+  
 <body>
-<header class="app-header"><div class="wrap">
-  <span class="eyebrow">Simulasi Respons Siswa · Tes Diagnostik MCDM (40 butir)</span>
-  <h1>Andi Pratama Mengerjakan Tes Diagnostik Kognitif</h1>
-  <p class="sub">Setiap butir dijawab sesuai karakteristik Andi (kuat bilangan bulat–geometri–pengukuran; lemah pecahan–aljabar–persamaan linear; cemas saat dinilai), lalu diskor memakai Q-matrix & kunci asli instrumen.</p>
-  <div class="crumbs"><a href="index.html">← Portal</a> · <a href="Laporan_Diagnostik_Andi_Pratama.html">Laporan Diagnostik</a> · <a href="EduMind_AI_Dashboard_Andi_Pratama.html">Dashboard</a></div>
-</div></header>
+<header class="app-header">
+<div class="wrap">
+
+    <div class="header-tabs">
+      <a href="#" class="header-tab active">
+        Tes Diagnostik MCDM
+      </a>
+
+      <a href="Simulasi_Kecemasan_Andi_Pratama.html" class="header-tab">
+        Tes Kecemasan Matematika
+      </a>
+
+      <a href="Laporan_Simulasi_Siswa_Virtual_Andi.html" class="header-tab">
+        Laporan Hasil Diagnostik
+      </a>
+    </div>
+
+    <span class="eyebrow">
+      Simulasi Respons Siswa · Tes Diagnostik MCDM (40 butir)
+    </span>
+
+    <h1>Andi Pratama Mengerjakan Tes Diagnostik Kognitif</h1>
+
+    <p class="sub">
+      Setiap butir dijawab sesuai karakteristik Andi (kuat bilangan bulat–geometri–pengukuran;
+      lemah pecahan–aljabar–persamaan linear; cemas saat dinilai), lalu diskor memakai
+      Q-matrix & kunci asli instrumen.
+    </p>
+
+    <div class="crumbs">
+      <a href="index.html">← Portal</a> ·
+      <a href="Laporan_Diagnostik_Andi_Pratama.html">Laporan Diagnostik</a> ·
+      <a href="EduMind_AI_Dashboard_Andi_Pratama.html">Dashboard</a>
+    </div>
+
+  </div>
+
+</header>
 
 <main class="wrap">
 
