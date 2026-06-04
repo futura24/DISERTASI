@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduMind AI · Learning Analytics Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --green:#22C55E; --green-d:#16A34A; --teal:#14B8A6; --teal-d:#0F766E;
+  --blue:#3B82F6; --indigo:#6366F1; --purple:#8B5CF6; --pink:#EC4899;
+  --amber:#F59E0B; --red:#EF4444; --red-d:#DC2626;
+  --bg:#EEF2F7; --card:#FFFFFF; --ink:#1E293B; --muted:#64748B; --line:#E7ECF3;
+  --r:22px; --r-sm:16px;
+  --sh:0 2px 0 rgba(15,23,42,.04),0 10px 30px rgba(15,23,42,.07);
+  --sh-lg:0 16px 44px rgba(15,23,42,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',system-ui,sans-serif;background:
+  radial-gradient(900px 500px at 85% -5%,rgba(99,102,241,.10),transparent 60%),
+  radial-gradient(800px 500px at 5% 5%,rgba(20,184,166,.10),transparent 55%),var(--bg);
+  color:var(--ink);line-height:1.55;font-weight:600;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.disp,.btn,.big{font-family:'Baloo 2',cursive;font-weight:700;letter-spacing:.1px}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 16px 60px}
+
+/* top bar */
+.topbar{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo .mk{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--teal),var(--indigo));display:grid;place-items:center;color:#fff;font-family:'Baloo 2';font-size:1.4rem;box-shadow:0 4px 0 rgba(15,118,110,.35)}
+.logo b{font-family:'Baloo 2';font-size:1.35rem;color:var(--teal-d)}
+.logo span{font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:.04em;display:block;margin-top:-4px}
+.topbar .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.chip{background:#fff;border:2px solid var(--line);border-radius:999px;padding:7px 14px;font-size:.82rem;font-weight:800;color:var(--ink);box-shadow:var(--sh);display:flex;gap:6px;align-items:center}
+.chip.flame{color:#EA580C}.chip.xp{color:var(--indigo)}
+
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);padding:20px}
+.grid{display:grid;gap:16px}
+.g-hero{grid-template-columns:1.4fr 1fr}
+.g-3{grid-template-columns:repeat(3,1fr)}
+.g-2{grid-template-columns:1fr 1fr}
+
+/* PROFILE HERO */
+.hero{display:flex;gap:20px;align-items:center;background:linear-gradient(135deg,#0F766E,#14B8A6 70%,#34D399);color:#fff;border:none;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;bottom:-80px;width:240px;height:240px;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);border-radius:50%}
+.avatar{flex:none;width:104px;height:104px;border-radius:26px;background:#fff;box-shadow:0 8px 0 rgba(4,48,44,.25);overflow:hidden;border:4px solid rgba(255,255,255,.7)}
+.hero .pinfo{position:relative;z-index:1}
+.hero h2{font-size:1.7rem;line-height:1}
+.hero .sub{font-weight:700;opacity:.92;font-size:.9rem;margin-top:2px}
+.hero .lvl{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.4);padding:5px 12px;border-radius:999px;font-family:'Baloo 2';font-size:.82rem;margin-top:10px}
+.ring-wrap{margin-left:auto;position:relative;z-index:1;text-align:center}
+.ring{position:relative;width:118px;height:118px}
+.ring svg{transform:rotate(-90deg)}
+.ring .ctr{position:absolute;inset:0;display:grid;place-items:center;flex-direction:column}
+.ring .ctr .n{font-family:'Baloo 2';font-size:1.8rem;line-height:1;color:#fff}
+.ring .ctr .t{font-size:.62rem;font-weight:800;opacity:.9;text-transform:uppercase;letter-spacing:.08em}
+
+/* stat row */
+.statline{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.miniStat{background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.3);border-radius:14px;padding:8px 14px;text-align:center;min-width:84px}
+.miniStat .v{font-family:'Baloo 2';font-size:1.25rem;line-height:1}
+.miniStat .l{font-size:.62rem;font-weight:800;opacity:.9;text-transform:uppercase;letter-spacing:.05em}
+
+/* section heading */
+.shead{display:flex;align-items:center;gap:10px;margin:24px 4px 12px}
+.shead .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:#fff;font-size:1.05rem;box-shadow:0 4px 0 rgba(15,23,42,.12)}
+.shead h3{font-size:1.15rem;color:var(--ink)}
+.shead p{font-size:.8rem;color:var(--muted);font-weight:700}
+
+/* mastery cards */
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.mcard{background:#fff;border:2px solid var(--line);border-radius:var(--r-sm);padding:14px;text-align:center;box-shadow:var(--sh);transition:.18s;position:relative}
+.mcard:hover{transform:translateY(-4px);box-shadow:var(--sh-lg)}
+.mcard .mring{position:relative;width:78px;height:78px;margin:2px auto 8px}
+.mcard .mring svg{transform:rotate(-90deg)}
+.mcard .mring .pc{position:absolute;inset:0;display:grid;place-items:center;font-family:'Baloo 2';font-size:1.1rem}
+.mcard .code{font-family:'Baloo 2';font-size:.86rem;color:var(--muted)}
+.mcard .nm{font-size:.78rem;font-weight:800;color:var(--ink);line-height:1.15;margin-top:2px;min-height:32px;display:flex;align-items:center;justify-content:center}
+.mcard .badge{position:absolute;top:8px;right:8px;font-size:.9rem}
+.lvlbar{display:flex;gap:3px;justify-content:center;margin-top:8px}
+.lvlbar i{width:14px;height:6px;border-radius:3px;background:var(--line)}
+.lvlbar i.on{background:var(--green)}.lvlbar i.on.y{background:var(--amber)}.lvlbar i.on.r{background:var(--red)}
+
+.chart-box{background:#fff;border:2px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.chart-box h4{font-family:'Baloo 2';font-size:1rem;color:var(--ink);margin-bottom:8px;text-align:center}
+.cw{position:relative;height:280px}.cw.sm{height:200px}
+
+/* anxiety gauge card */
+.anx .dims{display:grid;gap:9px;margin-top:8px}
+.anx .drow{display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:800}
+.anx .drow .lab{min-width:96px;color:var(--ink)}
+.bar{flex:1;height:12px;border-radius:999px;background:#EEF2F7;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:999px}
+.anx .drow .val{font-family:'Baloo 2';min-width:30px;text-align:right}
+
+/* LRI */
+.lri{display:flex;gap:18px;align-items:center}
+.lri .big{font-family:'Baloo 2';font-size:3.4rem;line-height:.9;color:var(--red-d)}
+.lri .meta b{font-family:'Baloo 2';color:var(--ink)}
+.lri .meta p{font-size:.8rem;color:var(--muted);font-weight:700}
+.lribar{height:16px;border-radius:999px;background:linear-gradient(90deg,#22C55E,#F59E0B 50%,#EF4444);position:relative;margin-top:10px}
+.lribar .mk{position:absolute;top:-6px;width:6px;height:28px;border-radius:4px;background:#0F172A;box-shadow:0 0 0 3px #fff}
+
+/* difficulty / recommendation cards */
+.list .row{display:flex;gap:12px;align-items:flex-start;padding:12px;border:2px solid var(--line);border-radius:var(--r-sm);margin-bottom:10px;background:#fff;transition:.15s}
+.list .row:hover{border-color:var(--teal);background:#F0FDFA}
+.list .row .rk{flex:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#fff;font-family:'Baloo 2';font-size:1rem;box-shadow:0 3px 0 rgba(15,23,42,.12)}
+.list .row .tx b{font-family:'Baloo 2';color:var(--ink);font-size:.96rem}
+.list .row .tx p{font-size:.8rem;color:var(--muted);font-weight:700;margin-top:1px}
+.tagr{margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
+.tagr span{font-size:.66rem;font-weight:800;background:#F0FDFA;border:1.5px solid #99F6E4;color:#0F766E;padding:2px 8px;border-radius:999px}
+
+/* predicted grade */
+.pred{text-align:center}
+.pred .gnum{font-family:'Baloo 2';font-size:3.2rem;line-height:1;color:var(--amber)}
+.pred .scale{position:relative;height:18px;border-radius:999px;background:linear-gradient(90deg,#EF4444,#F59E0B 50%,#22C55E);margin:18px 6px 8px}
+.pred .pin{position:absolute;top:-7px;transform:translateX(-50%);text-align:center}
+.pred .pin .dot{width:6px;height:32px;border-radius:4px;background:#0F172A;box-shadow:0 0 0 3px #fff;margin:0 auto}
+.pred .pin .lb{font-size:.6rem;font-weight:800;color:var(--ink);margin-top:2px;white-space:nowrap}
+.pred .legend{display:flex;justify-content:center;gap:16px;margin-top:14px;font-size:.78rem;font-weight:800}
+.pred .legend i{display:inline-block;width:11px;height:11px;border-radius:4px;margin-right:5px;vertical-align:-1px}
+
+/* AI generate */
+.ai-zone{background:linear-gradient(135deg,#1E1B4B,#312E81 60%,#4338CA);color:#fff;border:none;position:relative;overflow:hidden}
+.ai-zone::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 240px at 80% 0%,rgba(139,92,246,.4),transparent 60%)}
+.ai-zone .inner{position:relative;z-index:1}
+.ai-zone h3{font-family:'Baloo 2';font-size:1.4rem;display:flex;align-items:center;gap:10px}
+.ai-zone p.lead{opacity:.88;font-weight:700;font-size:.9rem;margin-top:4px;max-width:640px}
+.btn-ai{margin-top:16px;border:none;cursor:pointer;font-family:'Baloo 2';font-size:1.1rem;color:#1E1B4B;
+  background:linear-gradient(180deg,#FDE047,#FACC15);padding:15px 30px;border-radius:18px;
+  box-shadow:0 6px 0 #CA8A04,0 12px 24px rgba(250,204,21,.35);transition:.12s;display:inline-flex;align-items:center;gap:10px}
+.btn-ai:hover{filter:brightness(1.03)}
+.btn-ai:active{transform:translateY(4px);box-shadow:0 2px 0 #CA8A04}
+.btn-ai:disabled{opacity:.7;cursor:wait;transform:translateY(2px);box-shadow:0 4px 0 #CA8A04}
+.btn-ai .sp{width:18px;height:18px;border:3px solid rgba(30,27,75,.3);border-top-color:#1E1B4B;border-radius:50%;animation:spin .7s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.steps{margin-top:18px;display:none}
+.steps.on{display:block}
+.step{display:flex;align-items:center;gap:12px;padding:9px 0;opacity:.28;transition:.4s;font-weight:700;font-size:.88rem}
+.step.live{opacity:1}
+.step .dot{width:24px;height:24px;border-radius:8px;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:.8rem;flex:none;transition:.3s}
+.step.live .dot{background:#FACC15;color:#1E1B4B}
+.step.done .dot{background:#34D399;color:#06281f}
+.step.live{opacity:1}.step.done{opacity:.7}
+
+.result{margin-top:18px;display:none}
+.result.on{display:block;animation:rise .5s ease}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.result .rcard{background:rgba(255,255,255,.96);color:var(--ink);border-radius:var(--r-sm);padding:18px 20px;box-shadow:var(--sh-lg)}
+.result .verdict{font-family:'Baloo 2';font-size:1.15rem;color:var(--teal-d);min-height:1.4em}
+.result .meta{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+.result .meta span{font-size:.72rem;font-weight:800;background:#F0FDFA;border:1.5px solid #99F6E4;color:#0F766E;padding:3px 10px;border-radius:999px}
+.result h5{font-family:'Baloo 2';font-size:.92rem;color:var(--ink);margin:12px 0 6px;display:flex;gap:7px;align-items:center}
+.result ul{list-style:none;display:grid;gap:8px}
+.result li{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;font-weight:700;background:#F8FAFC;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}
+.result li .e{flex:none}
+.result .conf{margin-top:14px;font-size:.78rem;color:var(--muted);font-weight:700;display:flex;align-items:center;gap:8px}
+.result .conf .cb{flex:1;height:9px;border-radius:999px;background:#EEF2F7;overflow:hidden}
+.result .conf .cb>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--green));width:0;transition:width 1.1s ease}
+
+.note{background:#FFFBEB;border:2px solid #FDE68A;color:#92400E;border-radius:var(--r-sm);padding:13px 16px;font-size:.8rem;font-weight:700;margin-top:18px}
+.crumbs{margin-top:8px;font-size:.82rem;font-weight:800}.crumbs a{color:var(--teal-d);text-decoration:none}
+footer{text-align:center;color:var(--muted);font-size:.78rem;font-weight:700;padding:26px 16px 10px}
+
+@media(max-width:900px){.g-hero,.g-2{grid-template-columns:1fr}.mgrid{grid-template-columns:repeat(2,1fr)}.g-3{grid-template-columns:1fr}}
+@media(max-width:560px){.hero{flex-direction:column;text-align:center}.ring-wrap{margin:0 auto}.statline{justify-content:center}}
+</style></head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="logo"><div class="mk">∑</div><div><b>EduMind&nbsp;AI</b><span>Learning Analytics · MCDM Engine</span></div></div>
+    <div class="right">
+      <div class="chip flame">🔥 7 hari</div>
+      <div class="chip xp">⭐ 1.240 XP</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="grid g-hero">
+    <div class="card hero">
+      <div class="avatar">
+        <svg viewBox="0 0 120 120" width="100%" height="100%">
+          <rect width="120" height="120" fill="#E0F2FE"/>
+          <circle cx="60" cy="116" r="46" fill="#0EA5E9"/>
+          <path d="M30 120 q30 -34 60 0 Z" fill="#0284C7"/>
+          <circle cx="60" cy="54" r="30" fill="#FCD9B6"/>
+          <path d="M32 46 q4 -26 28 -26 t28 26 q-6 -6 -28 -8 t-28 8Z" fill="#3F2A1A"/>
+          <path d="M33 48 q27 -10 54 0 l-2 -10 q-25 -8 -50 0Z" fill="#2A1B10"/>
+          <circle cx="50" cy="56" r="3.6" fill="#3F2A1A"/><circle cx="70" cy="56" r="3.6" fill="#3F2A1A"/>
+          <path d="M52 70 q8 6 16 0" stroke="#B5654E" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <ellipse cx="44" cy="64" rx="4" ry="3" fill="#FCA5A5" opacity=".55"/><ellipse cx="76" cy="64" rx="4" ry="3" fill="#FCA5A5" opacity=".55"/>
+        </svg>
+      </div>
+      <div class="pinfo">
+        <h2>Andi Pratama</h2>
+        <div class="sub">Kelas VII SMP · 13 tahun · Jakarta</div>
+        <div class="lvl">🏅 Level 3 · Penjelajah Bilangan</div>
+        <div class="statline">
+          <div class="miniStat"><div class="v">4/8</div><div class="l">Atribut Tuntas</div></div>
+          <div class="miniStat"><div class="v">0.55</div><div class="l">θ Kognitif</div></div>
+          <div class="miniStat"><div class="v">3.7</div><div class="l">Skor Cemas</div></div>
+        </div>
+      </div>
+      <div class="ring-wrap">
+        <div class="ring">
+          <svg width="118" height="118"><circle cx="59" cy="59" r="50" stroke="rgba(255,255,255,.25)" stroke-width="12" fill="none"/>
+          <circle id="heroRing" cx="59" cy="59" r="50" stroke="#FDE047" stroke-width="12" fill="none" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314"/></svg>
+          <div class="ctr"><div><div class="n">55%</div><div class="t">Mastery</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LRI CARD -->
+    <div class="card">
+      <div class="shead" style="margin:0 0 12px"><div class="ic" style="background:var(--red)">⚠️</div><div><h3>Learning Risk Index</h3><p>Indeks risiko belajar komposit</p></div></div>
+      <div class="lri">
+        <div class="big">59</div>
+        <div class="meta"><b>Risiko TINGGI</b><p>Skala 0–100 · pita 56–75 = Tinggi</p>
+          <div class="lribar"><div class="mk" style="left:59%"></div></div>
+          <p style="margin-top:8px">Penyumbang: defisit penguasaan, rantai prasyarat putus di A2, & beban kecemasan evaluatif.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MASTERY -->
+  <div class="shead"><div class="ic" style="background:var(--teal)">🎯</div><div><h3>Skor Mastery per Atribut</h3><p>Hijau = tuntas · kuning = cukup · oranye = perlu intervensi · merah = kesulitan tinggi</p></div></div>
+  <div class="mgrid" id="mgrid"></div>
+
+  <!-- RADAR + ANXIETY -->
+  <div class="shead"><div class="ic" style="background:var(--indigo)">📊</div><div><h3>Profil Kemampuan &amp; Kecemasan</h3><p>Radar kognitif dan gauge afektif</p></div></div>
+  <div class="grid g-2">
+    <div class="chart-box"><h4>Radar Kemampuan (A1–A8)</h4><div class="cw"><canvas id="radar"></canvas></div></div>
+    <div class="chart-box anx"><h4>Gauge Kecemasan Matematika</h4>
+      <div class="cw sm"><canvas id="gauge"></canvas></div>
+      <div style="text-align:center;margin-top:-8px"><span style="font-family:'Baloo 2';font-size:1.6rem;color:var(--amber)">3.7</span> <span style="font-weight:800;color:var(--muted)">/ 5 · TINGGI</span></div>
+      <div class="dims">
+        <div class="drow"><span class="lab">Evaluation</span><div class="bar"><i style="width:90%;background:#EF4444"></i></div><span class="val">4.5</span></div>
+        <div class="drow"><span class="lab">Learning</span><div class="bar"><i style="width:76%;background:#F59E0B"></i></div><span class="val">3.8</span></div>
+        <div class="drow"><span class="lab">Numerical</span><div class="bar"><i style="width:72%;background:#F59E0B"></i></div><span class="val">3.6</span></div>
+        <div class="drow"><span class="lab">Teacher</span><div class="bar"><i style="width:58%;background:#22C55E"></i></div><span class="val">2.9</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOP 3 DIFFICULTY + TOP 3 RECO -->
+  <div class="grid g-2">
+    <div>
+      <div class="shead"><div class="ic" style="background:var(--red)">🚩</div><div><h3>Top 3 Kesulitan Belajar</h3><p>Atribut dengan penguasaan terendah</p></div></div>
+      <div class="card list">
+        <div class="row"><div class="rk" style="background:#DC2626">1</div><div class="tx"><b>A5 · Persamaan Linear — 0.25</b><p>Atribut terlemah; muara dari rantai aljabar.</p><div class="tagr"><span>Kesulitan Tinggi</span><span>terhilir</span></div></div></div>
+        <div class="row"><div class="rk" style="background:#EA580C">2</div><div class="tx"><b>A4 · Aljabar Dasar — 0.30</b><p>Gerbang ke topik aljabar semester depan.</p><div class="tagr"><span>Kesulitan Tinggi</span></div></div></div>
+        <div class="row"><div class="rk" style="background:#D97706">3</div><div class="tx"><b>A2 · Operasi Pecahan — 0.35</b><p>Titik patah utama; hulu bagi A3–A5 (daya ungkit tertinggi).</p><div class="tagr"><span>Kesulitan Tinggi</span><span>★ leverage</span></div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="shead"><div class="ic" style="background:var(--green)">💡</div><div><h3>Top 3 Rekomendasi Intervensi</h3><p>Diurutkan berdasarkan daya ungkit</p></div></div>
+      <div class="card list">
+        <div class="row"><div class="rk" style="background:#16A34A">1</div><div class="tx"><b>Pulihkan A2 (Pecahan) dengan metode CRA</b><p>Konkret→representasi→simbol; manfaatkan A1 yang kuat sebagai jangkar.</p><div class="tagr"><span>prioritas utama</span><span>buka A3–A5</span></div></div></div>
+        <div class="row"><div class="rk" style="background:#0EA5E9">2</div><div class="tx"><b>Bangun A4 (Aljabar) setelah A2 pulih</b><p>Makna huruf sebagai kuantitas; transisi konkret→simbolik.</p><div class="tagr"><span>gerbang aljabar</span></div></div></div>
+        <div class="row"><div class="rk" style="background:#8B5CF6">3</div><div class="tx"><b>Regulasi kecemasan evaluatif (paralel)</b><p>Kuis rendah-tekanan tanpa nilai; manfaatkan relasi guru yang aman.</p><div class="tagr"><span>afektif</span><span>berkelanjutan</span></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREDICTED GRADE -->
+  <div class="shead"><div class="ic" style="background:var(--amber)">🔮</div><div><h3>Prediksi Nilai Matematika Semester Depan</h3><p>Estimasi NCDM dari penguasaan prasyarat</p></div></div>
+  <div class="card pred">
+    <div class="gnum">62</div>
+    <div style="font-weight:800;color:var(--muted)">Prediksi tanpa intervensi · rentang 55–68 · <span style="color:var(--red-d)">di bawah KKM (70)</span></div>
+    <div class="scale">
+      <div class="pin" style="left:62%"><div class="dot"></div><div class="lb">Prediksi 62</div></div>
+      <div class="pin" style="left:70%"><div class="dot" style="background:#475569"></div><div class="lb">KKM 70</div></div>
+      <div class="pin" style="left:78%"><div class="dot" style="background:#16A34A"></div><div class="lb">+Intervensi 78</div></div>
+    </div>
+    <div class="legend"><span><i style="background:#EF4444"></i>Berisiko</span><span><i style="background:#F59E0B"></i>Borderline</span><span><i style="background:#22C55E"></i>Tuntas</span></div>
+  </div>
+
+  <!-- AI GENERATE -->
+  <div class="card ai-zone" style="margin-top:24px">
+    <div class="inner">
+      <h3>🤖 AI Recommendation Engine</h3>
+      <p class="lead">Tekan tombol untuk menjalankan mesin: HO-DINA mendiagnosis atribut belum-tuntas, NCDM memprediksi peluang topik, lalu rekomendasi personal disusun dan dimodulasi oleh profil kecemasan Andi.</p>
+      <button class="btn-ai" id="genBtn"><span class="sp"></span><span class="lbl">⚡ Generate AI Recommendation</span></button>
+
+      <div class="steps" id="steps">
+        <div class="step" data-s="1"><div class="dot">1</div><div>Tahap 1 — HO-DINA mengidentifikasi atribut belum-tuntas…</div></div>
+        <div class="step" data-s="2"><div class="dot">2</div><div>Tahap 2 — NCDM memprediksi peluang sukses per topik…</div></div>
+        <div class="step" data-s="3"><div class="dot">3</div><div>Tahap 3 — Menyusun jalur belajar (deep-learning recommender)…</div></div>
+        <div class="step" data-s="4"><div class="dot">4</div><div>Tahap 4 — Menyesuaikan dengan profil kecemasan (θ-afektif)…</div></div>
+      </div>
+
+      <div class="result" id="result">
+        <div class="rcard">
+          <div class="verdict" id="verdict"></div>
+          <div class="meta" id="rmeta"></div>
+          <h5>📚 Mulai dari sini</h5><ul id="recFirst"></ul>
+          <h5>⏸️ Bisa ditunda dulu</h5><ul id="recDefer"></ul>
+          <h5>🧩 Cara &amp; level belajar</h5><ul id="recHow"></ul>
+          <div class="conf">Keyakinan model <span id="confTxt">—</span><div class="cb"><i id="confBar"></i></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">⚠️ Semua skor mastery, θ-afektif, LRI, prediksi nilai, dan keyakinan model di sini adalah <b>estimasi ilustratif berbasis model</b> untuk simulasi. Implementasi nyata memerlukan kalibrasi HO-DINA/NCDM pada sampel empiris. Foto siswa berupa avatar ilustrasi (subjek fiktif). 
+  <div class="crumbs"><a href="index.html">← Portal Asesmen</a> · <a href="Laporan_Diagnostik_Andi_Pratama.html">Laporan Diagnostik</a> · <a href="AI_Recommendation_Engine_Andi_Pratama.html">Engine Pipeline</a></div></div>
+
+  <footer>EduMind AI (Simulasi) · HO-DINA × NCDM · Khusnul Marom — Pengembangan Model Diagnostik Kesulitan Belajar Matematika Bagi Murid SMP Berbasis AI.</footer>
+</div>
+
+<script>
+const FONT="Nunito, sans-serif"; Chart.defaults.font.family=FONT; Chart.defaults.font.weight='700'; Chart.defaults.color='#64748B';
+const ATTR=['A1','A2','A3','A4','A5','A6','A7','A8'];
+const NAME=['Bilangan Bulat','Operasi Pecahan','Rasio & Perbandingan','Aljabar Dasar','Persamaan Linear','Geometri Dasar','Pengukuran','Interpretasi Data'];
+const MAST=[0.90,0.35,0.40,0.30,0.25,0.75,0.80,0.65];
+const colOf=v=> v>=0.8?'#22C55E': v>=0.6?'#3B82F6': v>=0.4?'#F59E0B':'#EF4444';
+const badgeOf=v=> v>=0.8?'🏆': v>=0.6?'✅': v>=0.4?'⚠️':'🚧';
+
+// mastery cards
+const mg=document.getElementById('mgrid');
+MAST.forEach((v,i)=>{
+  const c=colOf(v), pct=Math.round(v*100), off=314*(1-v);
+  const lvls=v>=0.8?'<i class="on"></i><i class="on"></i><i class="on"></i>':
+             v>=0.6?'<i class="on y"></i><i class="on y"></i><i></i>':
+             v>=0.4?'<i class="on y"></i><i></i><i></i>':'<i class="on r"></i><i></i><i></i>';
+  mg.insertAdjacentHTML('beforeend',`
+    <div class="mcard"><span class="badge">${badgeOf(v)}</span>
+      <div class="mring"><svg width="78" height="78"><circle cx="39" cy="39" r="33" stroke="#EEF2F7" stroke-width="9" fill="none"/>
+        <circle cx="39" cy="39" r="33" stroke="${c}" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="207" stroke-dashoffset="207" data-off="${207*(1-v)}"/></svg>
+        <div class="pc" style="color:${c}">${pct}%</div></div>
+      <div class="code">${ATTR[i]}</div><div class="nm">${NAME[i]}</div>
+      <div class="lvlbar">${lvls}</div>
+    </div>`);
+});
+
+// radar
+new Chart(document.getElementById('radar'),{type:'radar',
+ data:{labels:ATTR,datasets:[{data:MAST,fill:true,backgroundColor:'rgba(20,184,166,.20)',borderColor:'#0F766E',
+   pointBackgroundColor:MAST.map(colOf),pointRadius:5,pointBorderColor:'#fff',pointBorderWidth:2,borderWidth:3}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.r.toFixed(2)}}},
+  scales:{r:{min:0,max:1,ticks:{stepSize:0.2,backdropColor:'transparent'},grid:{color:'#E7ECF3'},angleLines:{color:'#E7ECF3'},pointLabels:{font:{size:13,weight:'800',family:'Baloo 2'}}}}}});
+
+// anxiety gauge
+new Chart(document.getElementById('gauge'),{type:'doughnut',
+ data:{labels:['Cemas','Sisa'],datasets:[{data:[74,26],backgroundColor:['#F59E0B','#EEF2F7'],borderWidth:0,circumference:180,rotation:270}]},
+ options:{responsive:true,maintainAspectRatio:false,cutout:'74%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});
+
+// animate rings on load
+window.addEventListener('load',()=>{
+  setTimeout(()=>{document.getElementById('heroRing').style.transition='stroke-dashoffset 1.2s ease';
+    document.getElementById('heroRing').style.strokeDashoffset=314*(1-0.55);},200);
+  document.querySelectorAll('.mring circle[data-off]').forEach((el,k)=>{
+    setTimeout(()=>{el.style.transition='stroke-dashoffset 1s ease';el.style.strokeDashoffset=el.dataset.off;},300+k*90);
+  });
+});
+
+// ---- Generate AI Recommendation ----
+const recFirst=[
+  {e:'1️⃣',t:'<b>Operasi Pecahan (A2)</b> — titik patah utama. Mulai dengan model visual (garis bilangan, model luas) untuk membongkar kebiasaan menjumlah pembilang & penyebut. Manfaatkan A1 (0.90) sebagai jangkar.'},
+  {e:'2️⃣',t:'<b>Aljabar Dasar (A4)</b> — segera setelah A2 stabil. Tekankan makna huruf sebagai kuantitas, bukan label. Ini gerbang langsung ke topik aljabar semester depan (peluang sukses kini hanya 27%).'}
+];
+const recDefer=[
+  {e:'⏸️',t:'<b>Persamaan Linear (A5)</b> — tunda hingga A4 kokoh; tanpa aljabar dasar yang kuat, latihan persamaan akan terasa menghafal.'},
+  {e:'🛡️',t:'<b>Geometri & Statistika</b> — sudah cukup kuat (0.75–0.78). Cukup dipertahankan lewat soal pengayaan, bukan diprioritaskan.'}
+];
+const recHow=[
+  {e:'🧩',t:'<b>Metode:</b> Concrete → Representational → Abstract (CRA) dengan pendampingan terbimbing.'},
+  {e:'🎚️',t:'<b>Level soal:</b> mulai mudah (target sukses ≈80%) lalu naik bertahap — penyesuaian karena kecemasan evaluatif sangat tinggi (4.5).'},
+  {e:'💙',t:'<b>Afektif:</b> kuis rendah-tekanan tanpa nilai dulu; bangun pengalaman berhasil sebelum asesmen berbobot.'}
+];
+const verdicts=[
+  'Fokuskan energi pada satu titik: pulihkan Operasi Pecahan, dan empat atribut hilir ikut terangkat.',
+  'Andi adalah kasus "satu sumbatan, daya ungkit besar" — perbaiki pecahan dulu, sisanya menyusul.',
+  'Prioritas jelas: bongkar pecahan (A2) → aljabar (A4), dengan rasa aman emosional sebagai bahan bakar.'
+];
+
+function type(el,txt,done){el.textContent='';let i=0;const id=setInterval(()=>{el.textContent=txt.slice(0,++i);if(i>=txt.length){clearInterval(id);done&&done();}},16);}
+function fill(ul,arr){ul.innerHTML='';arr.forEach((o,k)=>{setTimeout(()=>{ul.insertAdjacentHTML('beforeend',`<li><span class="e">${o.e}</span><span>${o.t}</span></li>`);},k*180);});}
+
+let pressCount=0;
+document.getElementById('genBtn').addEventListener('click',function(){
+  const btn=this, sp=btn.querySelector('.sp'), lbl=btn.querySelector('.lbl');
+  const steps=document.getElementById('steps'), result=document.getElementById('result');
+  btn.disabled=true; sp.style.display='inline-block'; lbl.textContent='Menganalisis…';
+  result.classList.remove('on'); steps.classList.add('on');
+  const stepEls=[...document.querySelectorAll('.step')];
+  stepEls.forEach(s=>s.className='step');
+  let i=0;
+  const run=()=>{
+    if(i>0) stepEls[i-1].className='step done';
+    if(i<stepEls.length){ stepEls[i].className='step live'; i++; setTimeout(run,720); }
+    else{ reveal(); }
+  };
+  setTimeout(run,250);
+
+  function reveal(){
+    sp.style.display='none'; btn.disabled=false; lbl.textContent='🔄 Generate Ulang';
+    result.classList.add('on');
+    type(document.getElementById('verdict'), verdicts[pressCount%verdicts.length]);
+    pressCount++;
+    const meta=document.getElementById('rmeta');
+    meta.innerHTML=['🎯 Prioritas #1: A2','🧠 Sumber: HO-DINA + NCDM','📈 Proyeksi nilai +Intervensi: 78','🔥 LRI: 59 (Tinggi)']
+      .map(m=>`<span>${m}</span>`).join('');
+    fill(document.getElementById('recFirst'),recFirst);
+    fill(document.getElementById('recDefer'),recDefer);
+    fill(document.getElementById('recHow'),recHow);
+    const conf=86+ (pressCount%3);
+    document.getElementById('confTxt').textContent=conf+'%';
+    setTimeout(()=>{document.getElementById('confBar').style.width=conf+'%';},150);
+    result.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+});
+</script>
+</body></html>
