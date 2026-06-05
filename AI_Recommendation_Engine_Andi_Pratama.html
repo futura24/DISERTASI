@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Recommendation Engine · HO-DINA × NCDM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --primary:#0F766E; --secondary:#134E4A; --accent:#14B8A6; --accent-2:#0EA5E9;
+  --bg:#F1F5F9; --surface:#FFFFFF; --soft:#F0FDFA; --line:#E2E8F0;
+  --ink:#1E293B; --muted:#64748B; --ok:#16A34A; --warn:#D97706; --bad:#DC2626;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.chip,.btn,.mono{font-family:'Poppins',sans-serif}
+.mono,code{font-family:'JetBrains Mono',ui-monospace,monospace}
+.wrap{max-width:1140px;margin:0 auto;padding:0 18px}
+
+.app-header{background:linear-gradient(135deg,#0B1120,var(--secondary) 55%,var(--primary));color:#fff;position:relative;overflow:hidden}
+.app-header::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;background:radial-gradient(circle,rgba(20,184,166,.22),transparent 70%);border-radius:50%}
+.app-header .wrap{padding:34px 18px 30px;position:relative;z-index:1}
+.eyebrow{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;background:rgba(20,184,166,.18);border:1px solid rgba(94,234,212,.4);padding:6px 14px;border-radius:999px;margin-bottom:14px;color:#5EEAD4}
+.app-header h1{font-size:clamp(1.4rem,3.4vw,2.1rem);font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.app-header p.sub{margin-top:8px;max-width:800px;color:rgba(226,232,240,.92);font-size:.95rem}
+.engine{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+.engine span{font-size:.72rem;background:rgba(255,255,255,.08);border:1px solid rgba(94,234,212,.35);padding:5px 12px;border-radius:999px;letter-spacing:.03em;color:#CCFBF1}
+.crumbs{margin-top:14px;font-size:.85rem}.crumbs a{color:#5EEAD4;text-decoration:none;border-bottom:1px dashed rgba(94,234,212,.5)}.crumbs a:hover{color:#fff}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 22px 24px;margin:18px 0}
+.sec-label{display:inline-block;font-family:'Poppins';font-weight:700;font-size:.74rem;letter-spacing:.1em;color:var(--accent);background:var(--soft);border:1px solid #99F6E4;padding:4px 10px;border-radius:8px;margin-bottom:8px}
+.section-title{font-size:1.18rem;font-weight:600;color:var(--secondary);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--accent)}
+.section-desc{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+p.body{margin:10px 0}
+
+/* PIPELINE */
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:6px 0 4px}
+.stage{position:relative;background:#fff;border:1px solid var(--line);border-top:4px solid var(--st);border-radius:var(--radius-sm);padding:16px 16px 18px;margin-right:26px;box-shadow:var(--shadow)}
+.stage:last-child{margin-right:0}
+.stage::after{content:"→";position:absolute;right:-22px;top:50%;transform:translateY(-50%);font-size:1.4rem;color:var(--accent);font-weight:700}
+.stage:last-child::after{display:none}
+.stage .sn{font-family:'JetBrains Mono';font-weight:600;font-size:.7rem;color:var(--st);letter-spacing:.05em}
+.stage h4{font-size:.96rem;color:var(--secondary);margin:4px 0 6px}
+.stage p{font-size:.8rem;color:var(--muted)}
+.stage .mdl{margin-top:8px;font-size:.66rem;font-family:'JetBrains Mono';background:var(--soft);border:1px solid #CCFBF1;color:#115E59;padding:2px 8px;border-radius:6px;display:inline-block}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:6px 0 8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat .v{font-family:'Poppins';font-size:1.6rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .l{font-size:.72rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat.ok .v{color:var(--ok)}.stat.bad .v{color:var(--bad)}.stat.warn .v{color:var(--warn)}
+
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.86rem;min-width:520px}
+thead th{background:var(--secondary);color:#fff;font-family:'Poppins';font-weight:600;font-size:.78rem;padding:10px 12px;text-align:left}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:nth-child(even){background:#F8FAFC}tbody tr:hover{background:var(--soft)}
+.center{text-align:center}
+.pill{display:inline-block;font-size:.7rem;font-weight:600;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pill.g{background:#DCFCE7;color:#166534;border:1px solid #86EFAC}
+.pill.b{background:#DBEAFE;color:#1E40AF;border:1px solid #93C5FD}
+.pill.y{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D}
+.pill.r{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+.pill.rr{background:#FCA5A5;color:#7F1D1D;border:1px solid #F87171}
+
+.chart-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)}
+.chart-box h4{font-size:.92rem;color:var(--secondary);margin-bottom:10px;text-align:center}
+.chart-box .cw{position:relative;height:280px}
+.chart-box .cw.sm{height:200px}
+
+.reccard{border:1px solid var(--line);border-left:4px solid var(--rc);border-radius:var(--radius-sm);padding:14px 16px;background:#fff;box-shadow:var(--shadow)}
+.reccard .rt{font-family:'Poppins';font-weight:700;font-size:.7rem;color:var(--rc);letter-spacing:.06em;text-transform:uppercase}
+.reccard h4{font-size:1rem;color:var(--secondary);margin:3px 0 6px}
+.reccard p{font-size:.85rem;color:var(--ink)}
+.reccard .tags{margin-top:9px;display:flex;gap:6px;flex-wrap:wrap}
+.reccard .tags span{font-size:.68rem;background:var(--soft);border:1px solid #CCFBF1;color:#115E59;padding:2px 8px;border-radius:999px}
+
+.rank{display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius-sm);margin:8px 0;background:#fff;box-shadow:var(--shadow)}
+.rank .no{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;font-family:'Poppins';font-weight:700;color:#fff;font-size:1rem}
+.rank .info{flex:1}.rank .info b{font-family:'Poppins';color:var(--secondary)}.rank .info p{font-size:.8rem;color:var(--muted);margin-top:1px}
+.rank .uscore{font-family:'JetBrains Mono';font-weight:600;font-size:.9rem;color:var(--secondary)}
+
+.xai{background:#0B1120;color:#CBD5E1;border-radius:var(--radius-sm);padding:18px 18px 8px;font-size:.86rem;border:1px solid #1E293B}
+.xai h4{color:#5EEAD4;font-size:.92rem;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.xai .why{margin:8px 0;padding-left:14px;border-left:2px solid #14B8A6}
+.xai code{color:#5EEAD4;background:rgba(20,184,166,.12);padding:1px 6px;border-radius:5px}
+.xai .cwx{position:relative;height:230px;background:#0F172A;border-radius:8px;padding:8px;margin:12px 0}
+
+.teacher{background:linear-gradient(135deg,#F0FDFA,#fff);border:1px solid #99F6E4}
+.tline{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.tline:last-child{border-bottom:none}
+.tline .ic{flex:none;width:30px;height:30px;border-radius:8px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:700;font-family:'Poppins';font-size:.85rem}
+.tline .tx b{color:var(--secondary)}.tline .tx p{font-size:.86rem;color:var(--ink)}
+
+.note{background:var(--soft);border:1px solid #99F6E4;border-radius:var(--radius-sm);padding:14px 16px;color:#115E59;font-size:.85rem;margin-top:14px}
+.note b{color:#0F766E}
+.barwrap{display:flex;align-items:center;gap:10px}.barwrap b{font-family:'Poppins';font-size:.8rem;min-width:36px}
+.bar{height:11px;border-radius:999px;background:#E2E8F0;overflow:hidden;min-width:80px}.bar>i{display:block;height:100%;border-radius:999px}
+footer.foot{color:var(--muted);font-size:.8rem;text-align:center;padding:30px 18px 50px}
+
+@media(max-width:820px){.pipe{grid-template-columns:1fr 1fr}.stage{margin-right:0;margin-bottom:26px}.stage::after{content:"↓";right:50%;top:auto;bottom:-22px;transform:translateX(50%)}.stage:nth-child(2)::after,.stage:last-child::after{display:none}.grid2,.grid3{grid-template-columns:1fr}.stat-grid{grid-template-columns:repeat(2,1fr)}}
+@media print{.crumbs{display:none}.card,.chart-box{box-shadow:none;break-inside:avoid}body{background:#fff}}
+</style></head>
+<body>
+<header class="app-header"><div class="wrap" style="padding:34px 18px 30px">
+  <span class="eyebrow">AI Recommendation Engine · Simulasi</span>
+  <h1>Mesin Rekomendasi Pembelajaran Adaptif</h1>
+  <p class="sub">Pipeline diagnostik–prediktif–preskriptif: HO-DINA mengidentifikasi atribut belum-tuntas → NCDM memprediksi peluang sukses per topik → mesin rekomendasi (deep learning) menyusun jalur belajar → kecemasan matematika memodifikasi rekomendasi sebagai variabel afektif. Subjek: <b>Andi Pratama</b> (VII SMP).</p>
+  <div class="engine"><span>● Input: P(mastery) A1–A8</span><span>● Input: θ-afektif</span><span>● Input: riwayat belajar*</span><span>● XAI aktif</span></div>
+  <div class="crumbs"><a href="index.html">← Portal</a> &nbsp;·&nbsp; <a href="Laporan_Diagnostik_Andi_Pratama.html">Laporan Diagnostik →</a></div>
+</div></header>
+
+<main class="wrap">
+
+  <!-- PIPELINE -->
+  <section class="card">
+    <span class="sec-label">Arsitektur · Pipeline 4 Tahap</span>
+    <div class="section-title">Alur Kerja Mesin Rekomendasi</div>
+    <p class="section-desc">Empat tahap berurutan: diagnosis laten → prediksi topik → preskripsi deep-learning → modulasi afektif.</p>
+    <div class="pipe">
+      <div class="stage" style="--st:#0F766E"><div class="sn">TAHAP 1</div><h4>Diagnosis Laten</h4><p>Identifikasi atribut belum-mastered dari vektor P(mastery) & θ-umum.</p><span class="mdl">HO-DINA</span></div>
+      <div class="stage" style="--st:#0EA5E9"><div class="sn">TAHAP 2</div><h4>Prediksi Topik</h4><p>Estimasi P(sukses) untuk Bilangan, Aljabar, Geometri, Statistika.</p><span class="mdl">NCDM</span></div>
+      <div class="stage" style="--st:#7C3AED"><div class="sn">TAHAP 3</div><h4>Preskripsi</h4><p>Urutan materi, materi tertunda, mode belajar, level kesulitan.</p><span class="mdl">DL Recommender</span></div>
+      <div class="stage" style="--st:#DB2777"><div class="sn">TAHAP 4</div><h4>Modulasi Afektif</h4><p>Kecemasan menggeser format asesmen & titik mulai kesulitan.</p><span class="mdl">θ-afektif gate</span></div>
+    </div>
+    <div class="note"><b>*Riwayat belajar (input simulasi):</b> tren formatif 6 unit terakhir — kuat & stabil pada unit Bilangan Bulat/Geometri/Pengukuran; menurun tajam pada unit Pecahan dan Bentuk Aljabar; <b>penurunan performa konsisten pada asesmen ber-tenggat/berbobot</b> dibanding tugas latihan (pola khas interferensi kecemasan evaluatif). Angka spesifik bersifat ilustratif untuk simulasi.</div>
+  </section>
+
+  <!-- OUTPUT 1 & 2: COGNITIVE + AFFECTIVE PROFILE -->
+  <section class="card">
+    <span class="sec-label">Output 1 &amp; 2 · Profil</span>
+    <div class="section-title">Student Cognitive Profile &amp; Affective Profile</div>
+    <p class="section-desc">Ringkasan dua kanal input yang diumpankan ke mesin.</p>
+    <div class="stat-grid">
+      <div class="stat warn"><div class="v">0.55</div><div class="l">θ-kognitif (rerata mastery)</div></div>
+      <div class="stat ok"><div class="v">A1·A7</div><div class="l">Simpul Kuat</div></div>
+      <div class="stat bad"><div class="v">A2·A4·A5</div><div class="l">Simpul Lemah</div></div>
+      <div class="stat warn"><div class="v">+1.0σ</div><div class="l">θ-afektif (ilustratif)</div></div>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="chart-box"><h4>Cognitive Profile — Radar Mastery</h4><div class="cw"><canvas id="radarCog"></canvas></div></div>
+      <div class="chart-box"><h4>Affective Profile — Dimensi Kecemasan</h4><div class="cw"><canvas id="radarAff"></canvas></div></div>
+    </div>
+  </section>
+
+  <!-- TAHAP 1 + OUTPUT 3 -->
+  <section class="card">
+    <span class="sec-label">Tahap 1 · HO-DINA · Output 3</span>
+    <div class="section-title">Mastery Probability per Attribute &amp; Atribut Belum-Tuntas</div>
+    <p class="section-desc">HO-DINA mengklasifikasi mastered (≥0.60) vs belum-tuntas (&lt;0.60), dengan pembacaan jalur prasyarat.</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th>Atribut</th><th>Domain</th><th class="center">P(mastery)</th><th class="center">Status HO-DINA</th><th>Peran Hierarki</th></tr></thead>
+      <tbody>
+        <tr><td><b>A1</b></td><td>Bilangan Bulat</td><td class="center">0.90</td><td class="center"><span class="pill g">Mastered</span></td><td>Fondasi (akar)</td></tr>
+        <tr><td><b>A2</b></td><td>Operasi Pecahan</td><td class="center">0.35</td><td class="center"><span class="pill r">Belum · titik patah</span></td><td>Hulu rantai abstrak</td></tr>
+        <tr><td><b>A3</b></td><td>Rasio &amp; Perbandingan</td><td class="center">0.40</td><td class="center"><span class="pill r">Belum</span></td><td>← A2</td></tr>
+        <tr><td><b>A4</b></td><td>Aljabar Dasar</td><td class="center">0.30</td><td class="center"><span class="pill r">Belum</span></td><td>← A1, A2</td></tr>
+        <tr><td><b>A5</b></td><td>Persamaan Linear</td><td class="center">0.25</td><td class="center"><span class="pill rr">Belum · terlemah</span></td><td>← A4 (muara)</td></tr>
+        <tr><td><b>A6</b></td><td>Geometri Dasar</td><td class="center">0.75</td><td class="center"><span class="pill b">Mastered</span></td><td>Jalur semi-independen</td></tr>
+        <tr><td><b>A7</b></td><td>Pengukuran</td><td class="center">0.80</td><td class="center"><span class="pill g">Mastered</span></td><td>← A1, A6</td></tr>
+        <tr><td><b>A8</b></td><td>Interpretasi Data</td><td class="center">0.65</td><td class="center"><span class="pill b">Mastered (tipis)</span></td><td>← A2, A3</td></tr>
+      </tbody>
+    </table></div>
+    <p class="body"><b>Atribut belum-tuntas:</b> A2, A3, A4, A5 — keempatnya terletak pada satu rantai prasyarat yang patah di A2, sehingga mesin memperlakukannya sebagai <b>satu klaster bottleneck</b>, bukan empat masalah terpisah.</p>
+  </section>
+
+  <!-- TAHAP 2: NCDM TOPIC PREDICTION -->
+  <section class="card">
+    <span class="sec-label">Tahap 2 · NCDM</span>
+    <div class="section-title">Prediksi Probabilitas Sukses per Topik (NCDM)</div>
+    <p class="section-desc">Lapisan interaksi NCDM memetakan vektor proficiency → peluang sukses pada empat topik makro Kelas VII.</p>
+    <div class="grid2">
+      <div class="chart-box"><h4>P(sukses) per Topik Makro</h4><div class="cw"><canvas id="barTopic"></canvas></div></div>
+      <div class="table-scroll" style="align-self:start"><table>
+        <thead><tr><th>Topik</th><th>Atribut pendukung</th><th class="center">P(sukses)</th><th class="center">Status</th></tr></thead>
+        <tbody>
+          <tr><td><b>Geometri</b></td><td>A6, A7</td><td class="center">0.78</td><td class="center"><span class="pill g">Siap</span></td></tr>
+          <tr><td><b>Statistika</b></td><td>A8, A3</td><td class="center">0.62</td><td class="center"><span class="pill b">Cukup</span></td></tr>
+          <tr><td><b>Bilangan</b></td><td>A1, A2, A3</td><td class="center">0.50</td><td class="center"><span class="pill y">Rentan</span></td></tr>
+          <tr><td><b>Aljabar</b></td><td>A4, A5</td><td class="center">0.27</td><td class="center"><span class="pill r">Berisiko Tinggi</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <p class="body"><b>Pembacaan:</b> Geometri aman; Bilangan tampak menengah namun <b>rapuh</b> karena diseret turun oleh A2 (pecahan) meski A1 tinggi; Aljabar adalah zona merah — muara dari bottleneck. Inilah sinyal utama yang diteruskan ke mesin rekomendasi.</p>
+  </section>
+
+  <!-- OUTPUT 4: LEARNING RISK INDEX -->
+  <section class="card">
+    <span class="sec-label">Output 4 · Learning Risk Index</span>
+    <div class="section-title">Learning Risk Index (LRI)</div>
+    <p class="section-desc">Indeks komposit transparan dari tiga komponen: defisit penguasaan, keterputusan rantai prasyarat, dan beban afektif.</p>
+    <div class="grid2">
+      <div class="chart-box"><h4>LRI Komposit (0–100)</h4><div class="cw sm"><canvas id="gaugeLRI"></canvas></div>
+        <div style="text-align:center;margin-top:6px"><span class="mono" style="font-size:1.6rem;font-weight:700;color:var(--bad)">59</span> <span class="pill r">RISIKO TINGGI</span></div></div>
+      <div class="chart-box"><h4>Dekomposisi LRI</h4><div class="cw sm"><canvas id="barLRI"></canvas></div>
+        <p class="section-desc mono" style="margin-top:8px;font-size:.74rem">LRI = 100 × [0.40·defisit + 0.35·breakage + 0.25·afektif]<br>= 100 × [0.40·0.45 + 0.35·0.675 + 0.25·0.675] ≈ 59</p></div>
+    </div>
+    <p class="section-desc">Skala: 0–30 Rendah · 31–55 Sedang · <b>56–75 Tinggi</b> · 76–100 Sangat Tinggi. Pita afektif (0.675) berasal dari rerata kecemasan 3.70 ternormalisasi.</p>
+  </section>
+
+  <!-- TAHAP 3 + OUTPUT 5: RECOMMENDATIONS -->
+  <section class="card">
+    <span class="sec-label">Tahap 3 · Output 5 · Personalized Learning Recommendation</span>
+    <div class="section-title">Rekomendasi Pembelajaran Personalisasi</div>
+    <p class="section-desc">Empat keluaran preskriptif mesin (3a–3d), sudah dimodulasi oleh profil afektif (Tahap 4).</p>
+    <div class="grid2">
+      <div class="reccard" style="--rc:#0F766E"><div class="rt">3a · Pelajari Lebih Dulu</div><h4>A2 Operasi Pecahan → A4 Aljabar Dasar</h4><p>Poros berdaya ungkit tertinggi. A2 sebagai gerbang membuka A3–A5; manfaatkan A1 (kuat) sebagai jangkar konkret.</p><div class="tags"><span>urgensi kritis</span><span>hulu prasyarat</span></div></div>
+      <div class="reccard" style="--rc:#D97706"><div class="rt">3b · Dapat Ditunda</div><h4>A5 Persamaan Linear &amp; pengayaan Geometri/Statistika</h4><p>A5 ditunda hingga A4 stabil (ketergantungan langsung). Topik kuat (Geometri/Statistika) cukup dipelihara, bukan diprioritaskan.</p><div class="tags"><span>tunda terkondisi</span><span>mode pemeliharaan</span></div></div>
+      <div class="reccard" style="--rc:#0EA5E9"><div class="rt">3c · Bentuk Pembelajaran</div><h4>Concrete–Representational–Abstract (CRA) + formatif rendah-tekanan</h4><p>Mulai dari manipulatif/visual (garis bilangan, model batang) → representasi → simbol. Pendampingan terbimbing; hindari drill berbatas waktu di awal.</p><div class="tags"><span>visual-konkret</span><span>scaffolded</span><span>peer/guided</span></div></div>
+      <div class="reccard" style="--rc:#DB2777"><div class="rt">3d · Tingkat Kesulitan</div><h4>Adaptif, mulai rendah (target sukses ≈ 80%)</h4><p>Titik mulai diturunkan karena kecemasan evaluatif tinggi → bangun pengalaman sukses lebih dulu, naikkan kesulitan bertahap. Area kuat boleh langsung sedang–sulit.</p><div class="tags"><span>adaptive difficulty</span><span>success-rate 80%</span></div></div>
+    </div>
+    <div class="note"><b>Tahap 4 — modulasi afektif yang diterapkan:</b> karena Evaluation Anxiety = 4.5 (sangat tinggi), mesin (1) mengganti asesmen berbobot menjadi formatif tanpa nilai pada fase awal, (2) menurunkan titik-mulai kesulitan ~1 level, dan (3) menjadwalkan dukungan afektif <b>paralel sejak hari-1</b>. Tanpa modulasi ini, rekomendasi kesulitan akan satu level lebih tinggi.</div>
+  </section>
+
+  <!-- OUTPUT 6: INTERVENTION PRIORITY -->
+  <section class="card">
+    <span class="sec-label">Output 6 · Intervention Priority Ranking</span>
+    <div class="section-title">Peringkat Prioritas Intervensi</div>
+    <p class="section-desc">Skor urgensi = f(defisit × daya ungkit hierarkis × beban risiko topik). Skala 0–100.</p>
+    <div class="rank"><div class="no" style="background:#DC2626">1</div><div class="info"><b>A2 · Operasi Pecahan</b><p>Hulu bottleneck; membuka A3–A5. Defisit 0.65 + daya ungkit tertinggi.</p></div><div class="uscore">92</div></div>
+    <div class="rank"><div class="no" style="background:#EA580C">2</div><div class="info"><b>A4 · Aljabar Dasar</b><p>Gerbang langsung topik Aljabar (zona merah NCDM). Defisit 0.70.</p></div><div class="uscore">85</div></div>
+    <div class="rank"><div class="no" style="background:#DB2777">3</div><div class="info"><b>Dukungan Afektif (Evaluation Anxiety)</b><p>Modifier silang; paralel & berkelanjutan agar gain kognitif tidak tergerus tekanan ujian.</p></div><div class="uscore">78</div></div>
+    <div class="rank"><div class="no" style="background:#D97706">4</div><div class="info"><b>A5 · Persamaan Linear</b><p>Muara terlemah (0.25), namun berurut — dikerjakan setelah A4 stabil.</p></div><div class="uscore">64</div></div>
+    <div class="rank"><div class="no" style="background:#16A34A">5</div><div class="info"><b>Pemeliharaan A1·A6·A7·A8</b><p>Kekuatan eksisting; pengayaan agar tidak meluruh.</p></div><div class="uscore">28</div></div>
+  </section>
+
+  <!-- OUTPUT 7: XAI -->
+  <section class="card">
+    <span class="sec-label">Output 7 · Explainable AI</span>
+    <div class="section-title">Penjelasan Keputusan Mesin (XAI)</div>
+    <p class="section-desc">Mengapa mesin menempatkan A2 sebagai prioritas #1? Atribusi fitur gaya additif (kontribusi terhadap skor urgensi).</p>
+    <div class="xai">
+      <h4>◆ Atribusi Fitur — Rekomendasi: "Prioritaskan A2 lebih dulu"</h4>
+      <div class="cwx"><canvas id="xaiBar"></canvas></div>
+      <div class="why">Faktor pendorong terbesar: <code>P(mastery A2)=0.35</code> (defisit berat) dan <code>leverage_hierarki(A2)=0.95</code> — A2 menjadi prasyarat bagi A3, A4, A5 sekaligus.</div>
+      <div class="why"><code>P(mastery A1)=0.90</code> berkontribusi positif sebagai <i>enabler</i>: prasyarat hulu A2 sudah terpenuhi, sehingga pemulihan A2 berpeluang cepat (kesiapan belajar tinggi).</div>
+      <div class="why"><code>numerical_anxiety=3.6</code> menambah urgensi (defisit numerik diperberat afektif), sementara <code>teacher_anxiety=2.9</code> (rendah) sedikit menurunkan urgensi karena kanal pendampingan aman tersedia.</div>
+      <div class="why" style="border-color:#0EA5E9">Aturan keputusan transparan: pilih atribut belum-tuntas dengan <code>(defisit × leverage)</code> maksimum yang <b>prasyarat hulunya sudah mastered</b> → kandidat valid hanya A2 (hulunya A1 ✓). A4/A5 menunggu karena hulunya (A2) belum pulih.</div>
+    </div>
+  </section>
+
+  <!-- OUTPUT 8: TEACHER DASHBOARD -->
+  <section class="card teacher">
+    <span class="sec-label">Output 8 · Dashboard Summary untuk Guru</span>
+    <div class="section-title">Ringkasan untuk Guru — Sekali Lihat</div>
+    <p class="section-desc">Bahasa praktis, langsung dapat ditindaklanjuti di kelas.</p>
+    <div class="tline"><div class="ic">📍</div><div class="tx"><b>Diagnosis singkat.</b><p>Andi kuat di bilangan bulat, geometri, dan pengukuran. Masalah berpusat di <b>pecahan</b>, lalu merembet ke rasio, aljabar, dan persamaan. Ini satu akar masalah, bukan banyak.</p></div></div>
+    <div class="tline"><div class="ic">🎯</div><div class="tx"><b>Mulai dari mana.</b><p>Ajarkan ulang <b>operasi pecahan dengan alat peraga/visual</b> dulu. Begitu pecahan pulih, aljabar akan jauh lebih mudah masuk.</p></div></div>
+    <div class="tline"><div class="ic">🧩</div><div class="tx"><b>Cara mengajar.</b><p>Konkret → gambar → simbol. Beri latihan bertahap dari yang mudah agar ia sering berhasil; <b>hindari ulangan mendadak berbobot</b> di fase awal.</p></div></div>
+    <div class="tline"><div class="ic">💙</div><div class="tx"><b>Perhatikan kecemasan.</b><p>Andi sangat cemas saat <b>dinilai/ujian</b> (skor 4.5/5). Gunakan kuis ringan tanpa nilai dulu. Kabar baik: ia tidak takut pada guru — manfaatkan relasi ini untuk mendampingi.</p></div></div>
+    <div class="tline"><div class="ic">⚠️</div><div class="tx"><b>Risiko semester depan.</b><p><b>Tinggi</b> untuk materi Aljabar/Persamaan Linear (peluang sukses ≈ 27%). Dengan intervensi pecahan→aljabar + dukungan rasa percaya diri, peluang naik ke ~60–68%.</p></div></div>
+    <div class="tline"><div class="ic">📌</div><div class="tx"><b>Tunda dulu.</b><p>Persamaan Linear (A5) baru efektif setelah aljabar dasar kuat. Geometri & data cukup dipertahankan dengan soal pengayaan.</p></div></div>
+    <div class="note"><b>Disclaimer.</b> Seluruh probabilitas, θ-afektif, LRI, dan skor urgensi adalah <b>estimasi ilustratif berbasis model</b> untuk simulasi mesin. Implementasi nyata memerlukan kalibrasi HO-DINA/NCDM pada sampel empiris, dokumentasi konvensi norming θ-afektif, dan pelaporan eksplisit ambang CVR/CVI di Bab Metode.</div>
+  </section>
+
+</main>
+<footer class="foot">AI Recommendation Engine (Simulasi) · HO-DINA × NCDM × DL Recommender · Khusnul Marom — Pengembangan Model Diagnostik Kesulitan Belajar Matematika Bagi Murid SMP Berbasis Artificial Intelligence.</footer>
+
+<script>
+const FONT="Inter, sans-serif"; Chart.defaults.font.family=FONT; Chart.defaults.color='#64748B';
+const ATTR=['A1','A2','A3','A4','A5','A6','A7','A8'];
+const MAST=[0.90,0.35,0.40,0.30,0.25,0.75,0.80,0.65];
+const colMap=MAST.map(v=> v>=0.8?'#16A34A': v>=0.6?'#0EA5E9': v>=0.4?'#D97706':'#DC2626');
+
+new Chart(document.getElementById('radarCog'),{type:'radar',
+ data:{labels:ATTR,datasets:[{data:MAST,fill:true,backgroundColor:'rgba(20,184,166,.18)',borderColor:'#0F766E',pointBackgroundColor:colMap,pointRadius:5,borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+  scales:{r:{min:0,max:1,ticks:{stepSize:0.2,backdropColor:'transparent'},grid:{color:'#E2E8F0'},angleLines:{color:'#E2E8F0'},pointLabels:{font:{size:12,weight:'600'}}}}}});
+
+new Chart(document.getElementById('radarAff'),{type:'radar',
+ data:{labels:['Learning','Evaluation','Numerical','Teacher'],datasets:[{data:[3.8,4.5,3.6,2.9],fill:true,backgroundColor:'rgba(219,39,119,.16)',borderColor:'#DB2777',pointBackgroundColor:'#9D174D',pointRadius:5,borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+  scales:{r:{min:0,max:5,ticks:{stepSize:1,backdropColor:'transparent'},grid:{color:'#E2E8F0'},angleLines:{color:'#E2E8F0'},pointLabels:{font:{size:12,weight:'600'}}}}}});
+
+new Chart(document.getElementById('barTopic'),{type:'bar',
+ data:{labels:['Geometri','Statistika','Bilangan','Aljabar'],datasets:[{data:[0.78,0.62,0.50,0.27],backgroundColor:['#16A34A','#0EA5E9','#D97706','#DC2626'],borderRadius:6}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'P(sukses) = '+c.parsed.x.toFixed(2)}}},
+  scales:{x:{min:0,max:1,ticks:{stepSize:0.2}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('gaugeLRI'),{type:'doughnut',
+ data:{labels:['Risiko','Sisa'],datasets:[{data:[59,41],backgroundColor:['#DC2626','#E2E8F0'],borderWidth:0,circumference:180,rotation:270}]},
+ options:{responsive:true,maintainAspectRatio:false,cutout:'72%',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+c.parsed}}}}});
+
+new Chart(document.getElementById('barLRI'),{type:'bar',
+ data:{labels:['Defisit (0.40)','Breakage (0.35)','Afektif (0.25)'],datasets:[{data:[18.0,23.6,16.9],backgroundColor:['#0F766E','#D97706','#DB2777'],borderRadius:6}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'Kontribusi '+c.parsed.y.toFixed(1)+' poin'}}},
+  scales:{y:{min:0,max:30,title:{display:true,text:'Poin ke LRI'}},x:{grid:{display:false},ticks:{font:{size:10}}}}}});
+
+// XAI additive attribution (signed)
+new Chart(document.getElementById('xaiBar'),{type:'bar',
+ data:{labels:['Defisit A2 (0.35)','Leverage A2 (0.95)','Beban risiko Aljabar','Numerical anxiety','Enabler: A1 mastered','Teacher anxiety rendah'],
+   datasets:[{data:[34,30,14,8,-6,-4],backgroundColor:v=>v,
+   backgroundColor:['#F87171','#FB923C','#FBBF24','#F472B6','#34D399','#34D399'],borderRadius:5}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.parsed.x>0?'+':'')+c.parsed.x+' poin urgensi'}}},
+  scales:{x:{title:{display:true,text:'Kontribusi ke skor urgensi (+ menaikkan / − menurunkan)',color:'#94A3B8'},grid:{color:'#1E293B'},ticks:{color:'#94A3B8'}},
+          y:{grid:{display:false},ticks:{color:'#CBD5E1',font:{size:11}}}}}});
+</script>
+</body></html>

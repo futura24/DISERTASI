@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laporan Diagnostik MCDM · Andi Pratama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --primary:#0F766E; --secondary:#134E4A; --accent:#14B8A6; --accent-2:#0EA5E9;
+  --bg:#F1F5F9; --surface:#FFFFFF; --soft:#F0FDFA; --line:#E2E8F0;
+  --ink:#1E293B; --muted:#64748B; --ok:#16A34A; --warn:#D97706; --bad:#DC2626;
+  --radius:14px; --radius-sm:10px;
+  --shadow:0 1px 3px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06);
+  --shadow-lg:0 12px 40px rgba(15,23,42,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,.brand,.chip,.btn{font-family:'Poppins',sans-serif}
+.wrap{max-width:1100px;margin:0 auto;padding:0 18px}
+
+.app-header{background:linear-gradient(135deg,var(--secondary),var(--primary) 60%,var(--accent));color:#fff;position:relative;overflow:hidden}
+.app-header::after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(255,255,255,.12),transparent 70%);border-radius:50%}
+.app-header .wrap{padding:34px 18px 30px;position:relative;z-index:1}
+.eyebrow{display:inline-block;font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:999px;margin-bottom:14px}
+.app-header h1{font-size:clamp(1.4rem,3.4vw,2.05rem);font-weight:700;line-height:1.2;letter-spacing:-.01em}
+.app-header p.sub{margin-top:8px;max-width:780px;color:rgba(255,255,255,.92);font-size:.95rem}
+.engine{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+.engine span{font-size:.72rem;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);padding:5px 12px;border-radius:999px;letter-spacing:.03em}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 22px 24px;margin:18px 0}
+.card.identity{border-top:4px solid var(--accent)}
+.sec-label{display:inline-block;font-family:'Poppins';font-weight:700;font-size:.74rem;letter-spacing:.1em;color:var(--accent);background:var(--soft);border:1px solid #99F6E4;padding:4px 10px;border-radius:8px;margin-bottom:8px}
+.section-title{font-size:1.18rem;font-weight:600;color:var(--secondary);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:"";width:6px;height:22px;border-radius:3px;background:var(--accent)}
+.section-desc{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+p.body{margin:10px 0;color:var(--ink)}
+p.body + p.body{margin-top:12px}
+
+.idgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.idcell{background:var(--soft);border:1px solid #CCFBF1;border-radius:var(--radius-sm);padding:12px 14px}
+.idcell .l{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+.idcell .v{font-family:'Poppins';font-weight:600;color:var(--secondary);font-size:1.02rem;margin-top:2px}
+
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:6px 0 8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;text-align:center;box-shadow:var(--shadow)}
+.stat .v{font-family:'Poppins';font-size:1.7rem;font-weight:700;color:var(--primary);line-height:1}
+.stat .l{font-size:.74rem;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.04em}
+.stat.ok .v{color:var(--ok)}.stat.bad .v{color:var(--bad)}.stat.warn .v{color:var(--warn)}
+
+.verdict{padding:16px 18px;border-radius:var(--radius-sm);font-weight:500;margin:14px 0 4px;border:1.5px solid;font-size:.94rem}
+.verdict b{font-weight:700}
+.verdict.good{background:#F0FDF4;border-color:#86EFAC;color:#166534}
+.verdict.mid{background:#FFFBEB;border-color:#FCD34D;color:#92400E}
+.verdict.bad{background:#FEF2F2;border-color:#FCA5A5;color:#991B1B}
+
+.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--shadow);margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:560px}
+thead th{background:var(--secondary);color:#fff;font-family:'Poppins';font-weight:600;font-size:.8rem;padding:11px 12px;text-align:left}
+tbody td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:nth-child(even){background:#F8FAFC}
+tbody tr:hover{background:var(--soft)}
+.center{text-align:center}
+.pill{display:inline-block;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.pill.tuntas{background:#DCFCE7;color:#166534;border:1px solid #86EFAC}
+.pill.cukup{background:#DBEAFE;color:#1E40AF;border:1px solid #93C5FD}
+.pill.intervensi{background:#FEF3C7;color:#92400E;border:1px solid #FCD34D}
+.pill.tinggi{background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5}
+.pill.sangattinggi{background:#FCA5A5;color:#7F1D1D;border:1px solid #F87171}
+.pill.sedang{background:#E0E7FF;color:#3730A3;border:1px solid #A5B4FC}
+
+.bar{height:12px;border-radius:999px;background:#E2E8F0;overflow:hidden;min-width:90px}
+.bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--primary),var(--accent))}
+.bar.lo > i{background:linear-gradient(90deg,#DC2626,#F97316)}
+.bar.mid > i{background:linear-gradient(90deg,#D97706,#FBBF24)}
+.barwrap{display:flex;align-items:center;gap:10px}.barwrap b{font-family:'Poppins';font-size:.82rem;min-width:38px}
+
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0 4px}
+.chart-box{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;box-shadow:var(--shadow)}
+.chart-box h4{font-size:.92rem;color:var(--secondary);margin-bottom:10px;text-align:center}
+.chart-box .cw{position:relative;height:300px}
+
+.misc{border:1px solid var(--line);border-left:4px solid var(--bad);border-radius:var(--radius-sm);padding:14px 16px;margin:12px 0;background:#fff}
+.misc.amber{border-left-color:var(--warn)}
+.misc h4{font-size:.96rem;color:var(--secondary);margin-bottom:4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.misc .mtag{font-size:.66rem;font-weight:600;background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5;padding:2px 8px;border-radius:999px}
+.misc.amber .mtag{background:#FEF3C7;color:#92400E;border-color:#FCD34D}
+.misc p{font-size:.88rem;color:var(--ink);margin-top:4px}
+.misc .ex{font-size:.82rem;color:var(--muted);font-style:italic;margin-top:6px;padding-left:12px;border-left:2px solid var(--line)}
+
+.path{position:relative;margin:10px 0 4px;padding-left:26px}
+.path::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent),var(--accent-2))}
+.step{position:relative;margin-bottom:16px;background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;box-shadow:var(--shadow)}
+.step::before{content:"";position:absolute;left:-22px;top:18px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid #fff;box-shadow:0 0 0 2px var(--accent)}
+.step .ph{font-family:'Poppins';font-weight:600;color:var(--primary);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.step h4{font-size:1rem;color:var(--secondary);margin:2px 0 6px}
+.step p{font-size:.88rem;color:var(--ink)}
+.step .meta{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+.step .meta span{font-size:.72rem;background:var(--soft);border:1px solid #CCFBF1;color:#115E59;padding:3px 9px;border-radius:999px}
+
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:12px 0 4px}
+.dcard{border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;background:#fff;box-shadow:var(--shadow);border-top:4px solid var(--dc)}
+.dcard .rank{font-family:'Poppins';font-weight:700;font-size:.72rem;color:var(--dc);letter-spacing:.06em}
+.dcard h4{font-size:1rem;color:var(--secondary);margin:4px 0 6px}
+.dcard p{font-size:.84rem;color:var(--muted)}
+.dcard .urg{display:inline-block;margin-top:10px;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--dc);color:#fff}
+
+.gauge-wrap{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center;margin:8px 0}
+.gauge{position:relative;width:200px;height:120px}
+.gauge .lbl{position:absolute;bottom:0;left:0;right:0;text-align:center}
+.gauge .lbl .g{font-family:'Poppins';font-weight:700;font-size:1.8rem;color:var(--bad)}
+.gauge .lbl .t{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+.note{background:var(--soft);border:1px solid #99F6E4;border-radius:var(--radius-sm);padding:14px 16px;color:#115E59;font-size:.86rem;margin-top:14px}
+.note b{color:#0F766E}
+
+footer.foot{color:var(--muted);font-size:.8rem;text-align:center;padding:30px 18px 50px}
+.crumbs{margin-top:14px;font-size:.85rem}.crumbs a{color:#CCFBF1;text-decoration:none;border-bottom:1px dashed rgba(204,251,241,.5)}.crumbs a:hover{color:#fff}
+
+@media(max-width:760px){
+  .idgrid{grid-template-columns:repeat(2,1fr)}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .chart-grid{grid-template-columns:1fr}
+}
+@media print{.crumbs{display:none}.card,.chart-box{box-shadow:none;break-inside:avoid}body{background:#fff}}
+</style></head>
+<body>
+<header class="app-header"><div class="wrap" style="padding:34px 18px 30px">
+  <span class="eyebrow">Simulasi Sistem Diagnostik AI · Model MCDM</span>
+  <h1>Laporan Diagnostik Kesulitan Belajar Matematika</h1>
+  <p class="sub">Output simulasi sistem diagnostik berbasis Multidimensional Cognitive Diagnostic Model (MCDM), dipadukan dengan estimasi Higher-Order DINA (HO-DINA) dan interpretasi gaya Neural Cognitive Diagnostic Model (NCDM). Konteks: Kurikulum Merdeka, SMP Kelas VII.</p>
+  <div class="engine"><span>● MCDM</span><span>● HO-DINA</span><span>● NCDM</span><span>● θ-afektif sebagai kovariat higher-order</span></div>
+  <div class="crumbs"><a href="index.html">← Kembali ke Portal Asesmen</a></div>
+</div></header>
+
+<main class="wrap">
+
+  <!-- IDENTITY -->
+  <section class="card identity">
+    <div class="section-title">Identitas Siswa</div>
+    <div class="idgrid">
+      <div class="idcell"><div class="l">Nama</div><div class="v">Andi Pratama</div></div>
+      <div class="idcell"><div class="l">Kelas</div><div class="v">VII SMP</div></div>
+      <div class="idcell"><div class="l">Usia</div><div class="v">13 tahun</div></div>
+      <div class="idcell"><div class="l">Tanggal Diagnosis</div><div class="v">Simulasi</div></div>
+    </div>
+  </section>
+
+  <!-- A. RINGKASAN DIAGNOSIS -->
+  <section class="card">
+    <span class="sec-label">A · Ringkasan Diagnosis</span>
+    <div class="section-title">Ringkasan Diagnosis</div>
+    <p class="section-desc">Sintesis lintas-modul: profil mastery kognitif, kovariat afektif, dan estimasi kemampuan laten higher-order.</p>
+
+    <div class="stat-grid">
+      <div class="stat warn"><div class="v">0.55</div><div class="l">Rerata Mastery (8 atribut)</div></div>
+      <div class="stat bad"><div class="v">3 / 8</div><div class="l">Atribut Kesulitan Tinggi</div></div>
+      <div class="stat warn"><div class="v">3.70</div><div class="l">Rerata Kecemasan (1–5)</div></div>
+      <div class="stat bad"><div class="v">≈ 0.35</div><div class="l">Prob. Sukses Semester Berikut*</div></div>
+    </div>
+
+    <p class="body"><b>Temuan inti.</b> Andi memiliki <b>fondasi bilangan dan keterampilan spasial-pengukuran yang kuat</b> (A1 Bilangan Bulat = 0.90; A7 Pengukuran = 0.80; A6 Geometri = 0.75), namun mengalami <b>keruntuhan tajam tepat di titik penalaran bilangan rasional</b>: A2 Operasi Pecahan jatuh ke 0.35 meski A1 sudah tuntas. Keruntuhan ini menjalar ke seluruh rantai prasyarat di bawahnya — Rasio (A3 = 0.40), Aljabar Dasar (A4 = 0.30), dan Persamaan Linear (A5 = 0.25).</p>
+
+    <p class="body">Pola ini menunjuk satu <b>titik patah diagnostik tunggal</b> (the fracture point) di A2, bukan defisit umum yang merata. Secara HO-DINA, kemampuan laten umum θ tergolong sedang, tetapi profil-nya sangat tidak homogen: tinggi pada jalur numerik-konkret, runtuh pada jalur simbolik-abstrak (pecahan → rasio → aljabar → persamaan).</p>
+
+    <div class="verdict bad">Status keseluruhan: <b>PERLU INTERVENSI TERFOKUS — RISIKO AKADEMIK TINGGI</b>. Intervensi paling berdaya ungkit terletak pada pemulihan A2 (Operasi Pecahan) sebagai gerbang menuju A3–A5. Kecemasan evaluatif yang sangat tinggi (4.5) berpotensi memperberat performa pada tugas berpenilaian, sehingga intervensi kognitif perlu disertai dukungan afektif.</div>
+    <p class="section-desc" style="margin-top:10px">*Angka probabilitas bersifat <b>ilustratif berbasis model</b> (estimasi gaya HO-DINA dari mastery prasyarat); pada implementasi nyata harus dikalibrasi pada sampel kalibrasi instrumen.</p>
+  </section>
+
+  <!-- B. PROFIL MASTERY -->
+  <section class="card">
+    <span class="sec-label">B · Profil Mastery Atribut</span>
+    <div class="section-title">Profil Mastery Atribut (A1–A8)</div>
+    <p class="section-desc">Klasifikasi mengikuti rentang: Tuntas (0.80–1.00), Cukup (0.60–0.79), Perlu Intervensi (0.40–0.59), Kesulitan Tinggi (0.00–0.39).</p>
+
+    <div class="table-scroll"><table>
+      <thead><tr><th>Atribut</th><th>Domain Konten</th><th class="center">Skor</th><th style="min-width:150px">Tingkat Penguasaan</th><th class="center">Kategori</th><th>Posisi Hierarki (prasyarat)</th></tr></thead>
+      <tbody>
+        <tr><td><b>A1</b></td><td>Bilangan Bulat</td><td class="center"><b>0.90</b></td><td><div class="barwrap"><div class="bar"><i style="width:90%"></i></div><b>90%</b></div></td><td class="center"><span class="pill tuntas">Tuntas</span></td><td>Fondasi (akar)</td></tr>
+        <tr><td><b>A2</b></td><td>Operasi Pecahan</td><td class="center"><b>0.35</b></td><td><div class="barwrap"><div class="bar lo"><i style="width:35%"></i></div><b>35%</b></div></td><td class="center"><span class="pill tinggi">Kesulitan Tinggi</span></td><td>← A1 · <b>titik patah</b></td></tr>
+        <tr><td><b>A3</b></td><td>Rasio &amp; Perbandingan</td><td class="center"><b>0.40</b></td><td><div class="barwrap"><div class="bar lo"><i style="width:40%"></i></div><b>40%</b></div></td><td class="center"><span class="pill intervensi">Perlu Intervensi</span></td><td>← A2</td></tr>
+        <tr><td><b>A4</b></td><td>Aljabar Dasar</td><td class="center"><b>0.30</b></td><td><div class="barwrap"><div class="bar lo"><i style="width:30%"></i></div><b>30%</b></div></td><td class="center"><span class="pill tinggi">Kesulitan Tinggi</span></td><td>← A1, A2</td></tr>
+        <tr><td><b>A5</b></td><td>Persamaan Linear</td><td class="center"><b>0.25</b></td><td><div class="barwrap"><div class="bar lo"><i style="width:25%"></i></div><b>25%</b></div></td><td class="center"><span class="pill tinggi">Kesulitan Tinggi</span></td><td>← A4 (terhilir)</td></tr>
+        <tr><td><b>A6</b></td><td>Geometri Dasar</td><td class="center"><b>0.75</b></td><td><div class="barwrap"><div class="bar mid"><i style="width:75%"></i></div><b>75%</b></div></td><td class="center"><span class="pill cukup">Cukup</span></td><td>Jalur semi-independen</td></tr>
+        <tr><td><b>A7</b></td><td>Pengukuran</td><td class="center"><b>0.80</b></td><td><div class="barwrap"><div class="bar"><i style="width:80%"></i></div><b>80%</b></div></td><td class="center"><span class="pill tuntas">Tuntas</span></td><td>← A1, A6</td></tr>
+        <tr><td><b>A8</b></td><td>Interpretasi Data</td><td class="center"><b>0.65</b></td><td><div class="barwrap"><div class="bar mid"><i style="width:65%"></i></div><b>65%</b></div></td><td class="center"><span class="pill cukup">Cukup</span></td><td>← A2, A3</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="chart-grid">
+      <div class="chart-box"><h4>Radar Profil Mastery (A1–A8)</h4><div class="cw"><canvas id="radarMastery"></canvas></div></div>
+      <div class="chart-box"><h4>Skor Mastery per Atribut</h4><div class="cw"><canvas id="barMastery"></canvas></div></div>
+    </div>
+    <p class="body"><b>Pembacaan jalur prasyarat.</b> Jalur "konkret" (A1 → A6/A7) hijau-stabil. Jalur "abstrak-simbolik" (A1 → A2 → A3/A4 → A5) terputus di A2 dan memburuk semakin ke hilir — A5 sebagai muara menjadi yang terlemah (0.25). Ini konsisten dengan asumsi monotonisitas CDM: ketidaktuntasan prasyarat menekan peluang penguasaan atribut turunannya.</p>
+  </section>
+
+  <!-- C. KECEMASAN -->
+  <section class="card">
+    <span class="sec-label">C · Analisis Kecemasan Matematika</span>
+    <div class="section-title">Analisis Kecemasan Matematika &amp; Kovariat Afektif</div>
+    <p class="section-desc">Kecemasan diperlakukan sebagai <b>kovariat afektif higher-order (θ-afektif)</b> yang masuk ke struktur HO-DINA — bukan sebagai atribut Q-matrix.</p>
+
+    <div class="table-scroll"><table>
+      <thead><tr><th>Dimensi Afektif</th><th class="center">Skor (1–5)</th><th style="min-width:150px">Intensitas</th><th class="center">Kategori</th><th>Kaitan dengan defisit kognitif</th></tr></thead>
+      <tbody>
+        <tr><td>Evaluation Anxiety</td><td class="center"><b>4.5</b></td><td><div class="barwrap"><div class="bar lo"><i style="width:90%"></i></div><b>90%</b></div></td><td class="center"><span class="pill sangattinggi">Sangat Tinggi</span></td><td>Menekan performa pada tugas berpenilaian (A4/A5)</td></tr>
+        <tr><td>Learning Anxiety</td><td class="center"><b>3.8</b></td><td><div class="barwrap"><div class="bar mid"><i style="width:76%"></i></div><b>76%</b></div></td><td class="center"><span class="pill tinggi">Tinggi</span></td><td>Menghambat akuisisi konten abstrak baru (aljabar)</td></tr>
+        <tr><td>Numerical Anxiety</td><td class="center"><b>3.6</b></td><td><div class="barwrap"><div class="bar mid"><i style="width:72%"></i></div><b>72%</b></div></td><td class="center"><span class="pill tinggi">Tinggi</span></td><td>Selaras dengan keruntuhan A2 (operasi pecahan)</td></tr>
+        <tr><td>Teacher Anxiety</td><td class="center"><b>2.9</b></td><td><div class="barwrap"><div class="bar mid"><i style="width:58%"></i></div><b>58%</b></div></td><td class="center"><span class="pill sedang">Sedang</span></td><td>Relasi guru relatif aman → kanal intervensi</td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="chart-grid">
+      <div class="chart-box"><h4>Radar Dimensi Kecemasan</h4><div class="cw"><canvas id="radarAnx"></canvas></div></div>
+      <div class="chart-box"><h4>Korelasi Konseptual: Kecemasan vs Mastery</h4><div class="cw"><canvas id="scatterAnx"></canvas></div></div>
+    </div>
+
+    <p class="body"><b>Hubungan kecemasan ↔ performa kognitif (Tugas 4).</b> Terbaca pola berlawanan arah yang khas: dimensi kecemasan tertinggi (Evaluation 4.5, Numerical 3.6) berdampingan dengan domain kognitif terlemah (operasi numerik & tugas berpenilaian), sedangkan Teacher Anxiety yang terendah menyiratkan iklim relasional yang masih sehat. Secara struktural, rerata 3.70 dipetakan menjadi <b>θ-afektif ≈ +1.0 SD</b> (ilustratif, asumsi μ=3.0, SD=0.70 pada sampel kalibrasi) — artinya tekanan afektif Andi berada di atas rata-rata kelompok.</p>
+    <p class="body">Dalam HO-DINA, θ-afektif yang tinggi menggeser turun probabilitas penguasaan atribut secara terkondisi, terutama pada atribut yang menuntut pemrosesan simbolik di bawah tekanan ujian. Karena itu sebagian dari rendahnya A4/A5 patut diperlakukan sebagai <b>performance gap (interferensi afektif), bukan murni competence gap</b> — implikasinya: pengukuran ulang dalam kondisi rendah-tekanan dianjurkan sebelum vonis defisit konseptual final.</p>
+    <div class="note"><b>Catatan norming (sesuai keputusan metodologis disertasi).</b> Pemilihan norma θ-afektif (tetap vs. distandarkan ulang) harus dinyatakan eksplisit; nilai z di atas hanya berlaku jika parameter sampel kalibrasi terkonfirmasi.</div>
+  </section>
+
+  <!-- D. MISKONSEPSI -->
+  <section class="card">
+    <span class="sec-label">D · Miskonsepsi Teridentifikasi</span>
+    <div class="section-title">Miskonsepsi yang Teridentifikasi</div>
+    <p class="section-desc">Inferensi berbasis pola respons pada atribut lemah, ditautkan ke tipe miskonsepsi yang lazim terdokumentasi dalam literatur.</p>
+
+    <div class="misc">
+      <h4>A2 · Operasi Pecahan <span class="mtag">Whole-number bias</span></h4>
+      <p>Memperlakukan pembilang dan penyebut sebagai dua bilangan bulat terpisah; menjumlahkan lintas penyebut tanpa menyamakan.</p>
+      <p class="ex">Gejala: 1/2 + 1/3 → 2/5 ; "pecahan lebih besar penyebutnya = nilai lebih besar".</p>
+    </div>
+    <div class="misc">
+      <h4>A4 · Aljabar Dasar <span class="mtag">Letter-as-object / conjoining</span></h4>
+      <p>Memaknai huruf sebagai label benda, bukan kuantitas; menggabungkan suku tak sejenis.</p>
+      <p class="ex">Gejala: 3 + 2x → 5x ; "a berarti apel", bukan bilangan yang diwakili.</p>
+    </div>
+    <div class="misc">
+      <h4>A5 · Persamaan Linear <span class="mtag">Equals-as-operator</span></h4>
+      <p>Tanda "=" dibaca sebagai perintah "hitung", bukan relasi kesetaraan; operasi tidak dikenakan pada kedua ruas; salah tanda saat pindah ruas.</p>
+      <p class="ex">Gejala: x + 5 = 12 → x = 12 + 5 ; menyelesaikan hanya satu sisi.</p>
+    </div>
+    <div class="misc amber">
+      <h4>A3 · Rasio &amp; Perbandingan <span class="mtag">Additive vs multiplicative</span></h4>
+      <p>Penalaran aditif menggantikan penalaran multiplikatif pada perbandingan senilai.</p>
+      <p class="ex">Gejala: bila 2:3, maka 4:? dijawab 5 (menambah 2) alih-alih 6 (mengali 2).</p>
+    </div>
+  </section>
+
+  <!-- E. PREDIKSI RISIKO -->
+  <section class="card">
+    <span class="sec-label">E · Prediksi Risiko Akademik</span>
+    <div class="section-title">Prediksi Risiko Akademik (Semester Berikutnya)</div>
+    <p class="section-desc">Konten Kelas VII Semester 2 (Kurikulum Merdeka) hampir seluruhnya bertumpu pada atribut terlemah Andi — sehingga risiko terkonsentrasi tinggi.</p>
+
+    <div class="table-scroll"><table>
+      <thead><tr><th>Topik Semester Berikut</th><th>Atribut prasyarat</th><th class="center">Prob. Sukses*</th><th class="center">Tingkat Risiko</th></tr></thead>
+      <tbody>
+        <tr><td>Persamaan &amp; Pertidaksamaan Linear (PtLSV)</td><td>A4, A5</td><td class="center"><b>0.25</b></td><td class="center"><span class="pill tinggi">Sangat Tinggi</span></td></tr>
+        <tr><td>Bentuk &amp; Operasi Aljabar</td><td>A1, A2, A4</td><td class="center"><b>0.30</b></td><td class="center"><span class="pill tinggi">Tinggi</span></td></tr>
+        <tr><td>Perbandingan &amp; Skala</td><td>A2, A3</td><td class="center"><b>0.38</b></td><td class="center"><span class="pill intervensi">Tinggi</span></td></tr>
+        <tr><td>Aritmetika Sosial</td><td>A1, A2, A3</td><td class="center"><b>0.42</b></td><td class="center"><span class="pill intervensi">Sedang–Tinggi</span></td></tr>
+        <tr><td>Penyajian &amp; Analisis Data</td><td>A8, A3</td><td class="center"><b>0.58</b></td><td class="center"><span class="pill sedang">Sedang</span></td></tr>
+      </tbody>
+    </table></div>
+
+    <div class="chart-grid">
+      <div class="chart-box"><h4>Probabilitas Sukses per Topik</h4><div class="cw"><canvas id="barRisk"></canvas></div></div>
+      <div class="chart-box"><h4>Indeks Daya Ungkit Atribut (Leverage)</h4><div class="cw"><canvas id="barLeverage"></canvas></div></div>
+    </div>
+
+    <p class="body"><b>Area paling berpengaruh (Tugas 5).</b> Atribut <b>A2 (Operasi Pecahan)</b> memiliki <b>daya ungkit tertinggi</b>: ia adalah prasyarat hulu bagi A3, A4, dan A5 sekaligus, sehingga pemulihannya berpotensi mengangkat empat atribut hilir. <b>A4 (Aljabar Dasar)</b> menempati daya ungkit kedua karena menjadi gerbang langsung PtLSV. Estimasi gabungan menempatkan <b>probabilitas keberhasilan keseluruhan tanpa intervensi ≈ 0.35 (risiko tinggi)</b>; dengan intervensi terfokus pada poros A2→A4, proyeksi naik ke <b>≈ 0.60–0.68</b>.</p>
+    <p class="section-desc">*Probabilitas adalah estimasi gaya HO-DINA dari penguasaan prasyarat (ilustratif), bukan hasil kalibrasi empiris.</p>
+  </section>
+
+  <!-- F. LEARNING PATH -->
+  <section class="card">
+    <span class="sec-label">F · Learning Path Recommendation</span>
+    <div class="section-title">Rekomendasi Jalur Pembelajaran Personalisasi (AI)</div>
+    <p class="section-desc">Urutan mengikuti hierarki prasyarat — memulihkan hulu sebelum hilir, dengan penopang afektif yang berjalan paralel.</p>
+
+    <div class="path">
+      <div class="step"><div class="ph">Fase 0 · Paralel · Afektif</div><h4>Regulasi Kecemasan Evaluatif</h4><p>Latihan paparan ujian bertahap (low-stakes quizzes), self-talk terstruktur, dan asesmen formatif tanpa nilai. Manfaatkan Teacher Anxiety yang rendah sebagai kanal pendampingan tepercaya.</p><div class="meta"><span>Target: Evaluation 4.5 → ≤3.0</span><span>Mode: scaffolding emosional</span></div></div>
+
+      <div class="step"><div class="ph">Fase 1 · Prioritas Utama</div><h4>Pemulihan A2 — Operasi Pecahan</h4><p>Mulai dari representasi visual (luas/garis bilangan) untuk membongkar whole-number bias, lalu menyamakan penyebut dan operasi. Manfaatkan A1 yang sudah kuat sebagai jangkar.</p><div class="meta"><span>Prasyarat siap: A1 ✓</span><span>Estimasi: 2–3 minggu</span><span>Daya ungkit: tertinggi</span></div></div>
+
+      <div class="step"><div class="ph">Fase 2 · Bercabang</div><h4>A3 Rasio &amp; A4 Aljabar Dasar</h4><p>Setelah A2 pulih: tekankan penalaran multiplikatif (A3) dan makna huruf sebagai kuantitas (A4). Gunakan tabel rasio & model batang untuk transisi konkret→simbolik.</p><div class="meta"><span>Prasyarat: A2 pulih</span><span>Estimasi: 3–4 minggu</span></div></div>
+
+      <div class="step"><div class="ph">Fase 3 · Muara</div><h4>A5 — Persamaan Linear</h4><p>Bangun makna "=" sebagai kesetaraan (model timbangan), operasi seimbang dua ruas. Hanya efektif bila A4 telah stabil.</p><div class="meta"><span>Prasyarat: A4 stabil</span><span>Estimasi: 2–3 minggu</span></div></div>
+
+      <div class="step"><div class="ph">Fase 4 · Pemeliharaan</div><h4>Konsolidasi A6/A7/A8 &amp; Asesmen Ulang</h4><p>Pertahankan kekuatan geometri/pengukuran via soal aplikatif; re-asesmen MCDM untuk verifikasi kenaikan mastery dan pemisahan competence vs performance gap.</p><div class="meta"><span>Re-diagnosis MCDM</span><span>Verifikasi θ-afektif</span></div></div>
+    </div>
+  </section>
+
+  <!-- G. DASHBOARD AI -->
+  <section class="card">
+    <span class="sec-label">G · Dashboard AI Recommendation</span>
+    <div class="section-title">Dashboard Rekomendasi AI — Prioritas Intervensi</div>
+    <p class="section-desc">Prioritas (Tugas 10) ditentukan oleh urgensi = fungsi dari (defisit × daya ungkit hierarkis × beban risiko semester berikut).</p>
+
+    <div class="gauge-wrap">
+      <div class="chart-box" style="flex:1;min-width:280px"><h4>Gauge Risiko Akademik Komposit</h4><div class="cw" style="height:200px"><canvas id="gaugeRisk"></canvas></div></div>
+      <div class="chart-box" style="flex:1;min-width:280px"><h4>Matriks Urgensi Intervensi</h4><div class="cw" style="height:200px"><canvas id="bubbleUrg"></canvas></div></div>
+    </div>
+
+    <div class="dash">
+      <div class="dcard" style="--dc:#DC2626"><div class="rank">PRIORITAS 1</div><h4>A2 · Operasi Pecahan</h4><p>Hulu rantai abstrak; pemulihannya mengangkat A3–A5. Defisit berat + daya ungkit tertinggi.</p><span class="urg">Urgensi Kritis</span></div>
+      <div class="dcard" style="--dc:#EA580C"><div class="rank">PRIORITAS 2</div><h4>A4 · Aljabar Dasar</h4><p>Gerbang langsung PtLSV semester berikut. Defisit berat (0.30).</p><span class="urg">Urgensi Tinggi</span></div>
+      <div class="dcard" style="--dc:#D97706"><div class="rank">PRIORITAS 3</div><h4>A5 · Persamaan Linear</h4><p>Muara terlemah (0.25), namun bergantung pada A4 — dikerjakan setelahnya.</p><span class="urg">Tinggi (berurut)</span></div>
+      <div class="dcard" style="--dc:#0EA5E9"><div class="rank">PRIORITAS 4</div><h4>Dukungan Afektif</h4><p>Evaluation Anxiety 4.5 — berjalan paralel sejak hari pertama, bukan menunggu.</p><span class="urg">Paralel · Berkelanjutan</span></div>
+      <div class="dcard" style="--dc:#16A34A"><div class="rank">PEMELIHARAAN</div><h4>A1 · A6 · A7 · A8</h4><p>Kekuatan eksisting; pertahankan dengan soal pengayaan agar tidak meluruh.</p><span class="urg">Pantau</span></div>
+    </div>
+  </section>
+
+  <!-- H. KESIMPULAN -->
+  <section class="card">
+    <span class="sec-label">H · Kesimpulan Akhir</span>
+    <div class="section-title">Kesimpulan Akhir &amp; Interpretasi Gaya NCDM</div>
+    <p class="body"><b>Interpretasi psikometrik (gaya NCDM, Tugas 7).</b> Vektor proficiency pengetahuan Andi = [A1 0.90, A2 0.35, A3 0.40, A4 0.30, A5 0.25, A6 0.75, A7 0.80, A8 0.65]. Dengan asumsi monotonisitas (proficiency lebih tinggi → peluang jawab benar lebih tinggi), lapisan interaksi NCDM membaca profil ini sebagai <b>kompetensi terpolarisasi</b>: simpul kuat pada representasi numerik-konkret dan spasial, simpul lemah terhubung pada lintasan simbolik-relasional. Bobot pengaruh terbesar terhadap prediksi prestasi mengarah ke A2 dan A4 — konsisten dengan daya ungkit hierarkis pada MCDM, sehingga estimasi neural dan estimasi HO-DINA saling menguatkan (konvergen).</p>
+
+    <p class="body"><b>Sintesis.</b> Kesulitan belajar Andi <b>bukan defisit umum melainkan kegagalan transisi konkret→abstrak</b> yang berpusat di operasi pecahan, diperberat oleh kecemasan evaluatif yang sangat tinggi. Karena sebagian rendahnya A4/A5 berpotensi merupakan performance gap afektif, vonis defisit konseptual final sebaiknya menunggu re-asesmen dalam kondisi rendah-tekanan.</p>
+
+    <div class="verdict bad" style="margin-top:14px"><b>Vonis akhir:</b> Risiko akademik <b>TINGGI</b> untuk semester berikutnya bila tanpa intervensi (prob. sukses ilustratif ≈ 0.35). Namun <b>prognosis baik</b>: dengan satu intervensi berdaya ungkit tinggi pada poros A2→A4 yang disertai regulasi kecemasan, proyeksi keberhasilan naik ke kisaran 0.60–0.68. Andi adalah kasus "high-leverage, single-bottleneck" — efisien untuk diintervensi.</div>
+
+    <div class="note"><b>Disclaimer metodologis.</b> Seluruh skor θ-afektif dan probabilitas keberhasilan dalam laporan ini bersifat <b>ilustratif berbasis model</b> untuk keperluan simulasi sistem. Pada penerapan riil, parameter HO-DINA/NCDM wajib dikalibrasi pada sampel empiris, ambang CVR/CVI dilaporkan eksplisit, dan konvensi norming θ-afektif (tetap vs. distandarkan ulang) didokumentasikan dalam Bab Metode.</div>
+  </section>
+
+</main>
+<footer class="foot">Simulasi Sistem Diagnostik AI · Model MCDM–HO-DINA–NCDM · Khusnul Marom — Pengembangan Model Diagnostik Kesulitan Belajar Matematika Bagi Murid SMP Berbasis Artificial Intelligence.</footer>
+
+<script>
+const ATTR=['A1','A2','A3','A4','A5','A6','A7','A8'];
+const MAST=[0.90,0.35,0.40,0.30,0.25,0.75,0.80,0.65];
+const colMap=MAST.map(v=> v>=0.8?'#16A34A': v>=0.6?'#0EA5E9': v>=0.4?'#D97706':'#DC2626');
+const FONT="Inter, sans-serif";
+Chart.defaults.font.family=FONT; Chart.defaults.color='#64748B';
+
+// B1 radar mastery
+new Chart(document.getElementById('radarMastery'),{type:'radar',
+ data:{labels:ATTR,datasets:[{label:'Mastery',data:MAST,fill:true,
+   backgroundColor:'rgba(20,184,166,.18)',borderColor:'#0F766E',pointBackgroundColor:colMap,pointRadius:5,borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+   scales:{r:{min:0,max:1,ticks:{stepSize:0.2,backdropColor:'transparent'},grid:{color:'#E2E8F0'},angleLines:{color:'#E2E8F0'},pointLabels:{font:{size:12,weight:'600'}}}}}});
+
+// B2 bar mastery
+new Chart(document.getElementById('barMastery'),{type:'bar',
+ data:{labels:ATTR,datasets:[{data:MAST,backgroundColor:colMap,borderRadius:6}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+   tooltip:{callbacks:{label:c=>c.parsed.y.toFixed(2)}}},
+   scales:{y:{min:0,max:1,ticks:{stepSize:0.2}},x:{grid:{display:false}}}}});
+
+// C radar anxiety
+new Chart(document.getElementById('radarAnx'),{type:'radar',
+ data:{labels:['Learning','Evaluation','Numerical','Teacher'],
+   datasets:[{label:'Kecemasan',data:[3.8,4.5,3.6,2.9],fill:true,
+   backgroundColor:'rgba(14,165,233,.18)',borderColor:'#0EA5E9',pointBackgroundColor:'#0369A1',pointRadius:5,borderWidth:2}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+   scales:{r:{min:0,max:5,ticks:{stepSize:1,backdropColor:'transparent'},grid:{color:'#E2E8F0'},angleLines:{color:'#E2E8F0'},pointLabels:{font:{size:12,weight:'600'}}}}}});
+
+// C scatter anxiety vs related mastery (conceptual)
+new Chart(document.getElementById('scatterAnx'),{type:'scatter',
+ data:{datasets:[{label:'Dimensi (anxiety x mastery terkait)',
+   data:[{x:3.8,y:0.30,d:'Learning↔A4'},{x:4.5,y:0.28,d:'Evaluation↔A4/A5'},{x:3.6,y:0.35,d:'Numerical↔A2'},{x:2.9,y:0.73,d:'Teacher↔iklim'}],
+   backgroundColor:['#0EA5E9','#DC2626','#D97706','#16A34A'],pointRadius:9,pointHoverRadius:11}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+   tooltip:{callbacks:{label:c=>c.raw.d+' ('+c.raw.x+', '+c.raw.y+')'}}},
+   scales:{x:{title:{display:true,text:'Skor Kecemasan (1–5)'},min:2,max:5},
+           y:{title:{display:true,text:'Mastery domain terkait'},min:0,max:1}}}});
+
+// E risk bars
+new Chart(document.getElementById('barRisk'),{type:'bar',
+ data:{labels:['PtLSV','Aljabar','Perbandingan','Aritm. Sosial','Data'],
+   datasets:[{data:[0.25,0.30,0.38,0.42,0.58],
+   backgroundColor:['#DC2626','#DC2626','#D97706','#D97706','#0EA5E9'],borderRadius:6}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+   tooltip:{callbacks:{label:c=>'P(sukses) = '+c.parsed.x.toFixed(2)}}},
+   scales:{x:{min:0,max:1,ticks:{stepSize:0.2}},y:{grid:{display:false}}}}});
+
+// E leverage index (qualitative leverage score)
+new Chart(document.getElementById('barLeverage'),{type:'bar',
+ data:{labels:ATTR,datasets:[{data:[0.15,0.95,0.45,0.80,0.30,0.10,0.10,0.25],
+   backgroundColor:['#94A3B8','#DC2626','#D97706','#EA580C','#FBBF24','#94A3B8','#94A3B8','#94A3B8'],borderRadius:6}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+   tooltip:{callbacks:{label:c=>'Leverage '+c.parsed.y.toFixed(2)}}},
+   scales:{y:{min:0,max:1,ticks:{stepSize:0.2}},x:{grid:{display:false}}}}});
+
+// G gauge (composite risk ~0.65 risk => doughnut)
+new Chart(document.getElementById('gaugeRisk'),{type:'doughnut',
+ data:{labels:['Risiko','Aman'],datasets:[{data:[65,35],backgroundColor:['#DC2626','#E2E8F0'],borderWidth:0,circumference:180,rotation:270}]},
+ options:{responsive:true,maintainAspectRatio:false,cutout:'70%',plugins:{legend:{display:false},
+   tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+'%'}}}}});
+// center text for gauge
+const gctx=document.getElementById('gaugeRisk');
+new ResizeObserver(()=>{}).observe(gctx);
+
+// G urgency bubble: x=defisit(1-mastery), y=leverage, r=risk weight
+new Chart(document.getElementById('bubbleUrg'),{type:'bubble',
+ data:{datasets:[
+  {label:'A2',data:[{x:0.65,y:0.95,r:18}],backgroundColor:'rgba(220,38,38,.6)'},
+  {label:'A4',data:[{x:0.70,y:0.80,r:16}],backgroundColor:'rgba(234,88,12,.6)'},
+  {label:'A5',data:[{x:0.75,y:0.30,r:13}],backgroundColor:'rgba(217,119,6,.6)'},
+  {label:'A3',data:[{x:0.60,y:0.45,r:11}],backgroundColor:'rgba(251,191,36,.6)'},
+  {label:'A8',data:[{x:0.35,y:0.25,r:8}],backgroundColor:'rgba(14,165,233,.5)'}
+ ]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}},
+   tooltip:{callbacks:{label:c=>c.dataset.label+' (defisit '+c.raw.x+', leverage '+c.raw.y+')'}}},
+   scales:{x:{title:{display:true,text:'Defisit (1 − mastery)'},min:0,max:1},
+           y:{title:{display:true,text:'Daya ungkit hierarkis'},min:0,max:1}}}});
+</script>
+</body></html>
