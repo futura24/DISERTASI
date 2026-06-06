@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>EduMind MCDM | Dashboard Siswa (Login → Asesmen → Hasil Diagnostik)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #F1F5F9;
+      font-family: 'Inter', sans-serif;
+      color: #0F172A;
+      line-height: 1.5;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 2rem;
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    /* header */
+    .app-header {
+      background: linear-gradient(135deg, #0F766E 0%, #134E4A 100%);
+      padding: 1.5rem 2rem;
+      color: white;
+    }
+    .app-header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .app-header p {
+      font-size: 0.85rem;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    .page {
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1.2rem;
+      border: 1px solid #E2E8F0;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.3rem;
+      color: #1E293B;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 1.5px solid #E2E8F0;
+      border-radius: 1rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+    input:focus {
+      outline: none;
+      border-color: #14B8A6;
+      box-shadow: 0 0 0 2px rgba(20,184,166,0.2);
+    }
+
+    .btn {
+      background: #0F766E;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 0.9rem;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid #0F766E;
+      color: #0F766E;
+    }
+    .btn:hover {
+      background: #0B5E56;
+      transform: translateY(-1px);
+    }
+
+    /* soal styling */
+    .soal-item {
+      border: 1px solid #E2EDF2;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      background: #FEFEFE;
+    }
+    .soal-num {
+      font-weight: 700;
+      background: #E6F7F5;
+      display: inline-block;
+      padding: 0.2rem 0.8rem;
+      border-radius: 2rem;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .opsi-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 0.8rem;
+    }
+    .opsi-label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #F8FAFE;
+      padding: 0.4rem 1rem;
+      border-radius: 2rem;
+      border: 1px solid #E2E8F0;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+    .opsi-label.selected {
+      background: #CCFBF1;
+      border-color: #14B8A6;
+    }
+    .likert-group {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: space-between;
+    }
+    .likert-opt {
+      text-align: center;
+      flex: 1;
+      background: #F8FAFE;
+      border-radius: 0.8rem;
+      padding: 0.5rem;
+      border: 1px solid #E2E8F0;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .likert-opt.selected {
+      background: #CCFBF1;
+      border-color: #0F766E;
+    }
+
+    .progress-text {
+      text-align: right;
+      font-size: 0.8rem;
+      color: #5B6E8C;
+      margin-bottom: 0.5rem;
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: #F8FAFE;
+      border-radius: 1rem;
+      padding: 1rem;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0F766E;
+    }
+    .chart-container {
+      height: 280px;
+      margin: 1rem 0;
+    }
+
+    .rekomendasi-list {
+      background: #F0FDFA;
+      border-radius: 1rem;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    .rekomendasi-item {
+      border-left: 4px solid #14B8A6;
+      padding: 0.6rem 1rem;
+      margin-bottom: 0.8rem;
+      background: white;
+      border-radius: 0.8rem;
+    }
+
+    .hidden {
+      display: none;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.7rem;
+      padding: 1rem;
+      color: #6C86A3;
+    }
+    @media (max-width: 700px) {
+      .page { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="app-header">
+    <h1>📋 EduMind MCDM · Asesmen Diagnostik AI</h1>
+    <p>Sistem Diagnostik Matematika SMP | HO‑DINA + NCDM | Profil mastery & rekomendasi personal</p>
+  </div>
+
+  <!-- PAGE LOGIN / IDENTITAS -->
+  <div id="loginPage" class="page">
+    <div class="card">
+      <h2 style="margin-bottom: 1rem;">👤 Identitas Siswa</h2>
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" id="studentName" placeholder="Contoh: Andi Pratama">
+      </div>
+      <div class="form-group">
+        <label>Kelas</label>
+        <input type="text" id="studentClass" placeholder="VII-A">
+      </div>
+      <div class="form-group">
+        <label>Sekolah</label>
+        <input type="text" id="studentSchool" placeholder="SMP Negeri 1 Jakarta">
+      </div>
+      <button class="btn" id="startBtn">🚀 Mulai Asesmen</button>
+    </div>
+  </div>
+
+  <!-- PAGE PILIH TES (urutan: kognitif lalu kecemasan) -->
+  <div id="selectionPage" class="page hidden">
+    <div class="card">
+      <h2>📌 Pilih Tahap Asesmen</h2>
+      <p style="margin-bottom: 1rem;">Tes diagnostik terdiri dari 2 bagian: <strong>Tes Kognitif (40 PG)</strong> dan <strong>Skala Kecemasan Matematika (28 pernyataan)</strong>. Kerjakan secara berurutan.</p>
+      <button class="btn" id="startCognitiveBtn">🧠 Mulai Tes Kognitif</button>
+      <button class="btn btn-outline" id="startAnxietyBtn" style="margin-left: 1rem;" disabled>📊 Skala Kecemasan (terkunci)</button>
+    </div>
+  </div>
+
+  <!-- PAGE TES KOGNITIF (40 butir) -->
+  <div id="cognitivePage" class="page hidden">
+    <div class="progress-text">Progress: <span id="cogProgress">0</span> / 40 terjawab</div>
+    <div id="cognitiveQuestions"></div>
+    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+      <button class="btn" id="saveCognitiveBtn">💾 Simpan & Lanjut ke Kecemasan</button>
+    </div>
+  </div>
+
+  <!-- PAGE SKALA KECEMASAN (28 butir) -->
+  <div id="anxietyPage" class="page hidden">
+    <div class="progress-text">Progress: <span id="anxProgress">0</span> / 28 terjawab</div>
+    <div id="anxietyQuestions"></div>
+    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+      <button class="btn" id="submitAnxietyBtn">✅ Selesaikan & Lihat Hasil Diagnostik</button>
+    </div>
+  </div>
+
+  <!-- PAGE HASIL DIAGNOSTIK -->
+  <div id="resultPage" class="page hidden">
+    <div class="card">
+      <h2>📊 Hasil Asesmen Diagnostik</h2>
+      <div id="resultSummary"></div>
+      <div class="result-stats" id="statRingkasan"></div>
+      <h3>📈 Profil Mastery Atribut (A1–A8)</h3>
+      <div class="chart-container"><canvas id="radarMastery"></canvas></div>
+      <div class="chart-container"><canvas id="barMastery"></canvas></div>
+      <h3>⚠️ Learning Risk Index (LRI)</h3>
+      <div id="lriBox" style="background:#FEF2E8; border-radius:1rem; padding:1rem; margin:1rem 0;"></div>
+      <h3>💡 Rekomendasi Personal (AI)</h3>
+      <div id="recommendationBox" class="rekomendasi-list"></div>
+      <button class="btn btn-outline" id="resetAllBtn">🔄 Kerjakan Ulang (Reset Data)</button>
+    </div>
+  </div>
+  <footer>EduMind MCDM · Simulasi diagnostik adaptif · hasil berdasarkan jawaban nyata siswa</footer>
+</div>
+
+<script>
+  // ---------- DATA SOAL KOGNITIF (40 butir) dari index_1.html ----------
+  const SOAL = [{"no":1,"stimulus":"Suhu kota A tercatat −3°C, kota B −8°C.","pertanyaan":"Pernyataan benar?","opsi":["A. Kota B lebih hangat karena 8>3","B. Kota A lebih hangat karena −3 > −8","C. Sama","D. Tidak dapat dibandingkan"],"kunci":"B"},{"no":2,"stimulus":"Bilangan −5,2,−1,0","pertanyaan":"Urutan terkecil ke terbesar","opsi":["A. 0,−1,2,−5","B. −5,−1,0,2","C. 2,0,−1,−5","D. −1,−5,0,2"],"kunci":"B"},{"no":3,"stimulus":"Lift di lantai −2, naik 5 turun 3","pertanyaan":"Lantai sekarang","opsi":["A. 0","B. 4","C. 10","D. −10"],"kunci":"A"},{"no":4,"stimulus":"Nilai mutlak & lawan","pertanyaan":"Pernyataan benar","opsi":["A. |−7| = −7","B. Lawan 7 = −7, |−7|=7","C. |−7|=0","D. Lawan 7=7"],"kunci":"B"},{"no":5,"stimulus":"Ikan −15m +9m","pertanyaan":"Hasil","opsi":["A. −6","B. 6","C. −24","D. 24"],"kunci":"A"},{"no":6,"stimulus":"(−4)×(−6)","pertanyaan":"Hasil","opsi":["A. −24","B. 24","C. −10","D. 10"],"kunci":"B"},{"no":7,"stimulus":"12−3×(−2)","pertanyaan":"Hasil","opsi":["A. 18","B. −18","C. 6","D. −6"],"kunci":"A"},{"no":8,"stimulus":"Suhu awal 2°C turun 1.5°C/jam selama 4 jam","pertanyaan":"Suhu akhir","opsi":["A. −4°C","B. 4°C","C. 8°C","D. −10°C"],"kunci":"A"},{"no":9,"stimulus":"Pizza 8 bagian, 3 dimakan","pertanyaan":"Sisa pecahan","opsi":["A. 3/8","B. 5/8","C. 3/5","D. 8/3"],"kunci":"B"},{"no":10,"stimulus":"0,75 ke pecahan","pertanyaan":"Pecahan senilai","opsi":["A. 7/5","B. 3/4","C. 75/10","D. 1/75"],"kunci":"B"},{"no":11,"stimulus":"Bandingkan 2/3 dan 3/5","pertanyaan":"Pernyataan benar","opsi":["A. 3/5 > karena penyebut besar","B. 2/3 > 3/5","C. sama","D. 3/5 > karena 3>2"],"kunci":"B"},{"no":12,"stimulus":"Letak −1/2 pada garis bilangan","pertanyaan":"Posisi","opsi":["A. kanan 0, antara 0-1","B. kiri 0, antara 0 dan −1","C. tepat −2","D. sama dengan 1/2"],"kunci":"B"},{"no":13,"stimulus":"1/2 + 1/3","pertanyaan":"Hasil","opsi":["A. 2/5","B. 5/6","C. 2/6","D. 1/6"],"kunci":"B"},{"no":14,"stimulus":"2/3 × 3/4","pertanyaan":"Hasil","opsi":["A. 1/2","B. 5/7","C. 6/7","D. 8/9"],"kunci":"A"},{"no":15,"stimulus":"3/4 − 1/2","pertanyaan":"Hasil","opsi":["A. 2/2","B. 1/4","C. 1/2","D. 2/6"],"kunci":"B"},{"no":16,"stimulus":"Andi punya 50ribu, belanja 2/5 lalu terima 8ribu","pertanyaan":"Uang sekarang","opsi":["A. 38.000","B. 22.000","C. 30.000","D. 42.000"],"kunci":"A"},{"no":17,"stimulus":"Pita 3/4 m dipotong 1/8 m","pertanyaan":"Banyak potongan","opsi":["A. 6","B. 3/32","C. 2","D. 8"],"kunci":"A"},{"no":18,"stimulus":"2/3 ÷ 4/5","pertanyaan":"Hasil","opsi":["A. 8/15","B. 5/6","C. 6/5","D. 3/10"],"kunci":"B"},{"no":19,"stimulus":"Kuis +4 / -2, 7 benar 3 salah","pertanyaan":"Skor total","opsi":["A. 22","B. 34","C. 10","D. 26"],"kunci":"A"},{"no":20,"stimulus":"Freezer −18°C naik 2°C/jam 5 jam","pertanyaan":"Suhu akhir","opsi":["A. −8°C","B. −28°C","C. 8°C","D. −16°C"],"kunci":"A"},{"no":21,"stimulus":"5x+3","pertanyaan":"Koefisien & konstanta","opsi":["A. koef 5, konst 3","B. koef 3, konst 5","C. koef x, konst 3","D. variabel 5, konst x"],"kunci":"A"},{"no":22,"stimulus":"7a+3b−2a+b","pertanyaan":"Sederhana","opsi":["A. 9ab","B. 5a+4b","C. 5a+2b","D. 9a+4b"],"kunci":"B"},{"no":23,"stimulus":"3(2x+4)","pertanyaan":"Jabarkan","opsi":["A. 6x+4","B. 6x+12","C. 5x+7","D. 2x+12"],"kunci":"B"},{"no":24,"stimulus":"1/2 x + 1/4 x","pertanyaan":"Sederhana","opsi":["A. 2/6 x","B. 3/4 x","C. 1/8 x","D. 2/4 x"],"kunci":"B"},{"no":25,"stimulus":"2x²+3 untuk x=-2","pertanyaan":"Nilai","opsi":["A. −5","B. 11","C. 19","D. −13"],"kunci":"B"},{"no":26,"stimulus":"Bilangan dikurangi 7 hasil 12","pertanyaan":"Persamaan","opsi":["A. x+7=12","B. x−7=12","C. 7−x=12","D. 7x=12"],"kunci":"B"},{"no":27,"stimulus":"x+5=12","pertanyaan":"x","opsi":["A. 7","B. 17","C. 5/12","D. −7"],"kunci":"A"},{"no":28,"stimulus":"3x=18","pertanyaan":"x","opsi":["A. 6","B. 54","C. 15","D. 21"],"kunci":"A"},{"no":29,"stimulus":"2x−3=7","pertanyaan":"x","opsi":["A. 5","B. 2","C. 8","D. 10"],"kunci":"A"},{"no":30,"stimulus":"Umur Ani 3 tahun lebih tua dari Budi, jumlah 27","pertanyaan":"Umur Budi","opsi":["A. 12","B. 15","C. 13.5","D. 24"],"kunci":"A"},{"no":31,"stimulus":"Sudut 120°","pertanyaan":"Jenis","opsi":["A. lancip","B. tumpul","C. siku","D. lurus"],"kunci":"B"},{"no":32,"stimulus":"Segitiga 5,5,8 cm","pertanyaan":"Jenis","opsi":["A. sama sisi","B. sama kaki","C. siku","D. sembarang"],"kunci":"B"},{"no":33,"stimulus":"Dua pasang sisi sejajar & sudut 90°","pertanyaan":"Bangun","opsi":["A. jajar genjang","B. persegi panjang","C. trapesium","D. belah ketupat"],"kunci":"B"},{"no":34,"stimulus":"Persegi panjang p=8 l=5","pertanyaan":"Rumus keliling","opsi":["A. 8×5","B. 2×(8+5)","C. 8+5","D. 2×8×5"],"kunci":"B"},{"no":35,"stimulus":"Taman 12x7 m pagar keliling","pertanyaan":"Panjang pagar","opsi":["A. 38 m","B. 84 m","C. 19 m","D. 76 m"],"kunci":"A"},{"no":36,"stimulus":"2,5 km = ... meter","pertanyaan":"Konversi","opsi":["A. 250","B. 2.500","C. 25","D. 25.000"],"kunci":"B"},{"no":37,"stimulus":"Persegi sisi 9 cm","pertanyaan":"Luas","opsi":["A. 36 cm²","B. 81 cm²","C. 18 cm²","D. 324 cm²"],"kunci":"B"},{"no":38,"stimulus":"Lantai 6x4 m, ubin 1x1, tersedia 30","pertanyaan":"Sisa ubin","opsi":["A. 6","B. 24","C. 0","D. 16"],"kunci":"A"},{"no":39,"stimulus":"Segitiga siku alas 6 tinggi 8","pertanyaan":"Luas","opsi":["A. 24 cm²","B. 48 cm²","C. 14 cm²","D. 28 cm²"],"kunci":"A"},{"no":40,"stimulus":"Skala 1:200, panjang denah 4 cm","pertanyaan":"Panjang sebenarnya","opsi":["A. 8 m","B. 800 m","C. 0,02 m","D. 50 m"],"kunci":"A"}];
+
+  // Q-matrix (40x8) dari Instrumen MCDM (tugas 3)
+  const Q_MATRIX = [
+    [1,0,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[1,1,0,0,0,0,0,0],[1,0,0,0,0,0,0,0],[0,1,0,0,0,0,0,0],[0,1,0,0,0,0,0,0],[0,1,0,0,0,0,0,0],[0,1,0,1,0,0,0,0],
+    [0,0,1,0,0,0,0,0],[0,0,1,0,0,0,0,0],[0,0,1,0,0,0,0,0],[1,0,1,0,0,0,0,0],[0,0,0,1,0,0,0,0],[0,0,0,1,0,0,0,0],[0,0,0,1,0,0,0,0],[0,1,0,1,0,0,0,0],
+    [0,0,1,1,0,0,0,0],[0,0,0,1,0,0,0,0],[0,1,0,0,0,0,0,0],[1,1,0,0,0,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,0,1,0,0,0],[0,0,0,1,1,0,0,0],
+    [0,0,0,0,1,0,0,0],[0,0,0,0,1,1,0,0],[0,0,0,0,0,1,0,0],[0,0,0,0,0,1,0,0],[0,0,0,0,0,1,0,0],[0,0,0,0,1,1,0,0],[0,0,0,0,0,0,1,0],[0,0,0,0,0,0,1,0],
+    [0,0,0,0,0,0,1,0],[0,0,0,0,0,0,1,0],[0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1],[0,0,0,0,0,0,0,1],[0,1,0,0,0,0,0,1],[0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1]
+  ];
+
+  // Data kecemasan (28 butir) dimensi & tipe
+  const ANXIETY_ITEMS = [
+    {no:1, text:"Saya khawatir tidak mampu menyelesaikan soal matematika.", dim:"Kognitif", tipe:"F"},
+    {no:2, text:"Pikiran saya kosong ketika menghadapi soal matematika sulit.", dim:"Kognitif", tipe:"F"},
+    {no:3, text:"Saya yakin dapat memahami materi matematika.", dim:"Kognitif", tipe:"UF"},
+    {no:4, text:"Saya sulit berkonsentrasi saat tugas matematika.", dim:"Kognitif", tipe:"F"},
+    {no:5, text:"Saya optimis memulai ulangan matematika.", dim:"Kognitif", tipe:"UF"},
+    {no:6, text:"Saya terus memikirkan kemungkinan gagal saat belajar matematika.", dim:"Kognitif", tipe:"F"},
+    {no:7, text:"Saya mampu fokus selama pelajaran matematika.", dim:"Kognitif", tipe:"UF"},
+    {no:8, text:"Saya takut saat ditunjuk ke papan tulis.", dim:"Afektif", tipe:"F"},
+    {no:9, text:"Saya menyukai tantangan matematika.", dim:"Afektif", tipe:"UF"},
+    {no:10, text:"Saya tegang saat pelajaran matematika akan dimulai.", dim:"Afektif", tipe:"F"},
+    {no:11, text:"Saya tenang mengerjakan soal matematika.", dim:"Afektif", tipe:"UF"},
+    {no:12, text:"Saya cemas saat hari ulangan dekat.", dim:"Afektif", tipe:"F"},
+    {no:13, text:"Matematika membuat saya tidak nyaman.", dim:"Afektif", tipe:"F"},
+    {no:14, text:"Saya senang saat berhasil memecahkan soal.", dim:"Afektif", tipe:"UF"},
+    {no:15, text:"Jantung berdebar saat ulangan matematika.", dim:"Fisiologis", tipe:"F"},
+    {no:16, text:"Telapak tangan berkeringat saat soal sulit.", dim:"Fisiologis", tipe:"F"},
+    {no:17, text:"Tubuh rileks saat tugas matematika.", dim:"Fisiologis", tipe:"UF"},
+    {no:18, text:"Mual/pusing menjelang ujian matematika.", dim:"Fisiologis", tipe:"F"},
+    {no:19, text:"Pernapasan normal saat di depan kelas.", dim:"Fisiologis", tipe:"UF"},
+    {no:20, text:"Otot tegang saat lembar soal dibagikan.", dim:"Fisiologis", tipe:"F"},
+    {no:21, text:"Tangan gemetar saat soal sulit.", dim:"Fisiologis", tipe:"F"},
+    {no:22, text:"Saya menunda PR matematika hingga menit terakhir.", dim:"Perilaku", tipe:"F"},
+    {no:23, text:"Saya aktif bertanya kepada guru.", dim:"Perilaku", tipe:"UF"},
+    {no:24, text:"Saya menghindari kegiatan hitung-menghitung.", dim:"Perilaku", tipe:"F"},
+    {no:25, text:"Saya latihan tambahan atas kemauan sendiri.", dim:"Perilaku", tipe:"UF"},
+    {no:26, text:"Saya memilih diam daripada bertanya.", dim:"Perilaku", tipe:"F"},
+    {no:27, text:"Saya mengumpulkan tugas tepat waktu.", dim:"Perilaku", tipe:"UF"},
+    {no:28, text:"Saya mencari alasan tidak masuk saat ulangan.", dim:"Perilaku", tipe:"F"}
+  ];
+
+  let student = { name: "", kelas: "", sekolah: "" };
+  let cognitiveAnswers = new Array(40).fill(null); // null = belum jawab, isi label pilihan (A/B/C/D)
+  let anxietyAnswers = new Array(28).fill(null); // skor 1-5
+
+  // DOM elements
+  const loginDiv = document.getElementById('loginPage');
+  const selectionDiv = document.getElementById('selectionPage');
+  const cognitiveDiv = document.getElementById('cognitivePage');
+  const anxietyDiv = document.getElementById('anxietyPage');
+  const resultDiv = document.getElementById('resultPage');
+
+  function showPage(pageId) {
+    loginDiv.classList.add('hidden'); selectionDiv.classList.add('hidden'); cognitiveDiv.classList.add('hidden'); anxietyDiv.classList.add('hidden'); resultDiv.classList.add('hidden');
+    document.getElementById(pageId).classList.remove('hidden');
+  }
+
+  // render soal kognitif
+  function renderCognitive() {
+    const container = document.getElementById('cognitiveQuestions');
+    container.innerHTML = '';
+    SOAL.forEach((soal, idx) => {
+      const saved = cognitiveAnswers[idx];
+      const div = document.createElement('div'); div.className = 'soal-item';
+      div.innerHTML = `<div class="soal-num">Soal ${soal.no}</div><div><strong>${soal.stimulus}</strong><br>${soal.pertanyaan}</div><div class="opsi-group" id="opsi-group-${idx}"></div>`;
+      const optsDiv = div.querySelector(`.opsi-group`);
+      soal.opsi.forEach(opt => {
+        const label = document.createElement('label'); label.className = `opsi-label ${saved === opt.charAt(0) ? 'selected' : ''}`;
+        label.innerHTML = `<input type="radio" name="q${idx}" value="${opt.charAt(0)}" style="display:none;"><span>${opt}</span>`;
+        label.addEventListener('click', (e) => {
+          const radio = label.querySelector('input'); radio.checked = true;
+          cognitiveAnswers[idx] = opt.charAt(0);
+          document.querySelectorAll(`#opsi-group-${idx} .opsi-label`).forEach(l => l.classList.remove('selected'));
+          label.classList.add('selected');
+          updateCogProgress();
+        });
+        optsDiv.appendChild(label);
+      });
+      container.appendChild(div);
+    });
+    updateCogProgress();
+  }
+  function updateCogProgress() { const cnt = cognitiveAnswers.filter(a => a !== null).length; document.getElementById('cogProgress').innerText = cnt; }
+
+  function renderAnxiety() {
+    const container = document.getElementById('anxietyQuestions');
+    container.innerHTML = '';
+    ANXIETY_ITEMS.forEach((item, idx) => {
+      const saved = anxietyAnswers[idx];
+      const div = document.createElement('div'); div.className = 'soal-item';
+      div.innerHTML = `<div class="soal-num">Pernyataan ${item.no}</div><p>${item.text}</p><div class="likert-group" id="anx-group-${idx}"></div>`;
+      const group = div.querySelector(`.likert-group`);
+      [1,2,3,4,5].forEach(score => {
+        const optDiv = document.createElement('div'); optDiv.className = `likert-opt ${saved === score ? 'selected' : ''}`;
+        optDiv.innerText = score===1?'STS':score===2?'TS':score===3?'N':score===4?'S':'SS';
+        optDiv.addEventListener('click', () => {
+          anxietyAnswers[idx] = score;
+          document.querySelectorAll(`#anx-group-${idx} .likert-opt`).forEach(el => el.classList.remove('selected'));
+          optDiv.classList.add('selected');
+          updateAnxProgress();
+        });
+        group.appendChild(optDiv);
+      });
+      container.appendChild(div);
+    });
+    updateAnxProgress();
+  }
+  function updateAnxProgress() { const cnt = anxietyAnswers.filter(a => a !== null).length; document.getElementById('anxProgress').innerText = cnt; }
+
+  // hitung mastery berdasarkan jawaban kognitif & Q-matrix
+  function computeMastery() {
+    let correct = cognitiveAnswers.map((ans, i) => ans === SOAL[i].kunci ? 1 : 0);
+    let attrScores = Array(8).fill(0).map(() => ({ correct: 0, total: 0 }));
+    for (let i = 0; i < 40; i++) {
+      for (let a = 0; a < 8; a++) {
+        if (Q_MATRIX[i][a]) {
+          attrScores[a].total++;
+          if (correct[i]) attrScores[a].correct++;
+        }
+      }
+    }
+    let mastery = attrScores.map(a => a.total ? a.correct / a.total : 0);
+    return mastery;
+  }
+
+  // hitung skor kecemasan
+  function computeAnxietyScores() {
+    let dimSums = { Kognitif:0, Afektif:0, Fisiologis:0, Perilaku:0 };
+    let dimCount = { Kognitif:0, Afektif:0, Fisiologis:0, Perilaku:0 };
+    for (let i=0;i<28;i++) {
+      let raw = anxietyAnswers[i];
+      if(raw === null) continue;
+      let item = ANXIETY_ITEMS[i];
+      let score = item.tipe === 'F' ? raw : (6 - raw);
+      dimSums[item.dim] += score;
+      dimCount[item.dim]++;
+    }
+    let totalScore = Object.values(dimSums).reduce((a,b)=>a+b,0);
+    let maxTotal = 28*5;
+    let percent = (totalScore / maxTotal) * 100;
+    let meanSample = 3.0, sdSample = 0.7;
+    let z_affective = (totalScore/28 - meanSample) / sdSample;
+    return { totalScore, percent, z_affective, dimSums };
+  }
+
+  // hitung LRI
+  function computeLRI(mastery, anxietyPercent) {
+    let avgMastery = mastery.reduce((a,b)=>a+b,0)/8;
+    let defisit = 1 - avgMastery;
+    let kritis = [1,3,4,5]; // index A2,A4,A5 (0-based: A2=1, A4=3, A5=4)
+    let unmasteredKritis = kritis.filter(k => mastery[k] < 0.6).length;
+    let breakage = unmasteredKritis / 4;
+    let afektif = anxietyPercent / 100;
+    let lri = 100 * (0.4*defisit + 0.35*breakage + 0.25*afektif);
+    return Math.round(lri);
+  }
+
+  function generateRecommendations(mastery) {
+    let weak = mastery.map((v,i)=> ({attr:i, val:v})).filter(v=> v.val<0.6).sort((a,b)=>a.val-b.val);
+    let recos = [];
+    if (mastery[1] < 0.6) recos.push("🔁 Pulihkan A2 (Operasi Pecahan) dengan metode CRA (konkret→gambar→simbol). Ini prasyarat utama untuk A3–A5.");
+    if (mastery[3] < 0.6) recos.push("📘 Bangun A4 (Aljabar Dasar) setelah pecahan pulih; fokus pada makna variabel.");
+    if (mastery[4] < 0.6) recos.push("⏸️ Tunda A5 (Persamaan Linear) hingga A4 stabil.");
+    if (mastery[2] < 0.6) recos.push("🧩 Latihan rasio & perbandingan (A3) dengan pendekatan visual.");
+    recos.push("🎯 Gunakan asesmen formatif rendah-tekanan karena kecemasan evaluatif tinggi.");
+    if (recos.length === 0) recos.push("✅ Semua atribut cukup dikuasai. Pertahankan dengan latihan pengayaan.");
+    return recos;
+  }
+
+  // tampilkan hasil lengkap
+  function showResults() {
+    const mastery = computeMastery();
+    const anxietyRes = computeAnxietyScores();
+    const lri = computeLRI(mastery, anxietyRes.percent);
+    const recos = generateRecommendations(mastery);
+    const benarCount = cognitiveAnswers.filter((ans,i)=> ans === SOAL[i].kunci).length;
+    const persenKognitif = Math.round(benarCount/40*100);
+    
+    document.getElementById('statRingkasan').innerHTML = `
+      <div class="stat-card"><div class="stat-value">${benarCount}/40</div><div>Benar Kognitif</div></div>
+      <div class="stat-card"><div class="stat-value">${persenKognitif}%</div><div>Penguasaan Awal</div></div>
+      <div class="stat-card"><div class="stat-value">${Math.round(anxietyRes.percent)}%</div><div>Kecemasan Matematika</div></div>
+      <div class="stat-card"><div class="stat-value">${lri}</div><div>LRI (Risiko Belajar)</div></div>
+    `;
+    document.getElementById('lriBox').innerHTML = `<strong>Learning Risk Index = ${lri}</strong><br>Interpretasi: ${lri>=75?'Sangat Tinggi':lri>=56?'Tinggi':lri>=31?'Sedang':'Rendah'}. <br>Defisit mastery + putus rantai pecahan + beban kecemasan.`;
+    const recoHtml = recos.map(r => `<div class="rekomendasi-item">${r}</div>`).join('');
+    document.getElementById('recommendationBox').innerHTML = recoHtml;
+
+    // charts
+    const ctxRadar = document.getElementById('radarMastery').getContext('2d');
+    const ctxBar = document.getElementById('barMastery').getContext('2d');
+    if (window.radarChart) window.radarChart.destroy();
+    if (window.barChart) window.barChart.destroy();
+    window.radarChart = new Chart(ctxRadar, {
+      type: 'radar', data: { labels: ['A1','A2','A3','A4','A5','A6','A7','A8'], datasets: [{ label: 'Mastery', data: mastery.map(v=>Math.round(v*100)), backgroundColor: 'rgba(20,184,166,0.2)', borderColor: '#0F766E', pointBackgroundColor: '#0F766E' }] },
+      options: { responsive: true, maintainAspectRatio: true, scales: { r: { min: 0, max: 100, ticks: { stepSize: 20 } } } }
+    });
+    window.barChart = new Chart(ctxBar, {
+      type: 'bar', data: { labels: ['A1','A2','A3','A4','A5','A6','A7','A8'], datasets: [{ label: 'Mastery (%)', data: mastery.map(v=>Math.round(v*100)), backgroundColor: '#14B8A6', borderRadius: 8 }] },
+      options: { responsive: true, maintainAspectRatio: true, scales: { y: { min: 0, max: 100 } } }
+    });
+    showPage('resultPage');
+  }
+
+  // event & state
+  document.getElementById('startBtn').addEventListener('click', () => {
+    let name = document.getElementById('studentName').value.trim();
+    let kelas = document.getElementById('studentClass').value.trim();
+    let sekolah = document.getElementById('studentSchool').value.trim();
+    if (!name) { alert("Nama harus diisi"); return; }
+    student = { name, kelas, sekolah };
+    showPage('selectionPage');
+    document.getElementById('startAnxietyBtn').disabled = true;
+  });
+  document.getElementById('startCognitiveBtn').addEventListener('click', () => {
+    renderCognitive();
+    showPage('cognitivePage');
+  });
+  document.getElementById('saveCognitiveBtn').addEventListener('click', () => {
+    let unanswered = cognitiveAnswers.filter(a => a === null).length;
+    if (unanswered > 0 && !confirm(`Masih ${unanswered} soal belum dijawab. Lanjut ke kecemasan? (jawaban kosong = salah)`)) return;
+    renderAnxiety();
+    showPage('anxietyPage');
+  });
+  document.getElementById('submitAnxietyBtn').addEventListener('click', () => {
+    let unansweredAnx = anxietyAnswers.filter(a => a === null).length;
+    if (unansweredAnx > 0) { alert(`Masih ${unansweredAnx} pernyataan kecemasan belum diisi. Harap lengkapi.`); return; }
+    showResults();
+  });
+  document.getElementById('resetAllBtn').addEventListener('click', () => {
+    if(confirm("Reset semua data? Progress akan hilang.")) {
+      cognitiveAnswers.fill(null); anxietyAnswers.fill(null);
+      showPage('loginPage');
+      document.getElementById('studentName').value = '';
+      document.getElementById('studentClass').value = '';
+      document.getElementById('studentSchool').value = '';
+    }
+  });
+  // default
+  showPage('loginPage');
+</script>
+</body>
+</html>
