@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Rancangan Implementasi | EduMind MCDM AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #F1F5F9;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: #0F172A;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* header */
+    .hero {
+      background: linear-gradient(135deg, #0F766E 0%, #134E4A 60%, #14B8A6 100%);
+      border-radius: 2rem;
+      padding: 2.5rem 2rem;
+      color: white;
+      margin-bottom: 2rem;
+      box-shadow: 0 20px 35px -12px rgba(15, 23, 42, 0.2);
+    }
+    .hero h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+    .hero .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(4px);
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      max-width: 700px;
+      opacity: 0.92;
+      font-size: 1rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1.5rem;
+      border: 1px solid #E2E8F0;
+      padding: 1.5rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.03);
+      transition: all 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: 0 12px 24px -12px rgba(15, 23, 42, 0.12);
+      border-color: #CBF5F0;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #0F766E;
+      border-left: 5px solid #14B8A6;
+      padding-left: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1E293B;
+      margin: 1rem 0 0.6rem 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.2rem;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.2rem;
+    }
+
+    /* arsitektur diagram (css grid) */
+    .arch-diagram {
+      background: #F8FAFE;
+      border-radius: 1.2rem;
+      padding: 1.5rem;
+      border: 1px solid #E2EDF2;
+      margin-top: 0.5rem;
+    }
+    .arch-layer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .arch-box {
+      background: white;
+      border-radius: 1rem;
+      padding: 0.8rem 1.2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #E2E8F0;
+      flex: 1;
+      min-width: 140px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .arch-box strong {
+      display: block;
+      color: #0F766E;
+      font-size: 0.85rem;
+      margin-bottom: 0.25rem;
+    }
+    .arrow-symbol {
+      font-size: 1.5rem;
+      color: #14B8A6;
+      align-self: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    th {
+      text-align: left;
+      background: #F1F5F9;
+      padding: 0.6rem 0.8rem;
+      font-weight: 600;
+      color: #1E293B;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    td {
+      padding: 0.6rem 0.8rem;
+      border-bottom: 1px solid #ECF3F9;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .badge-tech {
+      background: #E6F7F5;
+      color: #0F766E;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #0F766E;
+      color: white;
+      border-radius: 40px;
+      padding: 0.5rem 1.1rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+    .link-btn-outline {
+      background: transparent;
+      border: 1.5px solid #0F766E;
+      color: #0F766E;
+    }
+    .link-btn-outline:hover {
+      background: #F0FDFA;
+    }
+    .link-btn:hover {
+      background: #0B5E56;
+      transform: translateY(-1px);
+    }
+    .footer {
+      text-align: center;
+      border-top: 1px solid #E2E8F0;
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      font-size: 0.8rem;
+      color: #5B6E8C;
+    }
+    @media (max-width: 700px) {
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+    }
+    .code-inline {
+      background: #F1F5F9;
+      padding: 0.2rem 0.4rem;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <div class="badge">📐 Proposal Teknis · Disertasi PEP UNJ</div>
+    <h1>Rancangan Implementasi<br>Sistem Diagnostik MCDM Berbasis AI</h1>
+    <p>Higher‑Order DINA · Neural CDM · Dashboard Guru · Pipeline Real‑time · XAI Pedagogis<br>
+    Transformasi prototipe statis menjadi platform produksi terintegrasi.</p>
+  </div>
+
+  <!-- 1. Ikhtisar Arsitektur -->
+  <div class="card">
+    <h2>📡 Arsitektur Sistem (Client–Server + AI Service)</h2>
+    <div class="arch-diagram">
+      <div class="arch-layer">
+        <div class="arch-box"><strong>🌐 Frontend</strong> React SPA<br><span style="font-size:0.7rem;">Portal · Tes Kognitif · Kecemasan · Dashboard Guru</span></div>
+        <div class="arrow-symbol">→</div>
+        <div class="arch-box"><strong>🔁 API Gateway</strong> Django REST<br><span style="font-size:0.7rem;">Auth · Manajemen respons · Orchestrasi</span></div>
+        <div class="arrow-symbol">→</div>
+        <div class="arch-box"><strong>🧠 AI Service</strong> FastAPI<br><span style="font-size:0.7rem;">HO‑DINA (R/rpy2) + NCDM (PyTorch)</span></div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-box"><strong>🗄️ PostgreSQL</strong><br>students, responses, mastery_estimates</div>
+        <div class="arch-box"><strong>⚡ Redis</strong><br>Cache mastery & rekomendasi</div>
+        <div class="arch-box"><strong>📦 Model Registry</strong><br>HO‑DINA params / NCDM .pth</div>
+      </div>
+      <div style="text-align:center; margin-top:0.5rem;">
+        <span class="badge-tech">Docker + Docker Compose</span> <span class="badge-tech">GitHub Actions</span> <span class="badge-tech">VPS / Cloud Run</span>
+      </div>
+      <p style="margin-top:1rem; font-size:0.85rem; color:#2D4A4A;">✨ <strong>Alur data real‑time:</strong> Siswa menjawab butir → API menyimpan → panggil inferensi NCDD (latensi &lt; 3 detik) → profil mastery diperbarui → dashboard guru otomatis refresh.</p>
+    </div>
+  </div>
+
+  <!-- 2. Teknologi & Toolchain -->
+  <div class="grid-2">
+    <div class="card">
+      <h2>🧰 Stack Teknologi</h2>
+      <table style="margin-top: 0.5rem;">
+        <tr><th>Lapisan</th><th>Pilihan</th></tr>
+        <tr><td>Frontend</td><td>React + Vite · Chart.js / Recharts · Tailwind (opsional)</td></tr>
+        <tr><td>Backend</td><td>Python Django + DRF · Celery (async training)</td></tr>
+        <tr><td>AI / ML</td><td>PyTorch (NCDM) · R (GDINA) via rpy2 · SHAP</td></tr>
+        <tr><td>Database</td><td>PostgreSQL 15+ · JSONB untuk respons & vektor mastery</td></tr>
+        <tr><td>Cache</td><td>Redis (TTL 1 hari untuk profil mastery)</td></tr>
+        <tr><td>Deploy</td><td>Docker Compose + Nginx reverse proxy</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h2>📊 Skema Basis Data (Inti)</h2>
+      <ul style="margin-left: 1.2rem; font-size:0.85rem;">
+        <li><code>students</code> (id, nis, nama, kelas, sekolah)</li>
+        <li><code>cognitive_responses</code> (responses JSON, raw_choices JSON)</li>
+        <li><code>anxiety_scores</code> (raw_likert, dim_scores, theta_affective)</li>
+        <li><code>mastery_estimates</code> (cognitive_profile JSON, LRI, recommendations, model_version)</li>
+        <li><code>q_matrix</code> (item_id, A1..A8) + <code>attribute_hierarchy</code> (matriks 8x8)</li>
+        <li><code>usability_responses</code> (teacher feedback, SUS score)</li>
+      </ul>
+      <p style="margin-top:0.8rem;">✅ Semua template Excel (CVR/CVI, Q-matrix, AHM) dapat diimpor langsung melalui panel admin.</p>
+    </div>
+  </div>
+
+  <!-- 3. API Endpoints utama -->
+  <div class="card">
+    <h2>🔌 REST API Endpoints (Rancangan)</h2>
+    <div class="grid-2" style="margin-bottom:0;">
+      <div>
+        <h3>🔐 Autentikasi & Data</h3>
+        <ul style="font-size:0.85rem; list-style: none; padding-left:0;">
+          <li><code>POST /api/auth/login</code> → JWT token</li>
+          <li><code>GET /api/items/cognitive</code> → daftar 40 butir + Q‑vector</li>
+          <li><code>POST /api/responses/cognitive</code> → simpan respons kognitif (batch)</li>
+          <li><code>POST /api/responses/anxiety</code> → simpan skala kecemasan</li>
+        </ul>
+      </div>
+      <div>
+        <h3>🧠 Diagnosis & Rekomendasi</h3>
+        <ul style="font-size:0.85rem; list-style: none; padding-left:0;">
+          <li><code>GET /api/diagnosis/{student_id}</code> → profil mastery + LRI</li>
+          <li><code>POST /api/diagnosis/predict</code> → inferensi real‑time (NCDM)</li>
+          <li><code>GET /api/recommendation/{student_id}</code> → prioritas intervensi</li>
+          <li><code>GET /api/teacher/dashboard/class/{class_id}</code> → agregat kelas, heatmap atribut</li>
+          <li><code>POST /api/teacher/usability</code> → kuesioner USE/SUS</li>
+        </ul>
+      </div>
+    </div>
+    <div class="arch-diagram" style="background:#F0FDFA; margin-top:1rem;">
+      <p style="font-size:0.85rem;"><strong>⚙️ Pipeline AI (HO‑DINA + NCDM):</strong><br>
+      Estimasi MCMC (rpy2) → posterior mastery <span style="font-family:monospace">P(A=1|θ, X)</span> → NCDM fine‑tuning → SHAP/LIME → terjemahan pedagogis (dashboard guru).</p>
+    </div>
+  </div>
+
+  <!-- 4. Integrasi dengan Prototipe HTML yang Ada -->
+  <div class="card">
+    <h2>📁 Modul Prototipe (HTML Statis) → Roadmap Integrasi</h2>
+    <p>Kode statis yang telah dikembangkan (<code>index_1.html</code> … dashboard) akan dijadikan komponen React dan dihubungkan ke API. Berikut tautan langsung ke prototipe fungsional (masih client‑side) sebagai referensi antarmuka:</p>
+    <div class="grid-3" style="margin-top: 1rem;">
+      <div><a href="index_1.html" target="_blank" class="link-btn link-btn-outline">📋 Tes Diagnostik (40 butir)</a><div style="font-size:0.7rem; margin-top:6px;">pilihan ganda + profil mastery</div></div>
+      <div><a href="index_2.html" target="_blank" class="link-btn link-btn-outline">📊 Skala Kecemasan</a><div style="font-size:0.7rem; margin-top:6px;">Likert 28 butir + θ-afektif</div></div>
+      <div><a href="EduMind_AI_Dashboard_Andi_Pratama.html" target="_blank" class="link-btn link-btn-outline">📈 Dashboard Siswa + AI</a><div style="font-size:0.7rem; margin-top:6px;">rekomendasi adaptif</div></div>
+      <div><a href="AI_Recommendation_Engine_Andi_Pratama.html" target="_blank" class="link-btn link-btn-outline">🤖 Mesin Rekomendasi</a><div style="font-size:0.7rem; margin-top:6px;">HO‑DINA / NCDM simulasi</div></div>
+      <div><a href="index_3.html" target="_blank" class="link-btn link-btn-outline">✅ Validasi Ahli (CVR/CVI)</a><div style="font-size:0.7rem; margin-top:6px;">materi, psikometri, AI</div></div>
+      <div><a href="Template_Analisis_CVR-CVI_dan_Dataset_MCDM.xlsx" target="_blank" class="link-btn link-btn-outline">📎 Template Excel CVR/CVI</a><div style="font-size:0.7rem; margin-top:6px;">Q‑matrix, AHM, dataset</div></div>
+    </div>
+    <p style="margin-top: 1rem; background:#F1F8FF; padding:0.8rem; border-radius:1rem; font-size:0.85rem;">
+      💡 <strong>Strategi migrasi:</strong> Setiap halaman akan di‑rewrite sebagai komponen React, state dikelola oleh React Query, panggilan ke API backend. Data yang sebelumnya tersimpan di localStorage akan disimpan ke PostgreSQL dengan API yang sama.
+    </p>
+  </div>
+
+  <!-- 5. Model AI & Explainability -->
+  <div class="grid-2">
+    <div class="card">
+      <h2>🧠 HO‑DINA (Higher‑Order)</h2>
+      <ul style="margin-left: 1.2rem; font-size:0.85rem;">
+        <li>Estimasi mastery 8 atribut (A1–A8) dengan hierarki prasyarat (AHM)</li>
+        <li>Kovariat afektif θ‑afektif masuk ke struktur higher‑order → menggeser prior mastery</li>
+        <li>Implementasi: <span class="code-inline">GDINA::GDINA(att.dist = "higher.order")</span> via R/rpy2</li>
+        <li>Output: posterior mastery, guess/slip per butir, LRI</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>🤖 Neural CDM (NCDM) & XAI</h2>
+      <ul style="margin-left: 1.2rem; font-size:0.85rem;">
+        <li>Deep learning dengan Q‑matrix sebagai mask interaksi</li>
+        <li>Arsitektur: <span class="code-inline">σ( disc · (θ - β) ⊙ Q )</span> + dense layers</li>
+        <li>SHAP/LIME → kontribusi atribut terhadap prediksi kesulitan</li>
+        <li>Terjemahan otomatis: <em>“Kesalahan utama berasal dari atribut A2 (Pecahan), prasyarat aljabar”</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6. Learning Risk Index & Rekomendasi -->
+  <div class="card">
+    <h2>📉 Learning Risk Index (LRI) & Rekomendasi Personal</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start;">
+      <div style="flex: 1.5; background:#F8F2E9; padding:1rem; border-radius:1rem;">
+        <p><strong>Formula LRI:</strong><br>
+        <code>LRI = 100 × [0.40·defisit + 0.35·breakage + 0.25·afektif]</code><br>
+        defisit = rerata (1−mastery) · breakage = panjang rantai prasyarat putus · afektif = (θ‑afektif ternormalisasi)</p>
+        <p>Klasifikasi: 0–30 (rendah), 31–55 (sedang), 56–75 (tinggi), 76–100 (sangat tinggi).</p>
+        <p><strong>Rekomendasi 3a‑3d:</strong> materi prioritas (hulu), materi ditunda, bentuk pembelajaran (CRA), level kesulitan adaptif + modulasi kecemasan.</p>
+      </div>
+      <div style="flex: 1; background:#EFF6F5; padding:1rem; border-radius:1rem;">
+        <span class="badge-tech">🎯 Contoh output untuk Andi Pratama</span>
+        <ul style="font-size:0.8rem; margin-top:0.5rem;">
+          <li>Mastery terendah: A2 (0.35), A4 (0.30), A5 (0.25)</li>
+          <li>LRI = 59 → Risiko Tinggi</li>
+          <li>Rekomendasi: pulihkan pecahan (A2) dengan CRA, tunda persamaan linear</li>
+          <li>Dukungan afektif: kurangi tekanan evaluatif, kuis tanpa nilai</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Dashboard Guru & Usability -->
+  <div class="card">
+    <h2>👩‍🏫 Dashboard Guru (Explainable & Actionable)</h2>
+    <div class="grid-2">
+      <div>
+        <ul style="margin-left: 1.2rem;">
+          <li>Heatmap mastery per atribut (kelas / individu)</li>
+          <li>Visualisasi hierarki prasyarat (graf ketergantungan)</li>
+          <li>Notifikasi siswa dengan LRI &gt; 70 + rekomendasi intervensi prioritas</li>
+          <li>Ekspor laporan PDF/CSV, integrasi dengan sistem sekolah</li>
+          <li>Skor usability USE/SUS diukur dan ditampilkan real‑time</li>
+        </ul>
+      </div>
+      <div style="background:#F8FAFE; border-radius:1rem; padding:0.8rem;">
+        <span class="badge-tech">🔍 XAI Terjemahan Pedagogis</span>
+        <p style="font-size:0.85rem; margin-top:6px;"><i>“SHAP value atribut A2 = +0.42 → kontribusi terbesar terhadap prediksi kesulitan aljabar. Guru disarankan memulihkan operasi pecahan dengan pendekatan visual sebelum melangkah ke bentuk aljabar.”</i></p>
+        <p style="font-size:0.7rem; margin-top:4px;">⚡ Prinsip FITAP (Fairness, Inclusivity, Transparency, Accountability, Privacy) diterapkan.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Roadmap Implementasi (6 fase) -->
+  <div class="card">
+    <h2>📅 Roadmap Pengembangan (16 minggu)</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: space-between;">
+      <div style="flex:1; min-width:150px; background:#FFFFFF; border-radius:1rem; border:1px solid #E2E8F0; padding:0.8rem;">
+        <strong>🔹 Fase 1 (4 mg)</strong><br>Setup DB, Auth, migrasi Q‑matrix & butir ke API
+      </div>
+      <div style="flex:1; min-width:150px; background:#FFFFFF; border-radius:1rem; border:1px solid #E2E8F0; padding:0.8rem;">
+        <strong>🔹 Fase 2 (3 mg)</strong><br>Frontend dinamis (React) ambil soal dari API, simpan respons
+      </div>
+      <div style="flex:1; min-width:150px; background:#FFFFFF; border-radius:1rem; border:1px solid #E2E8F0; padding:0.8rem;">
+        <strong>🔹 Fase 3 (5 mg)</strong><br>Integrasi HO‑DINA & NCDM service, caching Redis
+      </div>
+      <div style="flex:1; min-width:150px; background:#FFFFFF; border-radius:1rem; border:1px solid #E2E8F0; padding:0.8rem;">
+        <strong>🔹 Fase 4 (4 mg)</strong><br>Dashboard guru + XAI + ekspor laporan
+      </div>
+    </div>
+    <p style="margin-top: 1rem; font-size:0.85rem;">✅ Uji coba terbatas (2 sekolah) → evaluasi usability & akurasi diagnostik → deployment produksi + dokumentasi lengkap.</p>
+  </div>
+
+  <!-- 9. Keamanan & Privasi (FITAP) -->
+  <div class="card">
+    <h2>🛡️ Pemenuhan Prinsip Etika AI (FITAP)</h2>
+    <div class="grid-3">
+      <div><span class="badge-tech">Fairness</span><br>Evaluasi bias demografis, calibration by group</div>
+      <div><span class="badge-tech">Inclusivity</span><br>Antarmuka aksesibel, dukungan disabilitas</div>
+      <div><span class="badge-tech">Transparency</span><br>XAI SHAP → teks pedagogis, audit trail</div>
+      <div><span class="badge-tech">Accountability</span><br>Log perubahan, mekanisme umpan balik guru</div>
+      <div><span class="badge-tech">Privacy</span><br>Enkripsi data sensitif, federated learning opsional</div>
+    </div>
+    <p style="margin-top: 0.8rem; font-size:0.8rem;">🔒 Semua data siswa diproses sesuai dengan regulasi perlindungan data pribadi (UU PDP).</p>
+  </div>
+
+  <!-- 10. Lampiran: Excel Template & Dataset -->
+  <div class="card">
+    <h2>📎 Integrasi Template Excel (CVR/CVI, Dataset)</h2>
+    <p>File <code>Template_Analisis_CVR-CVI_dan_Dataset_MCDM.xlsx</code> menyediakan sheet siap pakai yang dapat diimpor melalui antarmuka admin:</p>
+    <ul style="margin-left: 1.5rem; font-size:0.85rem;">
+      <li><strong>CVR_Lawshe & CVI</strong> → data validasi ahli disimpan & diekspor ulang.</li>
+      <li><strong>Q_Matrix & AHM</strong> → memuat matriks 40×8 dan hierarki prasyarat.</li>
+      <li><strong>Tes_Respons_Template</strong> → bulk import respons siswa (untuk kalibrasi awal).</li>
+      <li><strong>Kecemasan_Template</strong> → batch input skala kecemasan dan hitung θ‑afektif otomatis.</li>
+      <li><strong>Usability_Template</strong> → kuesioner guru USE/SUS langsung terakumulasi.</li>
+    </ul>
+    <div style="margin-top: 1rem; text-align: right;">
+      <a href="Template_Analisis_CVR-CVI_dan_Dataset_MCDM.xlsx" class="link-btn" style="background:#1E293B;">⬇️ Unduh Template Excel Referensi</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    Rancangan Implementasi — EduMind MCDM AI · Disertasi Khusnul Marom (PEP UNJ) · 2026<br>
+    Arsitektur siap dikembangkan menjadi production-grade system.
+  </div>
+</div>
+</body>
+</html>
